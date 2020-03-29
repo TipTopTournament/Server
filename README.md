@@ -1,6 +1,6 @@
 # SoPra RESTful Service Template FS20
 
-## Getting started with Spring Boot
+## Getting started with Spring Boot lol
 
 -   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
 -   Guides: http://spring.io/guides
