@@ -31,8 +31,12 @@ jobs:
     - name: test the project and upload test report -> sonarqube
     # run: ./gradlew test jacocoTestReport sonarqube -PsonarToken=$SONAR_TOKEN -PsonarProjectKey=$SONAR_PROJECT_KEY -PsonarOrganization=$SONAR_ORG
 
+    # create .netrc file for heroku authentication
     # https://devcenter.heroku.com/articles/authentication
+<<<<<<< HEAD
     - name: create .netrc file for heroku authentication
+=======
+>>>>>>> 17def4b0c2abe1b186fcaec9870fd9f6ecd3bc66
       run: |+
           cat >~/.netrc <<EOF
           machine api.heroku.com
