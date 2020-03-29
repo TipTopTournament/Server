@@ -1,4 +1,4 @@
-# SoPra RESTful Service Template FS20
+# SoPra RESTful Service Template FS20 lol
 
 ## Getting started with Spring Boot
 
@@ -18,7 +18,7 @@ To build right click the `build.gradle` file and choose `Run Build`
 
 ## Building with Gradle
 
-You can use the local Gradle Wrapper to build the application.
+You can use the local Gradle Wrapper to build the application. Hoi
 
 Plattform-Prefix:
 
