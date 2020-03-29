@@ -2,7 +2,6 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 /**
  * UserControllerTest
  * This is a WebMvcTest which allows to test the UserController i.e. GET/POST request without actually sending them over the network.
@@ -95,63 +95,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
-    /*
-    @Test //
-    public void createUser_usernameAlreadyExistInput_409HTTPStatusResponse()
-            throws Exception {
-        //given
-        User user = new User();
-        user.setId(1L);
-        user.setName("test_user");
-        user.setUsername("test_Username");
-        user.setToken("1");
-        user.setStatus(UserStatus.ONLINE);
-
-        UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setName("test_user");
-        userPostDTO.setUsername("test_Username");
-
-        given(userService.createUser(user)).willReturn(user);
-
-        //when
-        MockHttpServletRequestBuilder postRequest = post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userPostDTO));
-
-        //then
-        mockMvc.perform(postRequest)
-                .andExpect(status().isConflict());
-    }
-
-     */
-
-    /*
-    @Test
-    public void updateUser_validInput_HttpStatus200(){
-        //given
-        User user = new User();
-        user.setId(1L);
-        user.setName("Test User");
-        user.setUsername("testUsername");
-        user.setToken("1");
-        user.setStatus(UserStatus.ONLINE);
-
-        UserPutDTO userPutDTO = new UserPutDTO();
-        userPutDTO.setUserState(UserState.NOT_PRESENT);
-        userPutDTO.setTournament("SwitzerlandsTTTournament");
-        given(userService.createUser(Mockito.any())).willReturn(user);
-
-        //when
-        MockHttpServletRequestBuilder putRequest = put("/users/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userPutDTO));
-
-        // then
-        mockMvc.perform(putRequest)
-                .andExpect(status().isOk());
-
-    }
-     */
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
@@ -167,6 +110,4 @@ public class UserControllerTest {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The request body could not be created.%s", e.toString()));
         }
     }
-
-
 }
