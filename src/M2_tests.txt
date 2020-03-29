@@ -1,0 +1,79 @@
+||||||||||||||||||||||||||||||||||UserControllerTest|||||||||||||||||||||||||||||||||||
+    @Test //
+    public void createUser_usernameAlreadyExistInput_409HTTPStatusResponse()
+            throws Exception {
+        //given
+        User user = new User();
+        user.setId(1L);
+        user.setName("test_user");
+        user.setUsername("test_Username");
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setName("test_user");
+        userPostDTO.setUsername("test_Username");
+
+        given(userService.createUser(user)).willReturn(user);
+
+        //when
+        MockHttpServletRequestBuilder postRequest = post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        //then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isConflict());
+    }
+
+
+    /*
+    @Test
+    public void updateUser_validInput_HttpStatus200(){
+        //given
+        User user = new User();
+        user.setId(1L);
+        user.setName("Test User");
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
+
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setUserState(UserState.NOT_PRESENT);
+        userPutDTO.setTournament("SwitzerlandsTTTournament");
+        given(userService.createUser(Mockito.any())).willReturn(user);
+
+        //when
+        MockHttpServletRequestBuilder putRequest = put("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPutDTO));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk());
+
+    }
+
+
+|||||||||||||||||||||||||||||||GameControllerTest|||||||||||||||||||||||||||||||||||||
+
+@Test
+    public void updateGame_invalidInput_HTTPStatus404()
+            throws Exception {
+        // given
+        Game game = new Game(user1, user2);
+
+        GamePutDTO gamePutDTO = new GamePutDTO();
+        gamePutDTO.setResult("11:8, 11:3, 11:7, 14:9"); // can be a dic instead of string? idk?
+        given(gameService.createGame(Mockito.any())).willReturn(game);
+
+        // when
+        MockHttpServletRequestBuilder putRequest = post("/game/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(gamePutDTO));
+
+        //then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNotFound());
+
+    }
