@@ -77,6 +77,4 @@ public class UserServiceTest {
         // then -> attempt to create second user with same user -> check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
     }
-
-
 }
