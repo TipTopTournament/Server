@@ -42,6 +42,7 @@ jobs:
               login $HEROKU_EMAIL
               password $HEROKU_KEY
           EOF
+        
     - name: login to heroku cli
       run: heroku login
 
