@@ -1,6 +1,9 @@
 package ch.uzh.ifi.seal.soprafs20.rest.mapper;
 
+import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import org.mapstruct.*;
@@ -28,4 +31,14 @@ public interface DTOMapper {
     @Mapping(source = "username", target = "username")
     @Mapping(source = "status", target = "status")
     UserGetDTO convertEntityToUserGetDTO(User user);
+
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "password", target = "password")
+    Manager convertManagerPostDTOtoEntity(ManagerPostDTO managerPostDTO);
+
+    @Mapping(source = "managerID", target = "managerID")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "username", target = "username")
+    ManagerGetDTO convertEntityToManagerGetDTO(Manager manager);
 }
