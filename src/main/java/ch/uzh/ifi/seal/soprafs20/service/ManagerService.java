@@ -46,6 +46,7 @@ public class ManagerService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this Id");
     }
+
     public Manager createManager(Manager newManager) {
         newManager.setToken(UUID.randomUUID().toString());
 
@@ -59,10 +60,9 @@ public class ManagerService {
         else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
-
     }
 
-    public boolean CheckIfUsernameIsTaken(Manager managerToTest) {
+    private boolean CheckIfUsernameIsTaken(Manager managerToTest) {
         for (Manager manager : getManagers()) {
             if (manager.getUsername().equals(managerToTest.getUsername())) {
                 return true;
@@ -71,7 +71,7 @@ public class ManagerService {
         return false;
     }
 
-    public boolean checkIfManagerIdExists(Long id) {
+    private boolean checkIfManagerIdExists(Long id) {
         for (Manager manager : getManagers()) {
             if (manager.getManagerID().equals(id)) {
                 return true;
@@ -79,5 +79,4 @@ public class ManagerService {
         }
         return false;
     }
-
 }
