@@ -42,6 +42,9 @@ public interface DTOMapper {
     @Mapping(source = "username", target = "username")
     ManagerGetDTO convertEntityToManagerGetDTO(Manager manager);
 
+    @Mapping(source = "token", target = "token")
+    ManagerPutDTO convertEntityToManagerPutDTO(Manager manager);
+
     @Mapping(source = "name", target = "name")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "password", target = "password")
@@ -53,4 +56,9 @@ public interface DTOMapper {
     @Mapping(source = "username", target = "username")
     @Mapping(source = "userState", target = "userState")
     ParticipantGetDTO convertEntityToParticipantGetDTO(Participant participant);
+
+    @Mapping(source = "token", target = "token")
+    ParticipantPutDTO convertEntityToParticipantPutDTO(Participant participant);
+
+
 }

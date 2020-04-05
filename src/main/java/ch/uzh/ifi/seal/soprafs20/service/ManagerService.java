@@ -47,6 +47,15 @@ public class ManagerService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this Id");
     }
 
+    public Manager getManagerByUsername(String username) {
+        for (Manager manager : getManagers()) {
+            if (manager.getUsername().equals(username)) {
+                return manager;
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this username");
+    }
+
     public Manager createManager(Manager newManager) {
         newManager.setToken(UUID.randomUUID().toString());
 
@@ -74,6 +83,15 @@ public class ManagerService {
     private boolean checkIfManagerIdExists(Long id) {
         for (Manager manager : getManagers()) {
             if (manager.getManagerID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkUsernameAndPassword(String username, String password) {
+        for (Manager manager : getManagers()) {
+            if (manager.getUsername().equals(username) && manager.getPassword().equals(password)) {
                 return true;
             }
         }

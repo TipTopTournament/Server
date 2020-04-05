@@ -50,6 +50,15 @@ public class ParticipantService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
     }
 
+    public Participant getParticipantByUsername(String username) {
+        for (Participant participant : getParticipants()) {
+            if (participant.getUsername().equals(username)) {
+                return participant;
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this username");
+    }
+
     public Participant createParticipant(Participant newParticipant) {
         newParticipant.setToken(UUID.randomUUID().toString());
 
@@ -77,6 +86,15 @@ public class ParticipantService {
     private boolean checkIfParticipantIdExists(Long id) {
         for (Participant participant : getParticipants()) {
             if (participant.getParticipantID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkUsernameAndPassword(String username, String password) {
+        for (Participant participant : getParticipants()) {
+            if (participant.getUsername().equals(username) && participant.getPassword().equals(password)) {
                 return true;
             }
         }

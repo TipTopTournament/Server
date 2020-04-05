@@ -31,5 +31,4 @@ public class ManagerGetDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-
 }

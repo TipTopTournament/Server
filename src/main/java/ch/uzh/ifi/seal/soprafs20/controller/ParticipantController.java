@@ -5,11 +5,13 @@ import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +60,19 @@ public class ParticipantController {
 
         // create participant
         Participant createdParticipant = participantService.createParticipant(participantInput);
+    }
+
+    @PutMapping("/participants/login")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ParticipantPutDTO loginParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
+        Participant participant = DTOMapper.INSTANCE.convertParticipantPostDTOtoEntity(participantPostDTO);
+
+        if (participantService.checkUsernameAndPassword(participant.getUsername(), participant.getPassword())) {
+            return DTOMapper.INSTANCE.convertEntityToParticipantPutDTO(participantService.getParticipantByUsername(participant.getUsername()));
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password were incorrect");
+        }
     }
 }
