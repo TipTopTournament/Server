@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 
 @MappedSuperclass
 public abstract class Person {
@@ -19,7 +20,7 @@ public abstract class Person {
     private String name;
 
     @Column
-    private boolean isLoggedin;
+    private UserStatus userstatus;
 
     //getters
     public String getUsername() {
@@ -34,8 +35,8 @@ public abstract class Person {
     public String getName() {
         return name;
     }
-    public boolean isLoggedin() {
-        return isLoggedin;
+    public UserStatus getUserStatus() {
+        return userstatus;
     }
 
     //setters
@@ -52,7 +53,7 @@ public abstract class Person {
     public void setName(String name) {
         this.name = name;
     }
-    public void setLoggedin(boolean loggedin) {
-        isLoggedin = loggedin;
+    public void setUserStatus(UserStatus userstatus) {
+        this.userstatus = userstatus;
     }
 }

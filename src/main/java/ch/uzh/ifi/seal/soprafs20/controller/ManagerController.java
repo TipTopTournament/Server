@@ -1,9 +1,12 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
+import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPutDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import org.slf4j.Logger;
@@ -47,7 +50,8 @@ public class ManagerController {
     @ResponseStatus(HttpStatus.OK)
     @Query
     public ManagerGetDTO getManager(@PathVariable("managerId") long id) {
-        return managerService.getManagerById(id);
+        Manager manager = managerService.getManagerById(id);
+    	return DTOMapper.INSTANCE.convertEntityToManagerGetDTO(manager);
     }
 
 
@@ -74,5 +78,18 @@ public class ManagerController {
         else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password were incorrect");
         }
+    }
+    
+    @PutMapping("/managers/{managerId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void updateManagerStatus(@RequestBody ManagerPutDTO managerPutDTO,@PathVariable("managerId") long id) {
+    	
+    	//Used to get the status
+    	Manager managerStatus = DTOMapper.INSTANCE.convertManagerPutDTOToEntity(managerPutDTO);
+    	UserStatus status = managerStatus.getUserStatus();
+    	
+    	//Update the Managers Status
+    	managerService.updateStatus(id,status);
     }
 }

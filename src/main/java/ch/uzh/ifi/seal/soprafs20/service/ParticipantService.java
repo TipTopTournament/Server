@@ -6,6 +6,7 @@ import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
+import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import javax.servlet.http.Part;
 import javax.transaction.Transactional;
@@ -41,10 +43,10 @@ public class ParticipantService {
         return this.participantRepository.findAll();
     }
 
-    public ParticipantGetDTO getParticipantById(Long id) {
+    public Participant getParticipantById(Long id) {
         for (Participant participant : getParticipants()) {
             if (participant.getParticipantID().equals(id)) {
-                return DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(participant);
+                return participant;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
@@ -72,6 +74,16 @@ public class ParticipantService {
         else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
+    }
+    
+    public void updateState(Long id, UserState state) {
+    	if(checkIfParticipantIdExists(id)) {
+    		Participant participant = getParticipantById(id);
+    		participant.setUserState(state);
+    	}
+    	else {
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No participant found with this Id");
+    	}
     }
 
     private boolean CheckIfUsernameIsTaken(Participant participantToTest) {

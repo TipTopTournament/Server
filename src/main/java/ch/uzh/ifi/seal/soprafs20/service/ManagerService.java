@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -38,10 +39,10 @@ public class ManagerService {
         return this.managerRepository.findAll();
     }
 
-    public ManagerGetDTO getManagerById(Long id) {
+    public Manager getManagerById(Long id) {
         for (Manager manager : getManagers()) {
             if (manager.getManagerID().equals(id)) {
-                return DTOMapper.INSTANCE.convertEntityToManagerGetDTO(manager);
+                return manager;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this Id");
@@ -88,7 +89,18 @@ public class ManagerService {
         }
         return false;
     }
-
+    
+    public void updateStatus(Long id, UserStatus status) {
+    	if(checkIfManagerIdExists(id)) {
+    		Manager manager = getManagerById(id);
+    		manager.setUserStatus(status);
+    	}
+    	
+    	else {
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No manager found with this Id");
+    	}
+    }
+    
     public boolean checkUsernameAndPassword(String username, String password) {
         for (Manager manager : getManagers()) {
             if (manager.getUsername().equals(username) && manager.getPassword().equals(password)) {

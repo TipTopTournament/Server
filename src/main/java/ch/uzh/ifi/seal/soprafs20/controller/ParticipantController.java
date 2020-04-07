@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,8 @@ public class ParticipantController {
     @ResponseStatus(HttpStatus.OK)
     @Query
     public ParticipantGetDTO getParticipant(@PathVariable("participantId") long id) {
-        return participantService.getParticipantById(id);
+        Participant participant = participantService.getParticipantById(id);
+    	return DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(participant);
     }
 
     @PostMapping("/participants")
@@ -74,5 +76,18 @@ public class ParticipantController {
         else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password were incorrect");
         }
+    }
+    
+    @PutMapping("/participants/{participantId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void updateParticipantState(@RequestBody ParticipantPutDTO participantPutDTO,@PathVariable("participantId") long id) {
+    	
+    	//Used to get the state
+    	Participant participantState = DTOMapper.INSTANCE.convertParticipantPutDTOToEntity(participantPutDTO);
+    	UserState state = participantState.getUserState();
+    	
+    	//Update the Participant State
+    	participantService.updateState(id,state);
     }
 }
