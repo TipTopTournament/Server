@@ -8,11 +8,11 @@ public class ParticipantPutDTO{
         
         private UserState userState;
         	
-        public void setState(UserState userState) {
+        public void setUserState(UserState userState) {
         	this.userState = userState;
         }
         
-        public UserState getState() {
+        public UserState getUserState() {
         	return userState;
         }
         
