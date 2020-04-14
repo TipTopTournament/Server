@@ -58,6 +58,19 @@ public class TournamentController {
         return createdTournament.getTournamentCode();
     }
 
+    @GetMapping("/tournaments/{tournamentCode}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public TournamentGetDTO getTournamentGetDTO(@PathVariable("tournamentCode")  String tournamentCode) {
+
+        // Check if tournament exists
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+        }
+
+        return DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournamentService.getTournamentByTournamentCode(tournamentCode));
+    }
+
     @GetMapping("/tournaments/{tournamentCode}/bracket")
     @Query
     public List<GameGetDTO> getAllGamesOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
@@ -76,7 +89,22 @@ public class TournamentController {
 
         return allGamesGetDTO;
     }
+    /*
+    @GetMapping("/tournaments/{tournamentCode}/leaderboard")
+    @Query
+    public List<List<Object>> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
 
+        // Check if tournament code exists
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+        }
+
+        Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
+
+        return tournament.getLeaderboard().getLeaderboardList();
+
+    }
+    */
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
     @ResponseBody
     public void userJoinsTournament(@PathVariable("tournamentCode") String tournamentCode,

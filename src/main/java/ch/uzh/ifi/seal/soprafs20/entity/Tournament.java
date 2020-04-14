@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
 import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
+import org.springframework.data.annotation.Persistent;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -35,8 +36,8 @@ public class Tournament {
     @Column
     public int numberTables;
 
-    @OneToOne
-    public Leaderboard leaderboard;
+    //@OneToOne
+    //public Leaderboard leaderboard;
 
     @OneToOne
     public Bracket bracket;
@@ -68,9 +69,11 @@ public class Tournament {
     public int getNumberTables() {
         return numberTables;
     }
+    /*
     public Leaderboard getLeaderboard() {
         return leaderboard;
     }
+    */
     public Bracket getBracket() {
         return bracket;
     }
@@ -99,9 +102,11 @@ public class Tournament {
     public void setNumberTables(int numberTables) {
         this.numberTables = numberTables;
     }
+    /*
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
     }
+     */
     public void setBracket(Bracket bracket) {
         this.bracket = bracket;
     }

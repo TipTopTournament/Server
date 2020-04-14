@@ -4,10 +4,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.ifi.seal.soprafs20.entity.Bracket;
-import ch.uzh.ifi.seal.soprafs20.entity.Game;
-import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
+import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.BracketRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
@@ -52,7 +49,7 @@ public class TournamentService {
         tournament.setBracket(createBracket(tournament.getAmountOfPlayers(), tournament.getTournamentCode()));
 
         // Leaderboard is generated
-
+        //tournament.setLeaderboard(new Leaderboard(tournament.getAmountOfPlayers()));
 
         // Tournament is saved
         tournamentRepository.save(tournament);
@@ -110,10 +107,12 @@ public class TournamentService {
 
     // update methods
     public void updateBracketWithNewParticipant(Participant participant, Tournament tournament) {
+        // TODO: has to be changed after leaderboard has been implemented
         if (tournament.getActivePlayers().size() == tournament.getAmountOfPlayers()) {
             throw new ResponseStatusException(HttpStatus.LOCKED, "Tournament is already full.");
         }
-
+        // add player to the active players
+        // TODO: has to be changed after leaderboard has been implemented
         tournament.activePlayers.add(participant);
 
         // get the right bracket
