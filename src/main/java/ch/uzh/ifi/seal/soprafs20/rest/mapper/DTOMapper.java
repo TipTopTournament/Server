@@ -1,13 +1,12 @@
 package ch.uzh.ifi.seal.soprafs20.rest.mapper;
 
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * DTOMapper
@@ -21,16 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public interface DTOMapper {
 
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
-
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
-    User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
-
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "status", target = "status")
-    UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "name", target = "name")
     @Mapping(source = "username", target = "username")
@@ -66,5 +55,28 @@ public interface DTOMapper {
     @Mapping(source = "token", target = "token")
     ParticipantPutDTO convertEntityToParticipantPutDTO(Participant participant);
 
+    @Mapping(source = "breakDuration", target = "breakDuration")
+    @Mapping(source = "gameDuration", target = "gameDuration")
+    @Mapping(source = "startTime", target = "startTime")
+    @Mapping(source = "numberTables", target = "numberTables")
+    @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
+    Tournament convertiTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
 
+    @Mapping(source = "tournamentId", target = "tournamentId")
+    @Mapping(source = "tournamentCode", target = "tournamentCode")
+    @Mapping(source = "breakDuration", target = "breakDuration")
+    @Mapping(source = "gameDuration", target = "gameDuration")
+    @Mapping(source = "startTime", target = "startTime")
+    @Mapping(source = "numberTables", target = "numberTables")
+    @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
+    TournamentGetDTO convertEntityToTournamentGetDTO(Tournament tournament);
+
+    @Mapping(source = "gameId", target = "gameId")
+    @Mapping(source = "gameState", target = "gameState")
+    @Mapping(source = "score1", target = "score1")
+    @Mapping(source = "score2", target = "score2")
+    @Mapping(source = "participant1", target = "participant1")
+    @Mapping(source = "participant2", target = "participant2")
+    @Mapping(source = "tournamentCode", target = "tournamentCode")
+    GameGetDTO convertEntityToGameGetDTO(Game game);
 }

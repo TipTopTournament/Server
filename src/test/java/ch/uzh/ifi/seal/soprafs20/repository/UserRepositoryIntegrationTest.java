@@ -1,7 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.repository;
-
+/*
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
-import ch.uzh.ifi.seal.soprafs20.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -42,3 +41,4 @@ public class UserRepositoryIntegrationTest {
         assertEquals(found.getStatus(), user.getStatus());
     }
 }
+*/

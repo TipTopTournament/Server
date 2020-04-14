@@ -58,7 +58,7 @@ public class ParticipantService {
                 return participant;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No manager found with this username");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this username");
     }
 
     public Participant createParticipant(Participant newParticipant) {
@@ -68,7 +68,7 @@ public class ParticipantService {
             newParticipant = participantRepository.save(newParticipant);
             participantRepository.flush();
 
-            log.debug("Created Information for Manager: {}", newParticipant);
+            log.debug("Created Information for Participant: {}", newParticipant);
             return newParticipant;
         }
         else {
