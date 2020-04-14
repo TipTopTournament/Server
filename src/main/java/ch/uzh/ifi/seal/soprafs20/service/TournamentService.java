@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.ifi.seal.soprafs20.entity.*;
-import ch.uzh.ifi.seal.soprafs20.repository.BracketRepository;
-import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
-import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
-import ch.uzh.ifi.seal.soprafs20.repository.TournamentRepository;
+import ch.uzh.ifi.seal.soprafs20.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +25,17 @@ public class TournamentService {
     private TournamentRepository tournamentRepository;
     private GameRepository gameRepository;
     private BracketRepository bracketRepository;
+    private LeaderboardRepository leaderboardRepository;
 
     @Autowired
     public TournamentService(@Qualifier("tournamentRepository")TournamentRepository tournamentRepository,
                              @Qualifier("gameRepository") GameRepository gameRepository,
-                             @Qualifier("bracketRepository") BracketRepository bracketRepository) {
+                             @Qualifier("bracketRepository") BracketRepository bracketRepository,
+                             @Qualifier("leaderboardRepository") LeaderboardRepository leaderboardRepository) {
         this.tournamentRepository = tournamentRepository;
         this.gameRepository = gameRepository;
         this.bracketRepository = bracketRepository;
+        this.leaderboardRepository = leaderboardRepository;
     }
 
 
@@ -49,7 +49,7 @@ public class TournamentService {
         tournament.setBracket(createBracket(tournament.getAmountOfPlayers(), tournament.getTournamentCode()));
 
         // Leaderboard is generated
-        //tournament.setLeaderboard(new Leaderboard(tournament.getAmountOfPlayers()));
+        tournament.setLeaderboard(createLeaderboard());
 
         // Tournament is saved
         tournamentRepository.save(tournament);
@@ -83,6 +83,16 @@ public class TournamentService {
         return bracket;
     }
 
+    public Leaderboard createLeaderboard() {
+        Leaderboard leaderboard = new Leaderboard();
+
+        // save the leaderboard
+        leaderboardRepository.save(leaderboard);
+        leaderboardRepository.flush();
+
+        return leaderboard;
+    }
+
     // get methods
     public Tournament getTournamentByTournamentCode(String tournamentCode) {
         return tournamentRepository.findByTournamentCode(tournamentCode);
@@ -105,15 +115,33 @@ public class TournamentService {
         return newTournament != null;
     }
 
+    public boolean checkIfParticipantIsInLeaderboard(String username, List<Participant> liste) {
+        for (Participant participant : liste) {
+            if (participant.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // update methods
     public void updateBracketWithNewParticipant(Participant participant, Tournament tournament) {
-        // TODO: has to be changed after leaderboard has been implemented
-        if (tournament.getActivePlayers().size() == tournament.getAmountOfPlayers()) {
+        if (tournament.getLeaderboard().getLeaderboardList().size() == tournament.getAmountOfPlayers()) {
             throw new ResponseStatusException(HttpStatus.LOCKED, "Tournament is already full.");
         }
-        // add player to the active players
-        // TODO: has to be changed after leaderboard has been implemented
-        tournament.activePlayers.add(participant);
+
+        // add player to the leaderboard
+        // get the right leaderboard
+        Leaderboard leaderboard = tournament.getLeaderboard();
+
+        // check if participant is already in there
+        if (checkIfParticipantIsInLeaderboard(participant.getUsername(), leaderboard.getLeaderboardList())) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+
+        leaderboard.addParticipant(participant);
+        leaderboardRepository.save(leaderboard);
+        leaderboardRepository.flush();
 
         // get the right bracket
         Bracket bracket = tournament.getBracket();
@@ -162,8 +190,4 @@ public class TournamentService {
         return sb.toString();
 
     }
-
-
-
-
 }

@@ -1,10 +1,10 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.servlet.http.Part;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 @Entity
@@ -12,7 +12,7 @@ public class Leaderboard {
 
     @Id
     @GeneratedValue
-    public long leaderboardID;
+    public long leaderboardId;
 
     @OneToMany(targetEntity = Participant.class)
     private List<Participant> leaderboardList = new ArrayList<>();
@@ -21,7 +21,8 @@ public class Leaderboard {
         return leaderboardList;
     }
 
-    public void setLeaderboardList(List<Participant> leaderboardList) {
-        this.leaderboardList = leaderboardList;
+    public void addParticipant(Participant participant) {
+        leaderboardList.add(participant);
     }
+
 }

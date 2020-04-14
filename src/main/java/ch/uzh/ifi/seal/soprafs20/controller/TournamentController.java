@@ -3,10 +3,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.GameGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.TournamentGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.TournamentPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
@@ -89,11 +86,11 @@ public class TournamentController {
 
         return allGamesGetDTO;
     }
-    /*
+
     @GetMapping("/tournaments/{tournamentCode}/leaderboard")
     @Query
-    public List<List<Object>> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
-
+    public List<ParticipantGetDTO> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
+        List<ParticipantGetDTO> listParticipants = new ArrayList<>();
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
@@ -101,10 +98,13 @@ public class TournamentController {
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
-        return tournament.getLeaderboard().getLeaderboardList();
+        for (Participant participant : tournament.getLeaderboard().getLeaderboardList()) {
+            listParticipants.add(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(participant));
+        }
 
+        return listParticipants;
     }
-    */
+
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
     @ResponseBody
     public void userJoinsTournament(@PathVariable("tournamentCode") String tournamentCode,
