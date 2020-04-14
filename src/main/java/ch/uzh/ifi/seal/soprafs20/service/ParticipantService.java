@@ -95,7 +95,7 @@ public class ParticipantService {
         return false;
     }
 
-    private boolean checkIfParticipantIdExists(Long id) {
+    public boolean checkIfParticipantIdExists(Long id) {
         for (Participant participant : getParticipants()) {
             if (participant.getParticipantID().equals(id)) {
                 return true;

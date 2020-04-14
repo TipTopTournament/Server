@@ -1,11 +1,14 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.GameGetDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.TournamentGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.TournamentPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
+import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 import org.apache.coyote.Response;
 import org.springframework.data.jpa.repository.Query;
@@ -20,9 +23,11 @@ import java.util.List;
 public class TournamentController {
 
     private final TournamentService tournamentService;
+    private final ParticipantService participantService;
 
-    public TournamentController(TournamentService tournamentService) {
+    public TournamentController(TournamentService tournamentService, ParticipantService participantService) {
         this.tournamentService = tournamentService;
+        this.participantService = participantService;
     }
 
     @GetMapping("/tournaments")
@@ -70,5 +75,27 @@ public class TournamentController {
         }
 
         return allGamesGetDTO;
+    }
+
+    @PutMapping("/tournaments/{tournamentCode}/{participantId}")
+    @ResponseBody
+    public void userJoinsTournament(@PathVariable("tournamentCode") String tournamentCode,
+                                    @PathVariable("participantId") long participantId) {
+
+        // if tournament does not exist, error
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+        }
+
+        // if user id is not valid, e.g. user does not exist
+        if (!participantService.checkIfParticipantIdExists(participantId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with such an ID exists.");
+        }
+
+        Participant participant = participantService.getParticipantById(participantId);
+
+        Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
+
+        tournamentService.updateBracketWithNewParticipant(participant, tournament);
     }
 }

@@ -6,14 +6,17 @@ import java.util.List;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Bracket;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.BracketRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
+import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.TournamentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -84,6 +87,10 @@ public class TournamentService {
     }
 
     // get methods
+    public Tournament getTournamentByTournamentCode(String tournamentCode) {
+        return tournamentRepository.findByTournamentCode(tournamentCode);
+    }
+
     public List<Game> getBracketByTournamentCode(String tournamentCode) {
         Tournament tournament = tournamentRepository.findByTournamentCode(tournamentCode);
 
@@ -99,6 +106,35 @@ public class TournamentService {
         Tournament newTournament = tournamentRepository.findByTournamentCode(tournamentCode);
 
         return newTournament != null;
+    }
+
+    // update methods
+    public void updateBracketWithNewParticipant(Participant participant, Tournament tournament) {
+        tournament.activePlayers.add(participant);
+
+        // get the right bracket
+        Bracket bracket = tournament.getBracket();
+
+        // update games in bracket
+        for (Game game : bracket.getBracketList()) {
+            if (game.getParticipant1() == participant || game.getParticipant2() == participant) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Participant is already in the tournament");
+            }
+            else if (game.getParticipant1() == null) {
+                game.setParticipant1(participant);
+                gameRepository.save(game);
+                gameRepository.flush();
+                break;
+            }
+            else if (game.getParticipant2() == null) {
+                game.setParticipant2(participant);
+                gameRepository.save(game);
+                gameRepository.flush();
+                break;
+            }
+        }
+        bracketRepository.save(bracket);
+        bracketRepository.flush();
     }
 
     //helpers
