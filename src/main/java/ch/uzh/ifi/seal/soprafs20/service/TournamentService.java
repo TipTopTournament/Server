@@ -110,6 +110,10 @@ public class TournamentService {
 
     // update methods
     public void updateBracketWithNewParticipant(Participant participant, Tournament tournament) {
+        if (tournament.getActivePlayers().size() == tournament.getAmountOfPlayers()) {
+            throw new ResponseStatusException(HttpStatus.LOCKED, "Tournament is already full.");
+        }
+
         tournament.activePlayers.add(participant);
 
         // get the right bracket

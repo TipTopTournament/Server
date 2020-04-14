@@ -74,6 +74,9 @@ public class Tournament {
     public Bracket getBracket() {
         return bracket;
     }
+    public List<Participant> getActivePlayers() {
+        return activePlayers;
+    }
 
     public void setTournamentState(TournamentState tournamentState) {
         this.tournamentState = tournamentState;
@@ -101,5 +104,8 @@ public class Tournament {
     }
     public void setBracket(Bracket bracket) {
         this.bracket = bracket;
+    }
+    public void setActivePlayers(List<Participant> activePlayers) {
+        this.activePlayers = activePlayers;
     }
 }
