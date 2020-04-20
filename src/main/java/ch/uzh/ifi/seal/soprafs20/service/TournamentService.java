@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.*;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 
 @Service
@@ -49,7 +51,7 @@ public class TournamentService {
         tournament.setBracket(createBracket(tournament.getAmountOfPlayers(), tournament.getTournamentCode()));
 
         // Leaderboard is generated
-        tournament.setLeaderboard(createLeaderboard());
+        tournament.setLeaderboard(createLeaderboard(tournament.getAmountOfPlayers()));
 
         // Tournament is saved
         tournamentRepository.save(tournament);
@@ -83,8 +85,16 @@ public class TournamentService {
         return bracket;
     }
 
-    public Leaderboard createLeaderboard() {
+    public Leaderboard createLeaderboard(int numberOfPlayers) {
         Leaderboard leaderboard = new Leaderboard();
+
+        // wins are stored in a string because of jpa being müehsam
+        List<Integer> leaderB = new ArrayList<>();
+        for (int i = 0; i < numberOfPlayers - 1; i++) {
+            leaderB.add(0);
+        }
+
+        leaderboard.setWins(leaderB);
 
         // save the leaderboard
         leaderboardRepository.save(leaderboard);
@@ -168,6 +178,56 @@ public class TournamentService {
         bracketRepository.flush();
     }
 
+    public void updateGameWithScore(String tournamentCode, long gameId, int score1, int score2) {
+
+        Game game = gameRepository.findByGameId(gameId);
+
+        // update the score of the game
+        if (game != null) {
+            // check if first entry
+            if (game.getGameState() == GameState.NOTREADY) {
+                game.setScore1(score1);
+                game.setScore2(score2);
+                game.setGameState(GameState.FIRSTENTRY);
+            }
+
+            else if (game.getGameState() == GameState.FIRSTENTRY) {
+
+                // check if the score is different
+                if (game.getScore1() != score1 || game.getScore2() != score2) {
+                    game.setGameState(GameState.CONFLICT);
+                }
+                else {
+                    game.setGameState(GameState.FINISHED);
+                }
+            }
+            gameRepository.save(game);
+            gameRepository.flush();
+        }
+        // update the leaderboard if there is a winner
+        if (game.getGameState() == GameState.FINISHED) {
+
+            Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
+
+            if (game.getScore1() > game.getScore2()) {
+                // Participant 1 wins
+                int position = getPositionFromLeaderboard(game.getParticipant1().getParticipantID(), leaderboard);
+
+                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
+            }
+            else {
+                // Participant 2 wins
+                int position = getPositionFromLeaderboard(game.getParticipant2().getParticipantID(), leaderboard);
+
+                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
+            }
+
+            leaderboardRepository.save(leaderboard);
+            leaderboardRepository.flush();
+        }
+    }
+
+
     //helpers
     public static String generateTournamentCode() {
 
@@ -189,5 +249,19 @@ public class TournamentService {
         }
         return sb.toString();
 
+    }
+
+    public static int getPositionFromLeaderboard(long participantId, Leaderboard leaderboard) {
+        for (int i = 0; i < leaderboard.getLeaderboardList().size() - 1; i++) {
+            if (leaderboard.getLeaderboardList().get(i).getParticipantID() == participantId) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static List<Integer> updateWins(List<Integer> oldList, int position) {
+        oldList.set(position, oldList.get(position) + 1);
+        return oldList;
     }
 }

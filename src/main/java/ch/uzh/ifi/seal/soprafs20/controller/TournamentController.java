@@ -89,8 +89,8 @@ public class TournamentController {
 
     @GetMapping("/tournaments/{tournamentCode}/leaderboard")
     @Query
-    public List<ParticipantGetDTO> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
-        List<ParticipantGetDTO> listParticipants = new ArrayList<>();
+    public List<List<Object>> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
+        List<List<Object>> listParticipants = new ArrayList<>();
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
@@ -98,11 +98,26 @@ public class TournamentController {
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
-        for (Participant participant : tournament.getLeaderboard().getLeaderboardList()) {
-            listParticipants.add(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(participant));
+        for (int i = 0 ; i < tournament.getLeaderboard().getLeaderboardList().size(); i++) {
+            List<Object> liste = new ArrayList<>();
+            liste.add(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getLeaderboard().getLeaderboardList().get(i)));
+            liste.add(tournament.getLeaderboard().getWins().get(i));
+            listParticipants.add(liste);
+        }
+        return listParticipants;
+    }
+
+    @PutMapping("/tournaments/{tournamentCode}/bracket/{gameId}")
+    @ResponseBody
+    public void updateGameScore(@PathVariable("tournamentCode") String tournamentCode,
+                                @PathVariable("gameId") long gameId,
+                                @RequestBody GamePutDTO gamePutDTO) {
+        // if tournament does not exist, error
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
         }
 
-        return listParticipants;
+        tournamentService.updateGameWithScore(tournamentCode, gameId, gamePutDTO.getScore1(), gamePutDTO.getScore2());
     }
 
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
