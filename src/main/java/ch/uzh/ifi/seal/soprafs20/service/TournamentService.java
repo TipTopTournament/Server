@@ -125,9 +125,9 @@ public class TournamentService {
         return newTournament != null;
     }
 
-    public boolean checkIfParticipantIsInLeaderboard(String username, List<Participant> liste) {
+    public boolean checkIfParticipantIsInLeaderboard(String licensenumber, List<Participant> liste) {
         for (Participant participant : liste) {
-            if (participant.getUsername().equals(username)) {
+            if (participant.getLicenseNumber().equals(licensenumber)) {
                 return true;
             }
         }
@@ -145,7 +145,7 @@ public class TournamentService {
         Leaderboard leaderboard = tournament.getLeaderboard();
 
         // check if participant is already in there
-        if (checkIfParticipantIsInLeaderboard(participant.getUsername(), leaderboard.getLeaderboardList())) {
+        if (checkIfParticipantIsInLeaderboard(participant.getLicenseNumber(), leaderboard.getLeaderboardList())) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
 
@@ -204,7 +204,7 @@ public class TournamentService {
             gameRepository.save(game);
             gameRepository.flush();
         }
-        // update the leaderboard if there is a winner
+        // update the leaderboard if there is a winner e.g. there is no conflict
         if (game.getGameState() == GameState.FINISHED) {
 
             Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();

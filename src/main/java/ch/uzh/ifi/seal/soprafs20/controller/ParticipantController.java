@@ -70,8 +70,8 @@ public class ParticipantController {
     public ParticipantPutDTO loginParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
         Participant participant = DTOMapper.INSTANCE.convertParticipantPostDTOtoEntity(participantPostDTO);
 
-        if (participantService.checkUsernameAndPassword(participant.getUsername(), participant.getPassword())) {
-            return DTOMapper.INSTANCE.convertEntityToParticipantPutDTO(participantService.getParticipantByUsername(participant.getUsername()));
+        if (participantService.checkLicenseNumberAndPassword(participant.getLicenseNumber(), participant.getPassword())) {
+            return DTOMapper.INSTANCE.convertEntityToParticipantPutDTO(participantService.getParticipantByLicenseNumber(participant.getLicenseNumber()));
         }
         else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password were incorrect");

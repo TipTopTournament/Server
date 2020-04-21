@@ -21,8 +21,8 @@ public interface DTOMapper {
 
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
+    @Mapping(source = "vorname", target = "vorname")
+    @Mapping(source = "nachname", target = "nachname")
     @Mapping(source = "password", target = "password")
     Manager convertManagerPostDTOtoEntity(ManagerPostDTO managerPostDTO);
 
@@ -30,16 +30,17 @@ public interface DTOMapper {
     Manager convertManagerPutDTOToEntity(ManagerPutDTO managerPutDTO);
     
     @Mapping(source = "managerID", target = "managerID")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
+    @Mapping(source = "vorname", target = "vorname")
+    @Mapping(source = "nachname", target = "nachname")
     ManagerGetDTO convertEntityToManagerGetDTO(Manager manager);
 
     @Mapping(source = "token", target = "token")
     ManagerPutDTO convertEntityToManagerPutDTO(Manager manager);
     
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
+    @Mapping(source = "vorname", target = "vorname")
+    @Mapping(source = "nachname", target = "nachname")
     @Mapping(source = "password", target = "password")
+    @Mapping(source = "licenseNumber", target = "licenseNumber")
     Participant convertParticipantPostDTOtoEntity(ParticipantPostDTO participantPostDTO);
     
     @Mapping(source = "userState", target = "userState")
@@ -47,12 +48,13 @@ public interface DTOMapper {
     
     @Mapping(source = "participantID", target = "participantID")
     @Mapping(source = "licenseNumber", target = "licenseNumber")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "username", target = "username")
+    @Mapping(source = "vorname", target = "vorname")
+    @Mapping(source = "nachname", target = "nachname")
     @Mapping(source = "userState", target = "userState")
     ParticipantGetDTO convertEntityToParticipantGetDTO(Participant participant);
 
     @Mapping(source = "token", target = "token")
+    @Mapping(source = "participantID", target = "participantID")
     ParticipantPutDTO convertEntityToParticipantPutDTO(Participant participant);
 
     @Mapping(source = "breakDuration", target = "breakDuration")

@@ -25,6 +25,12 @@ public class Participant extends Person{
     @Column
     private UserState userState;
 
+    @Column
+    private int eloScore;
+
+    @Column
+    private int ranking;
+
 
     // getters
     public Long getParticipantID() {
@@ -39,6 +45,12 @@ public class Participant extends Person{
     public UserState getUserState() {
         return userState;
     }
+    public int getEloScore() {
+        return eloScore;
+    }
+    public int getRanking() {
+        return ranking;
+    }
 
     //setters
     public void setLicenseNumber(String licenseNumber) {
@@ -49,5 +61,14 @@ public class Participant extends Person{
     }
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+    public void setParticipantID(Long participantID) {
+        this.participantID = participantID;
+    }
+    public void setEloScore(int eloScore) {
+        this.eloScore = eloScore;
+    }
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
     }
 }

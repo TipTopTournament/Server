@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
+import java.util.Random;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
@@ -52,27 +53,37 @@ public class ParticipantService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
     }
 
-    public Participant getParticipantByUsername(String username) {
-        for (Participant participant : getParticipants()) {
-            if (participant.getUsername().equals(username)) {
-                return participant;
-            }
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this username");
+    public Participant getParticipantByLicenseNumber(String licensenumber) {
+        return participantRepository.findByLicenseNumber(licensenumber);
     }
 
     public Participant createParticipant(Participant newParticipant) {
-        newParticipant.setToken(UUID.randomUUID().toString());
 
-        if(!CheckIfUsernameIsTaken(newParticipant)) {
-            newParticipant = participantRepository.save(newParticipant);
+        if (newParticipant.getLicenseNumber() == null) {
+            newParticipant.setToken(UUID.randomUUID().toString());
+            newParticipant.setLicenseNumber(createNewLicenseNumber());
+
+            participantRepository.save(newParticipant);
             participantRepository.flush();
 
-            log.debug("Created Information for Participant: {}", newParticipant);
             return newParticipant;
         }
+        else if (participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()) != null
+            && participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()).getPassword() == null) {
+
+            Participant oldOParticipant = participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber());
+
+            // set new values
+            oldOParticipant.setToken(UUID.randomUUID().toString());
+            oldOParticipant.setPassword(newParticipant.getPassword());
+
+            participantRepository.save(oldOParticipant);
+            participantRepository.flush();
+
+            return oldOParticipant;
+        }
         else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Participant already exists or license number doesn't exist");
         }
     }
     
@@ -86,15 +97,6 @@ public class ParticipantService {
     	}
     }
 
-    private boolean CheckIfUsernameIsTaken(Participant participantToTest) {
-        for (Participant participant : getParticipants()) {
-            if (participant.getUsername().equals(participantToTest.getUsername())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean checkIfParticipantIdExists(Long id) {
         for (Participant participant : getParticipants()) {
             if (participant.getParticipantID().equals(id)) {
@@ -104,12 +106,26 @@ public class ParticipantService {
         return false;
     }
 
-    public boolean checkUsernameAndPassword(String username, String password) {
+    public boolean checkLicenseNumberAndPassword(String licenseNumber, String password) {
         for (Participant participant : getParticipants()) {
-            if (participant.getUsername().equals(username) && participant.getPassword().equals(password)) {
+            if (participant.getLicenseNumber().equals(licenseNumber) && participant.getPassword().equals(password)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private String createNewLicenseNumber() {
+        boolean exists = true;
+        String newLicensenumber = "";
+        Random r = new Random();
+
+        while (exists) {
+            newLicensenumber = Integer.toString(r.nextInt((999999-100000)+1) + 100000);
+
+            exists = participantRepository.findByLicenseNumber(newLicensenumber) != null;
+        }
+
+        return newLicensenumber;
     }
 }

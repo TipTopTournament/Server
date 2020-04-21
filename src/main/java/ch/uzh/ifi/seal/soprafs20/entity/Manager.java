@@ -12,7 +12,18 @@ public class Manager extends Person{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long managerID;
 
+    @Column(nullable = false)
+    private String username;
+
     public Long getManagerID() {
         return managerID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -6,8 +6,8 @@ public class ParticipantGetDTO {
 
     private Long participantID;
     private String licenseNumber;
-    private String name;
-    private String username;
+    private String vorname;
+    private String nachname;
     private UserState userState;
 
     public Long getParticipantID() {
@@ -26,20 +26,18 @@ public class ParticipantGetDTO {
         this.licenseNumber = licenseNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getVorname() {
+        return vorname;
+    }
+    public String getNachname() {
+        return nachname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
     }
 
     public UserState getUserState() {

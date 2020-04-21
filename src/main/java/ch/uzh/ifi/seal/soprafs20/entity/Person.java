@@ -7,8 +7,11 @@ import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 @MappedSuperclass
 public abstract class Person {
 
-    @Column(nullable = false)
-    private String username;
+    @Column
+    private String vorname;
+
+    @Column
+    private String nachname;
 
     @Column
     private String password;
@@ -17,43 +20,40 @@ public abstract class Person {
     private String token;
 
     @Column
-    private String name;
-
-    @Column
     private UserStatus userstatus;
 
     //getters
-    public String getUsername() {
-        return username;
-    }
     public String getPassword() {
         return password;
     }
     public String getToken() {
         return token;
     }
-    public String getName() {
-        return name;
-    }
     public UserStatus getUserStatus() {
         return userstatus;
+    }
+    public String getVorname() {
+        return vorname;
+    }
+    public String getNachname() {
+        return nachname;
     }
 
     //setters
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
     public void setPassword(String password) {
         this.password = password;
     }
     public void setToken(String token) {
         this.token = token;
     }
-    public void setName(String name) {
-        this.name = name;
-    }
     public void setUserStatus(UserStatus userstatus) {
         this.userstatus = userstatus;
+    }
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
+    }
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
     }
 }
