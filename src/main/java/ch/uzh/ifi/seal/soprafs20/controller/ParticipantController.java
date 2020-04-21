@@ -2,10 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import org.springframework.data.jpa.repository.Query;
@@ -89,5 +86,12 @@ public class ParticipantController {
     	
     	//Update the Participant State
     	participantService.updateState(id,state);
+    }
+
+    @GetMapping("/participants/{participantId}/statistics")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public StatisticsGetDTO getStatisticFromParticipant(@PathVariable("participantId") long id) {
+        return DTOMapper.INSTANCE.convertEntityToStatisticsGetDTO(participantService.getStatsByParticipantID(id));
     }
 }

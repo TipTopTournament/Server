@@ -3,7 +3,9 @@ package ch.uzh.ifi.seal.soprafs20.service;
 import java.util.Random;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
+import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
+import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -34,10 +36,13 @@ public class ParticipantService {
     private final Logger log = LoggerFactory.getLogger(ParticipantService.class);
 
     private ParticipantRepository participantRepository;
+    private StatisticsRepository statisticsRepository;
 
     @Autowired
-    public ParticipantService(@Qualifier("participantRepository")ParticipantRepository participantRepository) {
+    public ParticipantService(@Qualifier("participantRepository")ParticipantRepository participantRepository,
+                              @Qualifier("statisticsRepository")StatisticsRepository statisticsRepository) {
         this.participantRepository = participantRepository;
+        this.statisticsRepository = statisticsRepository;
     }
 
     public List<Participant> getParticipants() {
@@ -57,11 +62,22 @@ public class ParticipantService {
         return participantRepository.findByLicenseNumber(licensenumber);
     }
 
+    public Statistics getStatsByParticipantID(Long id) {
+        if (participantRepository.findByParticipantID(id) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
+        }
+        else {
+            return participantRepository.findByParticipantID(id).getStatistics();
+        }
+    }
+
     public Participant createParticipant(Participant newParticipant) {
 
         if (newParticipant.getLicenseNumber() == null) {
+
             newParticipant.setToken(UUID.randomUUID().toString());
             newParticipant.setLicenseNumber(createNewLicenseNumber());
+            newParticipant.setStatistics(createEmptyStats());
 
             participantRepository.save(newParticipant);
             participantRepository.flush();
@@ -76,7 +92,8 @@ public class ParticipantService {
             // set new values
             oldOParticipant.setToken(UUID.randomUUID().toString());
             oldOParticipant.setPassword(newParticipant.getPassword());
-
+            oldOParticipant.setStatistics(createEmptyStats());
+            
             participantRepository.save(oldOParticipant);
             participantRepository.flush();
 
@@ -127,5 +144,19 @@ public class ParticipantService {
         }
 
         return newLicensenumber;
+    }
+
+    private Statistics createEmptyStats() {
+        Statistics stats = new Statistics();
+
+        stats.setWins(0);
+        stats.setLosses(0);
+        stats.setPointsScored(0);
+        stats.setPointsConceded(0);
+
+        statisticsRepository.save(stats);
+        statisticsRepository.flush();
+
+        return stats;
     }
 }

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository("participantRepository")
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
     Participant findByLicenseNumber(String licensenumber);
+    Participant findByParticipantID(Long participantID);
 }

@@ -2,10 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.entity;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "Participant")
 public class Participant extends Person{
@@ -31,6 +28,8 @@ public class Participant extends Person{
     @Column
     private int ranking;
 
+    @OneToOne
+    private Statistics statistics;
 
     // getters
     public Long getParticipantID() {
@@ -51,6 +50,9 @@ public class Participant extends Person{
     public int getRanking() {
         return ranking;
     }
+    public Statistics getStatistics() {
+        return statistics;
+    }
 
     //setters
     public void setLicenseNumber(String licenseNumber) {
@@ -70,5 +72,8 @@ public class Participant extends Person{
     }
     public void setRanking(int ranking) {
         this.ranking = ranking;
+    }
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
     }
 }
