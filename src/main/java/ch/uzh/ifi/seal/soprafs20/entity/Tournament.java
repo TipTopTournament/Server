@@ -18,6 +18,8 @@ public class Tournament {
     @Column
     public String tournamentName; // something like Zürich Open or Champions League 23.4.20 by Tony
 
+    @Column String location;
+
     @Column
     public TournamentState tournamentState;
 
@@ -75,6 +77,9 @@ public class Tournament {
     public int getNumberTables() {
         return numberTables;
     }
+    public String getLocation() {
+        return location;
+    }
 
     public Leaderboard getLeaderboard() {
         return leaderboard;
@@ -111,6 +116,9 @@ public class Tournament {
     }
     public void setNumberTables(int numberTables) {
         this.numberTables = numberTables;
+    }
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setLeaderboard(Leaderboard leaderboard) {
