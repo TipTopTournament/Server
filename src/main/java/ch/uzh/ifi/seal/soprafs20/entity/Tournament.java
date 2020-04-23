@@ -16,6 +16,9 @@ public class Tournament {
     public long tournamentId;
 
     @Column
+    public String tournamentName; // something like Zürich Open or Champions League 23.4.20 by Tony
+
+    @Column
     public TournamentState tournamentState;
 
     @Column
@@ -48,6 +51,9 @@ public class Tournament {
     public long getTournamentId() {
         return tournamentId;
     }
+    public String getTournamentName() {
+        return tournamentName;
+    }
     public TournamentState getTournamentState() {
         return tournamentState;
     }
@@ -79,6 +85,10 @@ public class Tournament {
     }
     public List<Participant> getActivePlayers() {
         return activePlayers;
+    }
+
+    public void setTournamentName(String tournamentName){
+        this.tournamentName = tournamentName;
     }
 
     public void setTournamentState(TournamentState tournamentState) {
