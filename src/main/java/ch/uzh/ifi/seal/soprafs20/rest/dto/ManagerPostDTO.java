@@ -5,7 +5,7 @@ public class ManagerPostDTO {
     private String vorname;
     private String nachname;
     private String password;
-    private String licenseNumber;
+    private String username;
 
 
     public String getNachname() {
@@ -15,8 +15,8 @@ public class ManagerPostDTO {
         return vorname;
     }
     public String getPassword() { return password; }
-    public String getLicenseNumber() {
-        return licenseNumber;
+    public String getUsername() {
+        return username;
     }
 
     public void setPassword(String password) {
@@ -28,7 +28,7 @@ public class ManagerPostDTO {
     public void setVorname(String vorname) {
         this.vorname = vorname;
     }
-    public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber;
+    public void setUsername(String licenseNumber) {
+        this.username = licenseNumber;
     }
 }
