@@ -181,6 +181,7 @@ public class TournamentService {
     public void updateGameWithScore(String tournamentCode, long gameId, int score1, int score2) {
 
         Game game = gameRepository.findByGameId(gameId);
+        Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
 
         // update the score of the game
         if (game != null) {
@@ -204,26 +205,29 @@ public class TournamentService {
             gameRepository.save(game);
             gameRepository.flush();
         }
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found.");
+        }
         // update the leaderboard if there is a winner e.g. there is no conflict
-        if (game.getGameState() == GameState.FINISHED) {
 
-            Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
+        updateLeaderboardWithGame(game, leaderboard);
+    }
 
-            if (game.getScore1() > game.getScore2()) {
-                // Participant 1 wins
-                int position = getPositionFromLeaderboard(game.getParticipant1().getParticipantID(), leaderboard);
+    public void updateBracketAfterUserLeft(Participant participant, Tournament tournament) {
 
-                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
+        Bracket bracket = tournament.getBracket();
+        Leaderboard leaderboard = tournament.getLeaderboard();
+
+        for (Game game : bracket.getBracketList()) {
+            // go through all the games and find the one which the participant is part of and is not finished
+            if (game.getParticipant1() != null && game.getParticipant2() != null) {
+                if ((game.getParticipant1().getParticipantID().equals(participant.getParticipantID())
+                        || game.getParticipant2().getParticipantID().equals(participant.getParticipantID()))
+                        && game.getGameState() != GameState.FINISHED) {
+
+                    gameForfait(game, participant, leaderboard);
+                }
             }
-            else {
-                // Participant 2 wins
-                int position = getPositionFromLeaderboard(game.getParticipant2().getParticipantID(), leaderboard);
-
-                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
-            }
-
-            leaderboardRepository.save(leaderboard);
-            leaderboardRepository.flush();
         }
     }
 
@@ -263,5 +267,45 @@ public class TournamentService {
     public static List<Integer> updateWins(List<Integer> oldList, int position) {
         oldList.set(position, oldList.get(position) + 1);
         return oldList;
+    }
+
+    public void gameForfait(Game game, Participant leaver, Leaderboard leaderboard) {
+
+        // if it is participant 1
+        if (game.getParticipant1().getParticipantID().equals(leaver.getParticipantID())) {
+            game.setScore1(0);
+            game.setScore2(3);
+            game.setGameState(GameState.FINISHED);
+        }
+        // if it is participant 2
+        else if (game.getParticipant2().getParticipantID().equals(leaver.getParticipantID())) {
+            game.setScore2(0);
+            game.setScore1(3);
+            game.setGameState(GameState.FINISHED);
+        }
+
+        this.updateLeaderboardWithGame(game, leaderboard);
+    }
+
+    public void updateLeaderboardWithGame(Game game, Leaderboard leaderboard) {
+        // update the leaderboard if there is a winner e.g. there is no conflict
+        if (game.getGameState() == GameState.FINISHED) {
+
+            if (game.getScore1() > game.getScore2()) {
+                // Participant 1 wins
+                int position = getPositionFromLeaderboard(game.getParticipant1().getParticipantID(), leaderboard);
+
+                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
+            }
+            else {
+                // Participant 2 wins
+                int position = getPositionFromLeaderboard(game.getParticipant2().getParticipantID(), leaderboard);
+
+                leaderboard.setWins(updateWins(leaderboard.getWins(), position));
+            }
+
+            leaderboardRepository.save(leaderboard);
+            leaderboardRepository.flush();
+        }
     }
 }

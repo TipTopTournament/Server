@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
@@ -137,8 +138,38 @@ public class TournamentController {
 
         Participant participant = participantService.getParticipantById(participantId);
 
+        // at the start of the tournament the status is NOT READY as a default.
+        participant.setUserState(UserState.NOTREADY);
+
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
         tournamentService.updateBracketWithNewParticipant(participant, tournament);
+    }
+
+    @PutMapping("/tournaments/{tournamentCode}/{participantId}/leave")
+    @ResponseBody
+    public void userLeavesTournament(@PathVariable("tournamentCode") String tournamentCode,
+                                     @PathVariable("participantId") long participantId) {
+
+        // if tournament does not exist, error
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+        }
+
+        // if user id is not valid, e.g. user does not exist
+        if (!participantService.checkIfParticipantIdExists(participantId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with such an ID exists.");
+        }
+
+        Participant participant = participantService.getParticipantById(participantId);
+
+        Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
+
+        // set User state to left
+        participant.setUserState(UserState.LEFT);
+
+        // update Bracket
+        tournamentService.updateBracketAfterUserLeft(participant, tournament);
+
     }
 }
