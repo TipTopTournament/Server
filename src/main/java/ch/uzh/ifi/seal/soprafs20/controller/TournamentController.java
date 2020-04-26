@@ -48,7 +48,7 @@ public class TournamentController {
         Tournament tournamentInput = DTOMapper.INSTANCE.convertTournamentPostDTOtoEntity(tournamentPostDTO);
 
         if (tournamentInput.getAmountOfPlayers() > 16) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Zu viele Teilnehmen!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Too many Participants!");
         }
         // create participant
         Tournament createdTournament = tournamentService.createTournament(tournamentInput);
