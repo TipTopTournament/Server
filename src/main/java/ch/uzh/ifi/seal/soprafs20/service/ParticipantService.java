@@ -37,6 +37,7 @@ public class ParticipantService {
 
     private ParticipantRepository participantRepository;
     private StatisticsRepository statisticsRepository;
+    Random r = new Random();
 
     @Autowired
     public ParticipantService(@Qualifier("participantRepository")ParticipantRepository participantRepository,
@@ -135,7 +136,6 @@ public class ParticipantService {
     private String createNewLicenseNumber() {
         boolean exists = true;
         String newLicensenumber = "";
-        Random r = new Random();
 
         while (exists) {
             newLicensenumber = Integer.toString(r.nextInt((999999-100000)+1) + 100000);

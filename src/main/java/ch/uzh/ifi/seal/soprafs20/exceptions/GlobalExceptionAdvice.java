@@ -27,12 +27,6 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(TransactionSystemException.class)
-    public ResponseStatusException handleTransactionSystemException(Exception ex, HttpServletRequest request) {
-        log.error("Request: {} raised {}", request.getRequestURL(), ex);
-        return new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage(), ex);
-    }
-
     // Keep this one disable for all testing purposes -> it shows more detail with this one disabled
     @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
     public ResponseStatusException handleException(Exception ex) {

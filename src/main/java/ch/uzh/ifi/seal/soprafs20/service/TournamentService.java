@@ -367,7 +367,7 @@ public class TournamentService {
             return game.getParticipant1();
         }
         else {
-            return game.getParticipant1();
+            return game.getParticipant2();
         }
     }
 
