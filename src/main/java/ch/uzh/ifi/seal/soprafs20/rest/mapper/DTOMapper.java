@@ -55,13 +55,15 @@ public interface DTOMapper {
     ParticipantPutDTO convertEntityToParticipantPutDTO(Participant participant);
 
     @Mapping(source = "breakDuration", target = "breakDuration")
+    @Mapping(source = "tournamentName", target = "tournamentName")
     @Mapping(source = "gameDuration", target = "gameDuration")
     @Mapping(source = "startTime", target = "startTime")
     @Mapping(source = "numberTables", target = "numberTables")
     @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
-    Tournament convertiTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
+    Tournament convertTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
 
     @Mapping(source = "tournamentId", target = "tournamentId")
+    @Mapping(source = "tournamentName", target = "tournamentName")
     @Mapping(source = "tournamentCode", target = "tournamentCode")
     @Mapping(source = "breakDuration", target = "breakDuration")
     @Mapping(source = "gameDuration", target = "gameDuration")

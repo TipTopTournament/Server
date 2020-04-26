@@ -5,6 +5,7 @@ import java.time.LocalTime;
 public class TournamentGetDTO {
 
     private long tournamentId;
+    private String tournamentName;
     private String tournamentCode;
     private float breakDuration;
     private float gameDuration;
@@ -14,6 +15,9 @@ public class TournamentGetDTO {
 
     public long getTournamentId() {
         return tournamentId;
+    }
+    public String getTournamentName() {
+        return tournamentName;
     }
     public String getTournamentCode() {
         return tournamentCode;
@@ -36,6 +40,9 @@ public class TournamentGetDTO {
 
     public void setTournamentId(long tournamentId) {
         this.tournamentId = tournamentId;
+    }
+    public void setTournamentName(String tournamentName) {
+        this.tournamentName = tournamentName;
     }
     public void setTournamentCode(String tournamentCode) {
         this.tournamentCode = tournamentCode;

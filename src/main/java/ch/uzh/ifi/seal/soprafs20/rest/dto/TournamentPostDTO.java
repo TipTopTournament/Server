@@ -4,6 +4,7 @@ import java.time.LocalTime;
 
 public class TournamentPostDTO {
 
+    private String tournamentName;
     private float breakDuration;
     private float gameDuration;
     private LocalTime startTime;
@@ -12,6 +13,9 @@ public class TournamentPostDTO {
 
     public float getBreakDuration() {
         return breakDuration;
+    }
+    public String getTournamentName() {
+        return tournamentName;
     }
     public float getGameDuration() {
         return gameDuration;
@@ -28,6 +32,9 @@ public class TournamentPostDTO {
 
     public void setBreakDuration(float breakDuration) {
         this.breakDuration = breakDuration;
+    }
+    public void setTournamentName(String tournamentName) {
+        this.tournamentName = tournamentName;
     }
     public void setGameDuration(float gameDuration) {
         this.gameDuration = gameDuration;

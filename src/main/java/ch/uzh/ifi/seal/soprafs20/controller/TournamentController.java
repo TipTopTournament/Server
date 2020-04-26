@@ -44,7 +44,7 @@ public class TournamentController {
     public String createTournament(@RequestBody TournamentPostDTO tournamentPostDTO){
 
         // convert API user to internal representation
-        Tournament tournamentInput = DTOMapper.INSTANCE.convertiTournamentPostDTOtoEntity(tournamentPostDTO);
+        Tournament tournamentInput = DTOMapper.INSTANCE.convertTournamentPostDTOtoEntity(tournamentPostDTO);
 
         if (tournamentInput.getAmountOfPlayers() > 16) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Zu viele Teilnehmen!");
