@@ -184,7 +184,10 @@ public class TournamentService {
         Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
 
         // update the score of the game
-        if (game != null) {
+        if (game != null && game.getGameState() == GameState.FINISHED) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Game score has already been set and is locked.");
+        }
+        else if (game != null) {
             // check if first entry
             if (game.getGameState() == GameState.NOTREADY) {
                 game.setScore1(score1);
@@ -292,11 +295,15 @@ public class TournamentService {
                 // Participant 1 wins
                 int position = getPositionFromLeaderboard(game.getParticipant1().getParticipantID(), leaderboard);
 
+                updatePlayerStats(game, game.getParticipant1(), game.getParticipant2());
+
                 leaderboard.setWins(updateWins(leaderboard.getWins(), position));
             }
             else {
                 // Participant 2 wins
                 int position = getPositionFromLeaderboard(game.getParticipant2().getParticipantID(), leaderboard);
+
+                updatePlayerStats(game, game.getParticipant2(), game.getParticipant1());
 
                 leaderboard.setWins(updateWins(leaderboard.getWins(), position));
             }
@@ -304,5 +311,24 @@ public class TournamentService {
             leaderboardRepository.save(leaderboard);
             leaderboardRepository.flush();
         }
+    }
+
+    private void updatePlayerStats(Game game, Participant winner, Participant loser) {
+
+        // update winner
+        Statistics statsWinner = winner.getStatistics();
+
+        statsWinner.setPointsScored(statsWinner.getPointsScored() + game.getScore1());
+        statsWinner.setPointsConceded(statsWinner.getPointsConceded() + game.getScore2());
+
+        statsWinner.setWins(statsWinner.getWins() + 1);
+
+        // update loser
+        Statistics statsLoser = loser.getStatistics();
+
+        statsLoser.setPointsScored(statsLoser.getPointsScored() + game.getScore2());
+        statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore1());
+
+        statsLoser.setLosses(statsLoser.getLosses() + 1);
     }
 }

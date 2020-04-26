@@ -90,8 +90,10 @@ public class TournamentController {
 
     @GetMapping("/tournaments/{tournamentCode}/leaderboard")
     @Query
-    public List<List<Object>> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
-        List<List<Object>> listParticipants = new ArrayList<>();
+    public List<LeaderboardGetDTO> getLeaderBoardOfTournament(@PathVariable("tournamentCode")  String tournamentCode) {
+
+        List<LeaderboardGetDTO> leaderboardGetDTOList = new ArrayList<>();
+
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
@@ -100,12 +102,12 @@ public class TournamentController {
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
         for (int i = 0 ; i < tournament.getLeaderboard().getLeaderboardList().size(); i++) {
-            List<Object> liste = new ArrayList<>();
-            liste.add(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getLeaderboard().getLeaderboardList().get(i)));
-            liste.add(tournament.getLeaderboard().getWins().get(i));
-            listParticipants.add(liste);
+            LeaderboardGetDTO leaderboardGetDTO = new LeaderboardGetDTO();
+            leaderboardGetDTO.setParticipantGetDTO(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getLeaderboard().getLeaderboardList().get(i)));
+            leaderboardGetDTO.setWins(tournament.getLeaderboard().getWins().get(i));
+            leaderboardGetDTOList.add(leaderboardGetDTO);
         }
-        return listParticipants;
+        return leaderboardGetDTOList;
     }
 
     @PutMapping("/tournaments/{tournamentCode}/bracket/{gameId}")

@@ -57,6 +57,10 @@ public class Statistics {
 
     // setters
 
+
+    public void setStatisticsID(Long statisticsID) {
+        this.statisticsID = statisticsID;
+    }
     public void setParticipant(Participant participant) {
         this.participant = participant;
     }
