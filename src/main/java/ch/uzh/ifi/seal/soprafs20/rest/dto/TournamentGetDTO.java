@@ -5,6 +5,7 @@ public class TournamentGetDTO {
     private long tournamentId;
     private String tournamentName;
     private String tournamentCode;
+    private ParticipantGetDTO winner;
     private float breakDuration;
     private float gameDuration;
     private String startTime;
@@ -14,6 +15,9 @@ public class TournamentGetDTO {
 
     public long getTournamentId() {
         return tournamentId;
+    }
+    public ParticipantGetDTO getWinner() {
+        return winner;
     }
     public String getTournamentName() {
         return tournamentName;
@@ -42,6 +46,9 @@ public class TournamentGetDTO {
 
     public void setTournamentId(long tournamentId) {
         this.tournamentId = tournamentId;
+    }
+    public void setWinner(ParticipantGetDTO winner) {
+        this.winner = winner;
     }
     public void setTournamentName(String tournamentName) {
         this.tournamentName = tournamentName;

@@ -16,6 +16,9 @@ public class Tournament {
     @Column
     public String tournamentName; // something like Zürich Open or Champions League 23.4.20 by Tony
 
+    @OneToOne
+    public Participant winner;
+
     @Column String location;
 
     @Column
@@ -57,6 +60,9 @@ public class Tournament {
     public String getTournamentName() {
         return tournamentName;
     }
+    public Participant getWinner() {
+        return winner;
+    }
     public TournamentState getTournamentState() {
         return tournamentState;
     }
@@ -81,18 +87,15 @@ public class Tournament {
     public String getLocation() {
         return location;
     }
-
     public Leaderboard getLeaderboard() {
         return leaderboard;
     }
-
     public Bracket getBracket() {
         return bracket;
     }
     public List<Participant> getActivePlayers() {
         return activePlayers;
     }
-
     public String getInformationBox() {
         return informationBox;
     }
@@ -100,7 +103,9 @@ public class Tournament {
     public void setTournamentName(String tournamentName){
         this.tournamentName = tournamentName;
     }
-
+    public void setWinner(Participant winner) {
+        this.winner = winner;
+    }
     public void setTournamentState(TournamentState tournamentState) {
         this.tournamentState = tournamentState;
     }
@@ -125,15 +130,12 @@ public class Tournament {
     public void setLocation(String location) {
         this.location = location;
     }
-
     public void setInformationBox(String informationBox) {
         this.informationBox = informationBox;
     }
-
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
     }
-
     public void setBracket(Bracket bracket) {
         this.bracket = bracket;
     }

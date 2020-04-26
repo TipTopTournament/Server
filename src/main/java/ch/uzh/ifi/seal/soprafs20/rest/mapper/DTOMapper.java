@@ -64,6 +64,7 @@ public interface DTOMapper {
     Tournament convertTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
 
     @Mapping(source = "tournamentId", target = "tournamentId")
+    @Mapping(source = "winner", target = "winner")
     @Mapping(source = "tournamentName", target = "tournamentName")
     @Mapping(source = "tournamentCode", target = "tournamentCode")
     @Mapping(source = "breakDuration", target = "breakDuration")
