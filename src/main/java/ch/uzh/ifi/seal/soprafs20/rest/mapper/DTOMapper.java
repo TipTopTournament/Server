@@ -27,8 +27,7 @@ public interface DTOMapper {
     Manager convertManagerPutDTOToEntity(ManagerPutDTO managerPutDTO);
     
     @Mapping(source = "managerID", target = "managerID")
-    @Mapping(source = "vorname", target = "vorname")
-    @Mapping(source = "nachname", target = "nachname")
+    @Mapping(source = "username", target = "username")
     ManagerGetDTO convertEntityToManagerGetDTO(Manager manager);
 
     @Mapping(source = "token", target = "token")

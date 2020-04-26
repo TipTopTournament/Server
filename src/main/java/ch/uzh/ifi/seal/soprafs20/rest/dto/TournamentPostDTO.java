@@ -10,6 +10,7 @@ public class TournamentPostDTO {
     private LocalTime startTime;
     private int numberTables;
     private int amountOfPlayers;
+    private long managerId;
 
     public float getBreakDuration() {
         return breakDuration;
@@ -29,6 +30,9 @@ public class TournamentPostDTO {
     public int getAmountOfPlayers() {
         return amountOfPlayers;
     }
+    public long getManagerId() {
+        return managerId;
+    }
 
     public void setBreakDuration(float breakDuration) {
         this.breakDuration = breakDuration;
@@ -47,5 +51,8 @@ public class TournamentPostDTO {
     }
     public void setAmountOfPlayers(int amountOfPlayers) {
         this.amountOfPlayers = amountOfPlayers;
+    }
+    public void setManagerId(long managerId) {
+        this.managerId = managerId;
     }
 }

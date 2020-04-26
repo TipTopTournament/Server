@@ -5,8 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 public class ManagerGetDTO {
 
     private Long managerID;
-    private String vorname;
-    private String nachname;
+    private String username;
 
     public Long getManagerID() {
         return managerID;
@@ -16,19 +15,12 @@ public class ManagerGetDTO {
         this.managerID = id;
     }
 
-    public String getVorname() {
-        return vorname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setVorname(String name) {
-        this.vorname = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
-
-    public String getNachname() {
-        return nachname;
-    }
-
-    public void setNachname(String username) {
-        this.nachname = username;
-    }
+    
 }

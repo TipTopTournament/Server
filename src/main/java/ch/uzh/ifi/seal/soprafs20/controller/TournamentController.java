@@ -2,10 +2,12 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
+import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 import org.apache.coyote.Response;
@@ -22,10 +24,12 @@ public class TournamentController {
 
     private final TournamentService tournamentService;
     private final ParticipantService participantService;
+    private final ManagerService managerService;
 
-    public TournamentController(TournamentService tournamentService, ParticipantService participantService) {
+    public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
         this.participantService = participantService;
+        this.managerService = managerService;
     }
 
     @GetMapping("/tournaments")
@@ -44,14 +48,19 @@ public class TournamentController {
     @ResponseBody
     public String createTournament(@RequestBody TournamentPostDTO tournamentPostDTO){
 
+        // check if manager is valid
+        Manager manager = managerService.getManagerById(tournamentPostDTO.getManagerId());
+
         // convert API user to internal representation
         Tournament tournamentInput = DTOMapper.INSTANCE.convertTournamentPostDTOtoEntity(tournamentPostDTO);
 
         if (tournamentInput.getAmountOfPlayers() > 16) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Too many Participants!");
         }
-        // create participant
+        // create tournament
         Tournament createdTournament = tournamentService.createTournament(tournamentInput);
+        
+        managerService.addTournamentToManager(createdTournament, manager);
 
         return createdTournament.getTournamentCode();
     }

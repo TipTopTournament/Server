@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -108,5 +109,12 @@ public class ManagerService {
             }
         }
         return false;
+    }
+
+    public void addTournamentToManager(Tournament tournament, Manager manager) {
+        manager.addTournamentToTournamentList(tournament);
+
+        managerRepository.save(manager);
+        managerRepository.flush();
     }
 }

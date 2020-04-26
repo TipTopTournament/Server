@@ -3,10 +3,8 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPutDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
+import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import org.slf4j.Logger;
@@ -91,5 +89,18 @@ public class ManagerController {
     	
     	//Update the Managers Status
     	managerService.updateStatus(id,status);
+    }
+
+    @GetMapping("/managers/{managerId}/tournaments")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<TournamentGetDTO> getAllTournamentsOfCertainManager(@PathVariable("managerId")long id) {
+        List<TournamentGetDTO> tournamentGetDTOList = new ArrayList<>();
+
+        for (Tournament tournament : managerService.getManagerById(id).getTournamentList()) {
+            tournamentGetDTOList.add(DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournament));
+        }
+
+        return tournamentGetDTOList;
     }
 }
