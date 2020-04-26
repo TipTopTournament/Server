@@ -1,10 +1,8 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
 import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
-import org.springframework.data.annotation.Persistent;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 import java.util.List;
 
 
@@ -24,7 +22,7 @@ public class Tournament {
     public TournamentState tournamentState;
 
     @Column
-    public LocalTime startTime;
+    public String startTime;
 
     @Column
     public float gameDuration;
@@ -40,6 +38,9 @@ public class Tournament {
 
     @Column
     public int numberTables;
+
+    @Column
+    public String informationBox;
 
     @OneToOne
     public Leaderboard leaderboard;
@@ -59,7 +60,7 @@ public class Tournament {
     public TournamentState getTournamentState() {
         return tournamentState;
     }
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
     public float getGameDuration() {
@@ -92,6 +93,10 @@ public class Tournament {
         return activePlayers;
     }
 
+    public String getInformationBox() {
+        return informationBox;
+    }
+
     public void setTournamentName(String tournamentName){
         this.tournamentName = tournamentName;
     }
@@ -99,7 +104,7 @@ public class Tournament {
     public void setTournamentState(TournamentState tournamentState) {
         this.tournamentState = tournamentState;
     }
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
     public void setGameDuration(float gameDuration) {
@@ -119,6 +124,10 @@ public class Tournament {
     }
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setInformationBox(String informationBox) {
+        this.informationBox = informationBox;
     }
 
     public void setLeaderboard(Leaderboard leaderboard) {

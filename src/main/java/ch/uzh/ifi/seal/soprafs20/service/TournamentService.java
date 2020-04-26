@@ -1,6 +1,9 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,12 @@ public class TournamentService {
         tournament.setTournamentCode(generateTournamentCode());
 
         // Bracket is generated
-        tournament.setBracket(createBracket(tournament.getAmountOfPlayers(), tournament.getTournamentCode()));
+        tournament.setBracket(createBracket(tournament.getAmountOfPlayers(),
+                                            tournament.getTournamentCode(),
+                                            tournament.getNumberTables(),
+                                            tournament.getStartTime(),
+                                            tournament.getBreakDuration(),
+                                            tournament.getGameDuration()));
 
         // Leaderboard is generated
         tournament.setLeaderboard(createLeaderboard(tournament.getAmountOfPlayers()));
@@ -61,7 +69,7 @@ public class TournamentService {
         return tournament;
     }
 
-    public Bracket createBracket(int numberOfPlayers, String tournamentCode) {
+    public Bracket createBracket(int numberOfPlayers, String tournamentCode, int tables, String startTime, float breatTime, float gameTime) {
         List<Game> newGames = new ArrayList<>();
         // create new Bracket
         Bracket bracket = new Bracket();
@@ -69,8 +77,13 @@ public class TournamentService {
         // Insert All games
         for (int i = 1; i <= numberOfPlayers -1; i++) {
             Game newGame = new Game();
+            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            int counter = 0;
             newGame.setTournamentCode(tournamentCode);
+
+
             newGames.add(newGame);
+
             gameRepository.save(newGame);
             gameRepository.flush();
         }

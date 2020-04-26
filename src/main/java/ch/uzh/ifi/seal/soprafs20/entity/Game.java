@@ -12,6 +12,9 @@ public class Game {
     public long gameId;
 
     @Column
+    public String startTime;
+
+    @Column
     public GameState gameState = GameState.NOTREADY;
 
     @Column
@@ -32,6 +35,9 @@ public class Game {
 
     public long getGameId() {
         return gameId;
+    }
+    public String getStartTime() {
+        return startTime;
     }
     public GameState getGameState() {
         return gameState;
@@ -54,6 +60,9 @@ public class Game {
 
     public void setGameId(long gameId) {
         this.gameId = gameId;
+    }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
     public void setGameState(GameState gameState) {
         this.gameState = gameState;

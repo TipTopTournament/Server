@@ -1,7 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
-import java.time.LocalTime;
-
 public class TournamentGetDTO {
 
     private long tournamentId;
@@ -9,9 +7,10 @@ public class TournamentGetDTO {
     private String tournamentCode;
     private float breakDuration;
     private float gameDuration;
-    private LocalTime startTime;
+    private String startTime;
     private int numberTables;
     private int amountOfPlayers;
+    private String informationBox;
 
     public long getTournamentId() {
         return tournamentId;
@@ -28,7 +27,7 @@ public class TournamentGetDTO {
     public float getGameDuration() {
         return gameDuration;
     }
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
     public int getNumberTables() {
@@ -36,6 +35,9 @@ public class TournamentGetDTO {
     }
     public int getAmountOfPlayers() {
         return amountOfPlayers;
+    }
+    public String getInformationBox() {
+        return informationBox;
     }
 
     public void setTournamentId(long tournamentId) {
@@ -53,7 +55,7 @@ public class TournamentGetDTO {
     public void setGameDuration(float gameDuration) {
         this.gameDuration = gameDuration;
     }
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
     public void setNumberTables(int numberTables) {
@@ -61,5 +63,8 @@ public class TournamentGetDTO {
     }
     public void setAmountOfPlayers(int amountOfPlayers) {
         this.amountOfPlayers = amountOfPlayers;
+    }
+    public void setInformationBox(String informationBox) {
+        this.informationBox = informationBox;
     }
 }

@@ -53,13 +53,15 @@ public class ParticipantController {
     @PostMapping("/participants")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void createParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
+    public ParticipantGetDTO createParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
 
         // convert API user to internal representation
         Participant participantInput = DTOMapper.INSTANCE.convertParticipantPostDTOtoEntity(participantPostDTO);
 
         // create participant
         Participant createdParticipant = participantService.createParticipant(participantInput);
+
+        return DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(createdParticipant);
     }
 
     @PutMapping("/participants/login")

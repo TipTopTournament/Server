@@ -67,11 +67,11 @@ public class ManagerController {
     @PutMapping("/managers/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ManagerPutDTO loginManager(@RequestBody ManagerPostDTO managerPostDTO) {
+    public ManagerGetDTO loginManager(@RequestBody ManagerPostDTO managerPostDTO) {
         Manager manager = DTOMapper.INSTANCE.convertManagerPostDTOtoEntity(managerPostDTO);
 
         if (managerService.checkUsernameAndPassword(manager.getUsername(), manager.getPassword())) {
-            return DTOMapper.INSTANCE.convertEntityToManagerPutDTO(managerService.getManagerByUsername(manager.getUsername()));
+            return DTOMapper.INSTANCE.convertEntityToManagerGetDTO(managerService.getManagerByUsername(manager.getUsername()));
         }
         else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password were incorrect");

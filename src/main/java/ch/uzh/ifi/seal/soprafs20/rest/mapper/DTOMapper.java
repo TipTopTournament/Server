@@ -59,6 +59,7 @@ public interface DTOMapper {
     @Mapping(source = "startTime", target = "startTime")
     @Mapping(source = "numberTables", target = "numberTables")
     @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
+    @Mapping(source = "informationBox", target = "informationBox")
     Tournament convertTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
 
     @Mapping(source = "tournamentId", target = "tournamentId")
@@ -69,6 +70,7 @@ public interface DTOMapper {
     @Mapping(source = "startTime", target = "startTime")
     @Mapping(source = "numberTables", target = "numberTables")
     @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
+    @Mapping(source = "informationBox", target = "informationBox")
     TournamentGetDTO convertEntityToTournamentGetDTO(Tournament tournament);
 
     @Mapping(source = "gameId", target = "gameId")

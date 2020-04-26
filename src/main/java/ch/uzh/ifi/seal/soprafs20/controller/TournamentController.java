@@ -59,7 +59,7 @@ public class TournamentController {
         }
         // create tournament
         Tournament createdTournament = tournamentService.createTournament(tournamentInput);
-        
+
         managerService.addTournamentToManager(createdTournament, manager);
 
         return createdTournament.getTournamentCode();
