@@ -4,13 +4,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import javax.persistence.*;
 import javax.servlet.http.Part;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Statistics")
 public class Statistics {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long statisticsID;
 
     @OneToOne
@@ -28,8 +29,8 @@ public class Statistics {
     @Column
     private int pointsConceded;
 
-    @OneToMany
-    private List<Game> history;
+    @ManyToMany(targetEntity = Game.class)
+    private List<Game> history = new ArrayList<>();
 
 
     // getters

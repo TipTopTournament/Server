@@ -9,6 +9,7 @@ public class StatisticsGetDTO {
     private int losses;
     private int pointsScored;
     private int pointsConceded;
+    private List<GameGetDTO> history;
 
     // getters
     public Long getStatisticsID() {
@@ -26,6 +27,9 @@ public class StatisticsGetDTO {
     public int getPointsConceded() {
         return pointsConceded;
     }
+    public List<GameGetDTO> getHistory() {
+        return history;
+    }
 
     // setters
     public void setWins(int wins) {
@@ -39,5 +43,11 @@ public class StatisticsGetDTO {
     }
     public void setPointsConceded(int pointsConceded) {
         this.pointsConceded = pointsConceded;
+    }
+    public void setStatisticsID(Long statisticsID) {
+        this.statisticsID = statisticsID;
+    }
+    public void setHistory(List<GameGetDTO> history) {
+        this.history = history;
     }
 }

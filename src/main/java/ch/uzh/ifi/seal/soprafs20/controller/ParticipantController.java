@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
@@ -92,6 +93,15 @@ public class ParticipantController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public StatisticsGetDTO getStatisticFromParticipant(@PathVariable("participantId") long id) {
-        return DTOMapper.INSTANCE.convertEntityToStatisticsGetDTO(participantService.getStatsByParticipantID(id));
+        StatisticsGetDTO stats = DTOMapper.INSTANCE.convertEntityToStatisticsGetDTO(participantService.getStatsByParticipantID(id));
+
+        List<GameGetDTO> listGames = new ArrayList<>();
+
+        for (Game game : participantService.getStatsByParticipantID(id).getHistory()) {
+            GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+            listGames.add(gameGetDTO);
+        }
+        stats.setHistory(listGames);
+        return stats;
     }
 }

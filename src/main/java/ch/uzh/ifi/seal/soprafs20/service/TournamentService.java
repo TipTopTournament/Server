@@ -320,15 +320,15 @@ public class TournamentService {
 
         statsWinner.setPointsScored(statsWinner.getPointsScored() + game.getScore1());
         statsWinner.setPointsConceded(statsWinner.getPointsConceded() + game.getScore2());
-
         statsWinner.setWins(statsWinner.getWins() + 1);
+        statsWinner.addGameToHistory(game);
 
         // update loser
         Statistics statsLoser = loser.getStatistics();
 
         statsLoser.setPointsScored(statsLoser.getPointsScored() + game.getScore2());
         statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore1());
-
         statsLoser.setLosses(statsLoser.getLosses() + 1);
+        statsLoser.addGameToHistory(game);
     }
 }
