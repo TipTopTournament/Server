@@ -7,6 +7,7 @@ import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 public class GameGetDTO {
 
     public long gameId;
+    public String startTime;
     public GameState gameState = GameState.NOTREADY;
     public int score1;
     public int score2;
@@ -17,6 +18,9 @@ public class GameGetDTO {
 
     public long getGameId() {
         return gameId;
+    }
+    public String getStartTime() {
+        return startTime;
     }
     public GameState getGameState() {
         return gameState;
@@ -39,6 +43,9 @@ public class GameGetDTO {
 
     public void setGameId(long gameId) {
         this.gameId = gameId;
+    }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
     public void setGameState(GameState gameState) {
         this.gameState = gameState;

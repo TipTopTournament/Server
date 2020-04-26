@@ -75,6 +75,7 @@ public interface DTOMapper {
     TournamentGetDTO convertEntityToTournamentGetDTO(Tournament tournament);
 
     @Mapping(source = "gameId", target = "gameId")
+    @Mapping(source = "startTime", target = "startTime")
     @Mapping(source = "gameState", target = "gameState")
     @Mapping(source = "score1", target = "score1")
     @Mapping(source = "score2", target = "score2")

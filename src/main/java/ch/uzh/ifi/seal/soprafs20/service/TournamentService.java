@@ -75,18 +75,17 @@ public class TournamentService {
         Bracket bracket = new Bracket();
 
         // Insert All games
-        for (int i = 1; i <= numberOfPlayers -1; i++) {
+        for (int i = 1; i <= numberOfPlayers - 1; i++) {
             Game newGame = new Game();
-            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            int counter = 0;
             newGame.setTournamentCode(tournamentCode);
-
 
             newGames.add(newGame);
 
             gameRepository.save(newGame);
             gameRepository.flush();
         }
+
+        calculateTimes(newGames, startTime, breatTime, gameTime, tables);
 
         // add the games to the bracket
         bracket.setBracketList(newGames);
@@ -343,5 +342,73 @@ public class TournamentService {
         statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore1());
         statsLoser.setLosses(statsLoser.getLosses() + 1);
         statsLoser.addGameToHistory(game);
+    }
+
+    private void calculateTimes(List<Game> gameList, String startTime, float breakTime, float gameTime, int tables) {
+        LocalTime start = LocalTime.parse(startTime);
+
+        switch (gameList.size()){
+
+            case 1:
+                gameList.get(0).setStartTime(startTime);
+                break;
+            case 3:
+                // round1
+                start = calculateRounds(gameList.subList(0, 2), start, (long) breakTime + (long) gameTime, tables);
+                // round 2
+                gameList.get(2).setStartTime(startTime);
+            case 7:
+                // round1
+                start = calculateRounds(gameList.subList(0, 4), start, (long) breakTime + (long) gameTime, tables);
+
+                // round 2
+                start = calculateRounds(gameList.subList(4, 6), start, (long) breakTime + (long) gameTime, tables);
+
+                //round 3
+                gameList.get(6).setStartTime(start.toString());
+            case 15:
+                // round1
+                start = calculateRounds(gameList.subList(0, 8), start, (long) breakTime + (long) gameTime, tables);
+
+                // round 2
+                start = calculateRounds(gameList.subList(8, 12), start, (long) breakTime + (long) gameTime, tables);
+
+                // round 3
+                start = calculateRounds(gameList.subList(12, 14), start, (long) breakTime + (long) gameTime, tables);
+
+                gameList.get(14).setStartTime(start.toString());
+        }
+    }
+
+    private LocalTime calculateRounds(List<Game> gameList, LocalTime startTime, long addedTime, int tables) {
+        if (tables >= gameList.size()) {
+            for(Game game : gameList) {
+                game.setStartTime(startTime.toString());
+            }
+        }
+        else {
+            int counter = 0;
+
+            for (Game game : gameList) {
+
+                game.setStartTime(startTime.toString());
+
+                counter++;
+
+                if (counter == tables) {
+                    counter = 0;
+                    startTime = startTime.plusMinutes(addedTime);
+                }
+            }
+        }
+        if (tables >= gameList.size()) {
+            return startTime.plusMinutes(addedTime);
+        }
+        else if (gameList.size() % tables == 0) {
+            return startTime;
+        }
+        else {
+            return startTime.plusMinutes(addedTime);
+        }
     }
 }
