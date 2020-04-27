@@ -1,5 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.service;
-/*
+
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for the UserResource REST resource.
  *
  * @see UserService
+ *
  *
 @WebAppConfiguration
 @SpringBootTest
@@ -72,4 +73,4 @@ public class UserServiceIntegrationTest {
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
 }
-*/
+ **/
