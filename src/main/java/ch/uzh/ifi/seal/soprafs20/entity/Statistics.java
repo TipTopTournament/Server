@@ -1,9 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-
 import javax.persistence.*;
-import javax.servlet.http.Part;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,14 +1,10 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import java.util.Random;
-import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-
-import javax.servlet.http.Part;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
@@ -33,10 +26,9 @@ import java.util.UUID;
 @Transactional
 public class ParticipantService {
 
-    private final Logger log = LoggerFactory.getLogger(ParticipantService.class);
-
-    private ParticipantRepository participantRepository;
-    private StatisticsRepository statisticsRepository;
+    private final ParticipantRepository participantRepository;
+    private final StatisticsRepository statisticsRepository;
+    private final String errorMsgNotFound = "No participant found with this Id";
     Random r = new Random();
 
     @Autowired
@@ -52,7 +44,7 @@ public class ParticipantService {
 
     public Participant getParticipantById(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
         }
         else {
             return participantRepository.findByParticipantID(id);
@@ -65,7 +57,7 @@ public class ParticipantService {
 
     public Statistics getStatsByParticipantID(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
         }
         else {
             return participantRepository.findByParticipantID(id).getStatistics();
@@ -111,7 +103,7 @@ public class ParticipantService {
     		participant.setUserState(state);
     	}
     	else {
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No participant found with this Id");
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
     	}
     }
 

@@ -6,14 +6,14 @@ import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 
 public class GameGetDTO {
 
-    public long gameId;
-    public String startTime;
-    public GameState gameState = GameState.NOTREADY;
-    public int score1;
-    public int score2;
-    public ParticipantGetDTO participant1;
-    public ParticipantGetDTO participant2;
-    public String tournamentCode;
+    private long gameId;
+    private String startTime;
+    private GameState gameState = GameState.NOTREADY;
+    private int score1;
+    private int score2;
+    private ParticipantGetDTO participant1;
+    private ParticipantGetDTO participant2;
+    private String tournamentCode;
 
 
     public long getGameId() {

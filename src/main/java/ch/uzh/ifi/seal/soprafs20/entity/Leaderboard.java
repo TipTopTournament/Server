@@ -1,10 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
 import javax.persistence.*;
-import javax.servlet.http.Part;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 @Entity

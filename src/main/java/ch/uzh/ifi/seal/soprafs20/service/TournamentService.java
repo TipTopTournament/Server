@@ -1,12 +1,9 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import java.security.SecureRandom;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.*;
@@ -17,8 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 
 @Service
@@ -27,10 +22,10 @@ public class TournamentService {
 
     private final Logger log = LoggerFactory.getLogger(TournamentService.class);
 
-    private TournamentRepository tournamentRepository;
-    private GameRepository gameRepository;
-    private BracketRepository bracketRepository;
-    private LeaderboardRepository leaderboardRepository;
+    private final TournamentRepository tournamentRepository;
+    private final GameRepository gameRepository;
+    private final BracketRepository bracketRepository;
+    private final LeaderboardRepository leaderboardRepository;
 
     @Autowired
     public TournamentService(@Qualifier("tournamentRepository")TournamentRepository tournamentRepository,

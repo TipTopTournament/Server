@@ -2,13 +2,10 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
-import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +58,7 @@ public class ManagerController {
         Manager managerInput = DTOMapper.INSTANCE.convertManagerPostDTOtoEntity(managerPostDTO);
 
         // create manager
-        Manager createdManager = managerService.createManager(managerInput);
+        managerService.createManager(managerInput);
     }
 
     @PutMapping("/managers/login")

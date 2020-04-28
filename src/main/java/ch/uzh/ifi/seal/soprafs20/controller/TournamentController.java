@@ -10,7 +10,6 @@ import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
-import org.apache.coyote.Response;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +24,8 @@ public class TournamentController {
     private final TournamentService tournamentService;
     private final ParticipantService participantService;
     private final ManagerService managerService;
+
+    private final String errorMsgNotExists = "No tournament with such a code exists";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
@@ -72,7 +73,7 @@ public class TournamentController {
 
         // Check if tournament exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
 
         return DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournamentService.getTournamentByTournamentCode(tournamentCode));
@@ -85,7 +86,7 @@ public class TournamentController {
         List<GameGetDTO> allGamesGetDTO = new ArrayList<>();
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
         // return all the games in the bracket
         List<Game> allGames =  tournamentService.getBracketByTournamentCode(tournamentCode);
@@ -105,7 +106,7 @@ public class TournamentController {
 
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
@@ -126,7 +127,7 @@ public class TournamentController {
                                 @RequestBody GamePutDTO gamePutDTO) {
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
 
         tournamentService.updateGameWithScore(tournamentCode, gameId, gamePutDTO.getScore1(), gamePutDTO.getScore2());
@@ -139,7 +140,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
 
         // if user id is not valid, e.g. user does not exist
@@ -164,7 +165,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tournament with such a code exists.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
         }
 
         // if user id is not valid, e.g. user does not exist

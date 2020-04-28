@@ -2,8 +2,8 @@ package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
 public class GamePutDTO {
 
-    public int score1;
-    public int score2;
+    private int score1;
+    private int score2;
 
     public int getScore1() {
         return score1;

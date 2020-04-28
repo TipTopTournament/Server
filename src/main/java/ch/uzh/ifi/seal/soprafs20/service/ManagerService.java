@@ -25,8 +25,6 @@ import java.util.UUID;
 @Transactional
 public class ManagerService {
 
-    private final Logger log = LoggerFactory.getLogger(ManagerService.class);
-
     private ManagerRepository managerRepository;
 
     @Autowired
@@ -62,8 +60,6 @@ public class ManagerService {
         if (!CheckIfUsernameIsTaken(newManager)) {
             newManager = managerRepository.save(newManager);
             managerRepository.flush();
-
-            log.debug("Created Information for Manager: {}", newManager);
             return newManager;
         }
         else {
