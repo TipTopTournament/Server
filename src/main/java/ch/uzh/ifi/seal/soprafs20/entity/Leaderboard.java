@@ -14,7 +14,7 @@ public class Leaderboard {
     @GeneratedValue
     public long leaderboardId;
 
-    @OneToMany(targetEntity = Participant.class)
+    @ManyToMany(targetEntity = Participant.class)
     private List<Participant> leaderboardList = new ArrayList<>();
 
     @Column

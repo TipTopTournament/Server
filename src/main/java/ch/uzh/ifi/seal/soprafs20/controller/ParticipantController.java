@@ -54,13 +54,10 @@ public class ParticipantController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ParticipantGetDTO createParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
-
         // convert API user to internal representation
         Participant participantInput = DTOMapper.INSTANCE.convertParticipantPostDTOtoEntity(participantPostDTO);
-
         // create participant
         Participant createdParticipant = participantService.createParticipant(participantInput);
-
         return DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(createdParticipant);
     }
 
@@ -69,7 +66,6 @@ public class ParticipantController {
     @ResponseBody
     public ParticipantPutDTO loginParticipant(@RequestBody ParticipantPostDTO participantPostDTO) {
         Participant participant = DTOMapper.INSTANCE.convertParticipantPostDTOtoEntity(participantPostDTO);
-
         if (participantService.checkLicenseNumberAndPassword(participant.getLicenseNumber(), participant.getPassword())) {
             return DTOMapper.INSTANCE.convertEntityToParticipantPutDTO(participantService.getParticipantByLicenseNumber(participant.getLicenseNumber()));
         }
@@ -82,11 +78,9 @@ public class ParticipantController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void updateParticipantState(@RequestBody ParticipantPutDTO participantPutDTO,@PathVariable("participantId") long id) {
-    	
     	//Used to get the state
     	Participant participantState = DTOMapper.INSTANCE.convertParticipantPutDTOToEntity(participantPutDTO);
     	UserState state = participantState.getUserState();
-    	
     	//Update the Participant State
     	participantService.updateState(id,state);
     }
@@ -96,9 +90,7 @@ public class ParticipantController {
     @ResponseBody
     public StatisticsGetDTO getStatisticFromParticipant(@PathVariable("participantId") long id) {
         StatisticsGetDTO stats = DTOMapper.INSTANCE.convertEntityToStatisticsGetDTO(participantService.getStatsByParticipantID(id));
-
         List<GameGetDTO> listGames = new ArrayList<>();
-
         for (Game game : participantService.getStatsByParticipantID(id).getHistory()) {
             GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
             listGames.add(gameGetDTO);

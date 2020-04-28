@@ -4,8 +4,6 @@ import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

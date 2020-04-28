@@ -51,12 +51,12 @@ public class ParticipantService {
     }
 
     public Participant getParticipantById(Long id) {
-        for (Participant participant : getParticipants()) {
-            if (participant.getParticipantID().equals(id)) {
-                return participant;
-            }
+        if (participantRepository.findByParticipantID(id) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id");
+        else {
+            return participantRepository.findByParticipantID(id);
+        }
     }
 
     public Participant getParticipantByLicenseNumber(String licensenumber) {
