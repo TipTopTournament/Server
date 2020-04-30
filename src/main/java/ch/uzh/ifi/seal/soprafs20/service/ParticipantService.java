@@ -26,8 +26,8 @@ public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final StatisticsRepository statisticsRepository;
-    private final static String errorMsgNotFound = "No participant found with this Id";
-    Random r = new Random();
+    private final static String ERROR_MSG_NOT_FOUND = "No participant found with this Id";
+    private final Random r = new Random();
 
     @Autowired
     public ParticipantService(@Qualifier("participantRepository")ParticipantRepository participantRepository,
@@ -42,7 +42,7 @@ public class ParticipantService {
 
     public Participant getParticipantById(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
         }
         else {
             return participantRepository.findByParticipantID(id);
@@ -55,7 +55,7 @@ public class ParticipantService {
 
     public Statistics getStatsByParticipantID(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
         }
         else {
             return participantRepository.findByParticipantID(id).getStatistics();
@@ -101,7 +101,7 @@ public class ParticipantService {
     		participant.setUserState(state);
     	}
     	else {
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
     	}
     }
 

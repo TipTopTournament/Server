@@ -5,6 +5,8 @@ import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import javax.persistence.ManyToMany;
+
 /**
  * DTOMapper
  * This class is responsible for generating classes that will automatically transform/map the internal representation
@@ -61,6 +63,7 @@ public interface DTOMapper {
     @Mapping(source = "numberTables", target = "numberTables")
     @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
     @Mapping(source = "informationBox", target = "informationBox")
+    @Mapping(source = "location", target = "location")
     Tournament convertTournamentPostDTOtoEntity(TournamentPostDTO tournamentPostDTO);
 
     @Mapping(source = "tournamentId", target = "tournamentId")
@@ -73,6 +76,7 @@ public interface DTOMapper {
     @Mapping(source = "numberTables", target = "numberTables")
     @Mapping(source = "amountOfPlayers", target = "amountOfPlayers")
     @Mapping(source = "informationBox", target = "informationBox")
+    @Mapping(source = "location", target = "location")
     TournamentGetDTO convertEntityToTournamentGetDTO(Tournament tournament);
 
     @Mapping(source = "gameId", target = "gameId")

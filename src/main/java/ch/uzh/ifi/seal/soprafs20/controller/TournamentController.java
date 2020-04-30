@@ -25,7 +25,7 @@ public class TournamentController {
     private final ParticipantService participantService;
     private final ManagerService managerService;
 
-    private final static String errorMsgNotExists = "No tournament with such a code exists";
+    private final static String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
@@ -73,7 +73,7 @@ public class TournamentController {
 
         // Check if tournament exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         return DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournamentService.getTournamentByTournamentCode(tournamentCode));
@@ -86,7 +86,7 @@ public class TournamentController {
         List<GameGetDTO> allGamesGetDTO = new ArrayList<>();
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
         // return all the games in the bracket
         List<Game> allGames =  tournamentService.getBracketByTournamentCode(tournamentCode);
@@ -106,7 +106,7 @@ public class TournamentController {
 
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
@@ -127,7 +127,7 @@ public class TournamentController {
                                 @RequestBody GamePutDTO gamePutDTO) {
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         tournamentService.updateGameWithScore(tournamentCode, gameId, gamePutDTO.getScore1(), gamePutDTO.getScore2());
@@ -140,7 +140,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         // if user id is not valid, e.g. user does not exist
@@ -165,7 +165,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         // if user id is not valid, e.g. user does not exist

@@ -19,7 +19,8 @@ public class Tournament {
     @OneToOne
     public Participant winner;
 
-    @Column String location;
+    @Column
+    String location;
 
     @Column
     public TournamentState tournamentState;
