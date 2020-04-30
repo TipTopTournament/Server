@@ -4,8 +4,6 @@ import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -57,7 +55,7 @@ public class ManagerService {
     public Manager createManager(Manager newManager) {
         newManager.setToken(UUID.randomUUID().toString());
 
-        if (!CheckIfUsernameIsTaken(newManager)) {
+        if (!checkIfUsernameIsTaken(newManager)) {
             newManager = managerRepository.save(newManager);
             managerRepository.flush();
             return newManager;
@@ -67,7 +65,7 @@ public class ManagerService {
         }
     }
 
-    private boolean CheckIfUsernameIsTaken(Manager managerToTest) {
+    private boolean checkIfUsernameIsTaken(Manager managerToTest) {
         for (Manager manager : getManagers()) {
             if (manager.getUsername().equals(managerToTest.getUsername())) {
                 return true;

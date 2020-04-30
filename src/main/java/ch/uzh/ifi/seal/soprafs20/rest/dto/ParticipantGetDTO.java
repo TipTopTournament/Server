@@ -1,7 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 
 public class ParticipantGetDTO {
 

@@ -6,8 +6,6 @@ import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final StatisticsRepository statisticsRepository;
-    private final String errorMsgNotFound = "No participant found with this Id";
+    private final static String errorMsgNotFound = "No participant found with this Id";
     Random r = new Random();
 
     @Autowired
