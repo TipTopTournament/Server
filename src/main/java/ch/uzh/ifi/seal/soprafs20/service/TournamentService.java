@@ -165,11 +165,13 @@ public class TournamentService {
                 game.setParticipant1(participant);
                 gameRepository.save(game);
                 gameRepository.flush();
+                break;
             }
             else if (game.getParticipant2() == null) {
                 game.setParticipant2(participant);
                 gameRepository.save(game);
                 gameRepository.flush();
+                break;
             }
         }
         bracketRepository.save(bracket);
