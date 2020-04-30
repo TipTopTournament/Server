@@ -24,8 +24,7 @@ public class TournamentController {
     private final TournamentService tournamentService;
     private final ParticipantService participantService;
     private final ManagerService managerService;
-
-    private final static String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
+    private static final String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;

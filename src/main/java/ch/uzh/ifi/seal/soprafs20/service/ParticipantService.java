@@ -26,7 +26,7 @@ public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final StatisticsRepository statisticsRepository;
-    private final static String ERROR_MSG_NOT_FOUND = "No participant found with this Id";
+    private static final String ERROR_MSG_NOT_FOUND = "No participant found with this Id";
     private final Random r = new Random();
 
     @Autowired
