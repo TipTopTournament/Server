@@ -13,7 +13,10 @@ public class ParticipantPostDTO {
     public String getNachname() {
         return nachname;
     }
-    public String getPassword() { return password; }
+    public String getPassword() { 
+    	return password; 
+    }
+    
     public String getLicenseNumber() {
         return licenseNumber;
     }
