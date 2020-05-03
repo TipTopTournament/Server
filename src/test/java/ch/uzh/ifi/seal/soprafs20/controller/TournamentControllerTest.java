@@ -53,9 +53,14 @@ public class TournamentControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private TournamentRepository managerRepository;
+    private GameRepository gameRepository;
+    private BracketRepository bracketRepository;
+    private LeaderboardRepository leaderBoardRepository;
+    
     private ParticipantService participantService;
     private ManagerService managerService;
-    private TournamentService tournamentService = new TournamentService();
+    private TournamentService tournamentService = new TournamentService(tournamentRepository, gameRepository, bracketRepository, leaderBoardRepository);
     
     private Participant testParticipant1;
     private Participant testParticipant2;
