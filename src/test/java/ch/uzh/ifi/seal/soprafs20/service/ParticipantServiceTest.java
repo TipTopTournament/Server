@@ -33,7 +33,7 @@ public class ParticipantServiceTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        
 
         // given
         testParticipant1 = new Participant();
