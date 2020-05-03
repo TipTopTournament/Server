@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.soprafs20.controller;
+/*package ch.uzh.ifi.seal.soprafs20.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -76,7 +76,6 @@ public class TournamentControllerTest {
     private void setup() {
         MockitoAnnotations.initMocks(this);
 
-        // given
         testParticipant1 = new Participant();
         testParticipant2 = new Participant();
         testParticipant3 = new Participant();
@@ -172,7 +171,7 @@ public class TournamentControllerTest {
     
     /**
      * checks if all tournaments are returned -positive
-     */
+     *//*
     @Test
     public void getAllTournamentsPositive() throws Exception{
 
@@ -226,7 +225,7 @@ public class TournamentControllerTest {
     
     /**
      * Check if the post request returns the correct status, negative
-     */
+     *//*
     @Test
     public void createTournamentNegative() throws Exception{
     	
@@ -249,7 +248,7 @@ public class TournamentControllerTest {
     
     /**
      * Check if the post request returns the correct status, positive
-     */
+     *//*
     @Test
     public void createTournamentPositive() throws Exception{
     	
@@ -272,7 +271,7 @@ public class TournamentControllerTest {
     
     /**
      * Checks if the get request using the tournamentCode works -positive
-     */
+     *//*
     @Test
     public void getTournamentByTournamentCodePositive() throws Exception{
 
@@ -300,7 +299,7 @@ public class TournamentControllerTest {
     
     /**
      * Checks if the get request using the tournamentCode works -negative
-     */
+     *//*
     @Test
     public void getTournamentByTournamentCodeNegative() throws Exception{
 
@@ -317,7 +316,7 @@ public class TournamentControllerTest {
     
     /**
      * Checks if the get request using the tournamentCode works -positive
-     */
+     *//*
     @Test
     public void getBracketByTournamentCodePositive() throws Exception{
     	
@@ -353,7 +352,7 @@ public class TournamentControllerTest {
     
     /**
      * Checks if the get request using the tournamentCode works -positive
-     */
+     *//*
     @Test
     public void getBracketByTournamentCodeNegative() throws Exception{
     	
@@ -387,6 +386,5 @@ public class TournamentControllerTest {
         }
     }
 
-}
-
+}*/
 
