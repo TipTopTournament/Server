@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,8 @@ import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 
 
 @WebMvcTest(TournamentController.class)
-@Configuration
-@ComponentScan("ch.uzh.ifi.seal.soprafs20.service")
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TournamentControllerTest {
 
     @Autowired
