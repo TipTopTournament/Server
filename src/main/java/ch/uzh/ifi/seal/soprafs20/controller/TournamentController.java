@@ -131,6 +131,22 @@ public class TournamentController {
 
         tournamentService.updateGameWithScore(tournamentCode, gameId, gamePutDTO.getScore1(), gamePutDTO.getScore2());
     }
+    
+    @PutMapping("/tournaments/{tournamentCode}/bracket/{gameId}/{managerId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void managerUpdateScore(@PathVariable("tournamentCode") String tournamentCode,
+    							   @PathVariable("gameId") long gameId,
+    							   @PathVariable("managerId") long managerId,
+    							   @RequestBody GamePutDTO gamePutDTO){
+    	//Check if the tournament exists. If not, 
+    	 if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
+         }
+    	 
+    	 tournamentService.updateGameWithScore(tournamentCode,gameId,gamePutDTO.getScore1(),gamePutDTO.getScore2());
+    	
+    } 
 
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
     @ResponseBody
