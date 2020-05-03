@@ -66,11 +66,15 @@ public class ManagerService {
     }
 
     private boolean checkIfUsernameIsTaken(Manager managerToTest) {
-        Manager newManager = managerRepository.findByManagerID(managerToTest.getManagerID());
-        return newManager != null;
+        for (Manager manager : getManagers()) {
+            if (manager.getUsername().equals(managerToTest.getUsername())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean checkIfManagerIdExists(Long id) {
+    private boolean checkIfManagerIdExists(Long id) {
         for (Manager manager : getManagers()) {
             if (manager.getManagerID().equals(id)) {
                 return true;

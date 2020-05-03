@@ -217,22 +217,6 @@ public class TournamentService {
         updateLeaderboardWithGame(game, leaderboard);
     }
 
-    public void updateGameAsManager(String tournamentCode, long gameId, int score1, int score2) {
-
-        Game game = gameRepository.findByGameId(gameId);
-        Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
-
-        game.setScore1(score1);
-        game.setScore2(score2);
-        game.setGameState(GameState.FINISHED);
-
-        gameRepository.save(game);
-        gameRepository.flush();
-
-        updateBracket(tournamentRepository.findByTournamentCode(tournamentCode));
-        updateLeaderboardWithGame(game, leaderboard);
-    }
-
     public void updateBracketAfterUserLeft(Participant participant, Tournament tournament) {
 
         Bracket bracket = tournament.getBracket();
