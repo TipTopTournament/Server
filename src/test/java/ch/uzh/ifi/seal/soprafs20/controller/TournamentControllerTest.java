@@ -241,6 +241,54 @@ public class TournamentControllerTest {
         mockMvc.perform(postRequest).andExpect(status().isCreated());
     }
     
+    /**
+     * Checks if the get request using the tournamentCode works -positive
+     */
+    @Test
+    public void getTournamentByTournamentCodePositive() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/TEST1")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+		        .andExpect(jsonPath("$[0].tournamentName", is(testTournament1.getTournamentName())))
+		        .andExpect(jsonPath("$[0].winner", is(testTournament1.getWinner())))
+		        .andExpect(jsonPath("$[0].location", is(testTournament1.getLocation())))
+		        .andExpect(jsonPath("$[0].tournamentState", is(testTournament1.getTournamentState())))
+		        .andExpect(jsonPath("$[0].starTime", is(testTournament1.getStartTime())))
+		        .andExpect(jsonPath("$[0].gameDuration", is(testTournament1.getGameDuration())))
+		        .andExpect(jsonPath("$[0].breakDuration", is(testTournament1.getBreakDuration())))
+		        .andExpect(jsonPath("$[0].tournamentCode", is(testTournament1.getTournamentCode())))
+		        .andExpect(jsonPath("$[0].amountOfPlayers", is(testTournament1.getAmountOfPlayers())))
+		        .andExpect(jsonPath("$[0].numberTables", is(testTournament1.getNumberTables())))
+		        .andExpect(jsonPath("$[0].informationBox", is(testTournament1.getInformationBox())))
+		        .andExpect(jsonPath("$[0].leaderboard", is(testTournament1.getLeaderboard())))
+		        .andExpect(jsonPath("$[0].bracket", is(testTournament1.getBracket())))
+		        .andExpect(jsonPath("$[0].activePlayers", is(testTournament1.getActivePlayers())));
+    }
+    
+    /**
+     * Checks if the get request using the tournamentCode works -negative
+     */
+    @Test
+    public void getTournamentByTournamentCodeNegative() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
+        given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/TEST1")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    }
+    
     
     
     
