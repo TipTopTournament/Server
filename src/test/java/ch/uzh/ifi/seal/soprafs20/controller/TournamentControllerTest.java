@@ -55,7 +55,7 @@ public class TournamentControllerTest {
     @MockBean
     private ParticipantService participantService;
     private ManagerService managerService;
-    private TournamentService tournamentService;
+    private TournamentService tournamentService = new TournamentService();
     
     private Participant testParticipant1;
     private Participant testParticipant2;
