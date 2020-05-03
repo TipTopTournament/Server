@@ -259,7 +259,6 @@ public class TournamentControllerTest {
 		        .andExpect(jsonPath("$[0].tournamentName", is(testTournament1.getTournamentName())))
 		        .andExpect(jsonPath("$[0].winner", is(testTournament1.getWinner())))
 		        .andExpect(jsonPath("$[0].location", is(testTournament1.getLocation())))
-		        .andExpect(jsonPath("$[0].tournamentState", is(testTournament1.getTournamentState())))
 		        .andExpect(jsonPath("$[0].starTime", is(testTournament1.getStartTime())))
 		        .andExpect(jsonPath("$[0].gameDuration", is(testTournament1.getGameDuration())))
 		        .andExpect(jsonPath("$[0].breakDuration", is(testTournament1.getBreakDuration())))
@@ -267,8 +266,6 @@ public class TournamentControllerTest {
 		        .andExpect(jsonPath("$[0].amountOfPlayers", is(testTournament1.getAmountOfPlayers())))
 		        .andExpect(jsonPath("$[0].numberTables", is(testTournament1.getNumberTables())))
 		        .andExpect(jsonPath("$[0].informationBox", is(testTournament1.getInformationBox())))
-		        .andExpect(jsonPath("$[0].leaderboard", is(testTournament1.getLeaderboard())))
-		        .andExpect(jsonPath("$[0].bracket", is(testTournament1.getBracket())))
 		        .andExpect(jsonPath("$[0].activePlayers", is(testTournament1.getActivePlayers())));
     }
     
