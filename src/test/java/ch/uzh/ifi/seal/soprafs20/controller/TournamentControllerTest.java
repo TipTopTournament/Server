@@ -19,6 +19,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,6 +45,8 @@ import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 
 
 @WebMvcTest(TournamentController.class)
+@Configuration
+@ComponentScan("ch.uzh.ifi.seal.soprafs20.service")
 public class TournamentControllerTest {
 
     @Autowired
