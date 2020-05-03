@@ -25,6 +25,7 @@ public class TournamentController {
     private final ParticipantService participantService;
     private final ManagerService managerService;
     private static final String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
+    private static final String ERROR_MSG_MANAGER = "Manager isn't valid.";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
@@ -143,8 +144,13 @@ public class TournamentController {
     	 if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
              throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
          }
+
+    	 //Check if the manager exists
+        if (!managerService.checkIfManagerIdExists(managerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_MANAGER);
+        }
     	 
-    	 tournamentService.updateGameWithScore(tournamentCode,gameId,gamePutDTO.getScore1(),gamePutDTO.getScore2());
+    	 tournamentService.updateGameAsManager(tournamentCode,gameId,gamePutDTO.getScore1(),gamePutDTO.getScore2());
     	
     } 
 

@@ -90,7 +90,6 @@ public class ParticipantService {
         	else {
         		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Participant with the provided license number already exists");
         	}
-        	
         }
     }
     
