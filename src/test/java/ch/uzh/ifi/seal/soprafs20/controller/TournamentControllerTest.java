@@ -28,18 +28,19 @@ import org.springframework.web.server.ResponseStatusException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
 import ch.uzh.ifi.seal.soprafs20.entity.Bracket;
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.Leaderboard;
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.TournamentPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
+
 
 @WebMvcTest(TournamentController.class)
 public class TournamentControllerTest {
@@ -64,6 +65,9 @@ public class TournamentControllerTest {
     
     private Bracket testBracket1;
     private Bracket testBracket2;
+    
+    private Game testGame1;
+    private Game testGame2;
     
     private Leaderboard testLeaderboard1;
     
@@ -132,6 +136,30 @@ public class TournamentControllerTest {
         testTournament1.setTournamentName("NAME2");
         testTournament1.setTournamentState(TournamentState.DONE);
         testTournament1.setWinner(testParticipant2);
+        
+        List<Game> dummyList3 = new ArrayList<>();
+        
+        testGame1 = new Game();
+        testGame2 = new Game();
+        
+        testGame1.setStartTime("10:00");
+        testGame1.setGameState(GameState.FINISHED);
+        testGame1.setScore1(3);
+        testGame1.setScore2(0);
+        testGame1.setParticipant1(testParticipant1);
+        testGame1.setParticipant2(testParticipant2);
+        testGame1.setTournamentCode("TEST1");
+        
+        testGame2.setStartTime("14:00");
+        testGame2.setGameState(GameState.READY);
+        testGame2.setScore1(2);
+        testGame2.setScore2(3);
+        testGame2.setParticipant1(testParticipant3);
+        testGame2.setParticipant2(testParticipant2);
+        testGame2.setTournamentCode("TEST1");
+        
+        dummyList3.add(testGame1);
+        dummyList3.add(testGame2);
         
         dummyList2.add(testTournament1);
         dummyList2.add(testTournament2);
@@ -286,7 +314,63 @@ public class TournamentControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isNotFound());
     }
     
+    /**
+     * Checks if the get request using the tournamentCode works -positive
+     */
+    @Test
+    public void getBracketByTournamentCodePositive() throws Exception{
+    	
+    	ArrayList<Game> dummyList3 = new ArrayList<>();
+    	
+    	dummyList3.add(testGame1);
+    	dummyList3.add(testGame2);
+    	
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(tournamentService.getBracketByTournamentCode(Mockito.any())).willReturn(dummyList3);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/TEST1/bracket")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+		        .andExpect(jsonPath("$[0].startTime", is(testGame1.getStartTime())))
+		        .andExpect(jsonPath("$[0].gameState", is(testGame1.getGameState())))
+		        .andExpect(jsonPath("$[0].score1", is(testGame1.getScore1())))
+		        .andExpect(jsonPath("$[0].score2", is(testGame1.getScore2())))
+		        .andExpect(jsonPath("$[0].participant1", is(testGame1.getParticipant1())))
+		        .andExpect(jsonPath("$[0].participant2", is(testGame1.getParticipant2())))
+		        .andExpect(jsonPath("$[0].tournamentCode", is(testGame1.getTournamentCode())))
+		        .andExpect(jsonPath("$[1].startTime", is(testGame2.getStartTime())))
+		        .andExpect(jsonPath("$[1].gameState", is(testGame2.getGameState())))
+		        .andExpect(jsonPath("$[1].score1", is(testGame2.getScore1())))
+		        .andExpect(jsonPath("$[1].score2", is(testGame2.getScore2())))
+		        .andExpect(jsonPath("$[1].participant1", is(testGame2.getParticipant1())))
+		        .andExpect(jsonPath("$[1].participant2", is(testGame2.getParticipant2())))
+		        .andExpect(jsonPath("$[1].tournamentCode", is(testGame2.getTournamentCode())));	       
+    }
     
+    /**
+     * Checks if the get request using the tournamentCode works -positive
+     */
+    @Test
+    public void getBracketByTournamentCodeNegative() throws Exception{
+    	
+    	ArrayList<Game> dummyList3 = new ArrayList<>();
+    	
+    	dummyList3.add(testGame1);
+    	dummyList3.add(testGame2);
+    	
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
+        given(tournamentService.getBracketByTournamentCode(Mockito.any())).willReturn(dummyList3);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/TEST1/bracket")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());       
+    }
     
     
     
