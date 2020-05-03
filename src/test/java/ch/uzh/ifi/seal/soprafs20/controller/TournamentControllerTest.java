@@ -31,7 +31,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
