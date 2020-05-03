@@ -74,7 +74,7 @@ public class ManagerService {
         return false;
     }
 
-    private boolean checkIfManagerIdExists(Long id) {
+    public boolean checkIfManagerIdExists(Long id) {
         for (Manager manager : getManagers()) {
             if (manager.getManagerID().equals(id)) {
                 return true;
