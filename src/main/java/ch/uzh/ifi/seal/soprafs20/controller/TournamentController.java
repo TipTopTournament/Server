@@ -173,6 +173,7 @@ public class TournamentController {
 
         // at the start of the tournament the status is NOT READY as a default.
         participant.setUserState(UserState.NOTREADY);
+        participant.setCode(tournamentCode);
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
@@ -200,6 +201,7 @@ public class TournamentController {
 
         // set User state to left
         participant.setUserState(UserState.LEFT);
+        participant.setCode(null);
 
         // update Bracket
         tournamentService.updateBracketAfterUserLeft(participant, tournament);

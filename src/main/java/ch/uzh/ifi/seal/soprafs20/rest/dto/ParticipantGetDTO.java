@@ -9,6 +9,7 @@ public class ParticipantGetDTO {
     private String vorname;
     private String nachname;
     private UserState userState;
+    private String code;
 
     public Long getParticipantID() {
         return participantID;
@@ -46,5 +47,13 @@ public class ParticipantGetDTO {
 
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
