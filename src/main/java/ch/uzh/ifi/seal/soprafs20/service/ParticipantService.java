@@ -94,14 +94,15 @@ public class ParticipantService {
         }
     }
     
-    public void updateStatus(Long id, UserStatus status) {
-    	if(checkIfParticipantIdExists(id)) {
+    public void updateStatus(Long id, UserStatus status, String token) {
+    	if(checkIfParticipantIdAndToken(id, token)) {
     		Participant participant = getParticipantById(id);
     		participant.setUserStatus(status);
-    	}
-    	else {
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
-    	}
+    	}else if (checkIfParticipantIdExists(id)){
+    		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Participant Id and token do not match, status update prevented!");
+    	}else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
+        }
     }
 
     public boolean checkIfParticipantIdExists(Long id) {
@@ -112,6 +113,16 @@ public class ParticipantService {
         }
         return false;
     }
+    // Abklären am Freitag
+    public boolean checkIfParticipantIdAndToken(Long id, String token){
+        for (Participant participant : getParticipants()) {
+            if (participant.getToken().equals(token) && participant.getParticipantID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean checkLicenseNumberAndPassword(String licenseNumber, String password) {
         for (Participant participant : getParticipants()) {

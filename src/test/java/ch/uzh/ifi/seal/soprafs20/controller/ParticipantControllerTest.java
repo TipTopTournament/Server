@@ -290,7 +290,7 @@ public class ParticipantControllerTest {
         participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         participantPutDTO.setUserStatus(UserStatus.ONLINE);
 
-        participantService.updateStatus(Mockito.any(), Mockito.any());
+        participantService.updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
 
         // mock the request
         MockHttpServletRequestBuilder updateRequest = put("/participants/1")
@@ -316,7 +316,7 @@ public class ParticipantControllerTest {
         participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         participantPutDTO.setUserStatus(UserStatus.ONLINE);
 
-        willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).given(participantService).updateStatus(Mockito.any(), Mockito.any());
+        willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).given(participantService).updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
 
         // mock the request
         MockHttpServletRequestBuilder updateRequest = put("/participants/1")
@@ -342,7 +342,7 @@ public class ParticipantControllerTest {
         participantPutDTO.setToken("254h7x88-jk5c-6254-o8o2-y642f7988p06");
         participantPutDTO.setUserStatus(UserStatus.ONLINE);
 
-        willThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED)).given(participantService).updateStatus(Mockito.any(), Mockito.any());
+        willThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED)).given(participantService).updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
         // mock the request
         MockHttpServletRequestBuilder updateRequest = put("/participants/1")
                 .contentType(MediaType.APPLICATION_JSON)

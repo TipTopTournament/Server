@@ -80,8 +80,9 @@ public class ParticipantController {
     	//Used to get the status
     	Participant participantStatus = DTOMapper.INSTANCE.convertParticipantPutDTOToEntity(participantPutDTO);
     	UserStatus status = participantStatus.getUserStatus();
+    	String token = participantStatus.getToken();
     	//Update the Participant Status
-    	participantService.updateStatus(id,status);
+    	participantService.updateStatus(id,status,token);
     }
 
     @GetMapping("/participants/{participantId}/statistics")
