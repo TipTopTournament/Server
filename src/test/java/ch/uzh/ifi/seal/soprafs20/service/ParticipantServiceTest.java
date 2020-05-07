@@ -83,7 +83,7 @@ public class ParticipantServiceTest {
 
     /**
      * Creates a user which already has a license number
-     */
+     
     @Test
     public void createParticipantSuccessWithLicenseNumber() {
         // create dummy participant which will be returned
@@ -116,7 +116,7 @@ public class ParticipantServiceTest {
         assertEquals(0, createdParticipant.getStatistics().getPointsConceded());
         assertEquals(0, createdParticipant.getStatistics().getHistory().size());
     }
-
+	*/
     /**
      * A user with this license number exists but already has a password, therefore, an exception should be thrown
      */

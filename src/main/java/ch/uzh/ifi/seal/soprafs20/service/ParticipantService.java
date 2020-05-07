@@ -5,9 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,8 +26,8 @@ public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final StatisticsRepository statisticsRepository;
-    private final String errorMsgNotFound = "No participant found with this Id";
-    Random r = new Random();
+    private static final String ERROR_MSG_NOT_FOUND = "No participant found with this Id";
+    private final Random r = new Random();
 
     @Autowired
     public ParticipantService(@Qualifier("participantRepository")ParticipantRepository participantRepository,
@@ -44,7 +42,7 @@ public class ParticipantService {
 
     public Participant getParticipantById(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
         }
         else {
             return participantRepository.findByParticipantID(id);
@@ -57,7 +55,7 @@ public class ParticipantService {
 
     public Statistics getStatsByParticipantID(Long id) {
         if (participantRepository.findByParticipantID(id) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
         }
         else {
             return participantRepository.findByParticipantID(id).getStatistics();
@@ -67,7 +65,7 @@ public class ParticipantService {
     public Participant createParticipant(Participant newParticipant) {
 
         if (newParticipant.getLicenseNumber() == null) {
-
+        	
             newParticipant.setToken(UUID.randomUUID().toString());
             newParticipant.setLicenseNumber(createNewLicenseNumber());
             newParticipant.setStatistics(createEmptyStats());
@@ -77,33 +75,32 @@ public class ParticipantService {
 
             return newParticipant;
         }
-        else if (participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()) != null
-            && participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()).getPassword() == null) {
-
-            Participant oldOParticipant = participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber());
-
-            // set new values
-            oldOParticipant.setToken(UUID.randomUUID().toString());
-            oldOParticipant.setPassword(newParticipant.getPassword());
-            oldOParticipant.setStatistics(createEmptyStats());
-            
-            participantRepository.save(oldOParticipant);
-            participantRepository.flush();
-
-            return oldOParticipant;
-        }
         else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Participant already exists or license number doesn't exist");
+        	//Check if a player with that license number exists
+        	if(participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()) == null) {
+        		newParticipant.setToken(UUID.randomUUID().toString());
+            	newParticipant.setStatistics(createEmptyStats());
+            	
+            	participantRepository.save(newParticipant);
+            	participantRepository.flush();
+            	
+            	return newParticipant;
+        	}
+        	
+        	else {
+        		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Participant with the provided license number already exists");
+        	}
+        	
         }
     }
     
-    public void updateState(Long id, UserState state) {
+    public void updateStatus(Long id, UserStatus status) {
     	if(checkIfParticipantIdExists(id)) {
     		Participant participant = getParticipantById(id);
-    		participant.setUserState(state);
+    		participant.setUserStatus(status);
     	}
     	else {
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotFound);
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
     	}
     }
 

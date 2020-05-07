@@ -7,8 +7,6 @@ import java.util.List;
 import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -19,8 +17,6 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class TournamentService {
-
-    private final Logger log = LoggerFactory.getLogger(TournamentService.class);
 
     private final TournamentRepository tournamentRepository;
     private final GameRepository gameRepository;
@@ -59,8 +55,6 @@ public class TournamentService {
         // Tournament is saved
         tournamentRepository.save(tournament);
         tournamentRepository.flush();
-
-        log.debug("Tournament created");
         return tournament;
     }
 
@@ -128,7 +122,6 @@ public class TournamentService {
     // check methods
     public boolean checkIfTournamentCodeExists(String tournamentCode) {
         Tournament newTournament = tournamentRepository.findByTournamentCode(tournamentCode);
-
         return newTournament != null;
     }
 
@@ -221,6 +214,22 @@ public class TournamentService {
         }
         // update the leaderboard if there is a winner e.g. there is no conflict
 
+        updateLeaderboardWithGame(game, leaderboard);
+    }
+
+    public void updateGameAsManager(String tournamentCode, long gameId, int score1, int score2) {
+
+        Game game = gameRepository.findByGameId(gameId);
+        Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
+
+        game.setScore1(score1);
+        game.setScore2(score2);
+        game.setGameState(GameState.FINISHED);
+
+        gameRepository.save(game);
+        gameRepository.flush();
+
+        updateBracket(tournamentRepository.findByTournamentCode(tournamentCode));
         updateLeaderboardWithGame(game, leaderboard);
     }
 
@@ -352,6 +361,7 @@ public class TournamentService {
                     tournament.setWinner(calculateWinner(gameList.get(14)));
                 }
                 break;
+            default:
         }
     }
 
@@ -368,7 +378,7 @@ public class TournamentService {
 
     public static String generateTournamentCode() {
 
-        String NUMBER = "0123456789";
+        String number = "0123456789";
 
         SecureRandom random = new SecureRandom();
 
@@ -376,8 +386,8 @@ public class TournamentService {
         for (int i = 0; i < 8; i++) {
 
             // 0-62 (exclusive), random returns 0-61
-            int rndCharAt = random.nextInt(NUMBER.length());
-            char rndChar = NUMBER.charAt(rndCharAt);
+            int rndCharAt = random.nextInt(number.length());
+            char rndChar = number.charAt(rndCharAt);
 
             sb.append(rndChar);
         }
@@ -510,13 +520,9 @@ public class TournamentService {
         }
         else {
             int counter = 0;
-
             for (Game game : gameList) {
-
                 game.setStartTime(startTime.toString());
-
                 counter++;
-
                 if (counter == tables) {
                     counter = 0;
                     startTime = startTime.plusMinutes(addedTime);

@@ -10,6 +10,7 @@ public class TournamentPostDTO {
     private int amountOfPlayers;
     private long managerId;
     private String informationBox;
+    private String location;
 
     public float getBreakDuration() {
         return breakDuration;
@@ -35,6 +36,9 @@ public class TournamentPostDTO {
     public String getInformationBox() {
         return informationBox;
     }
+    public String getLocation() {
+        return location;
+    }
 
     public void setBreakDuration(float breakDuration) {
         this.breakDuration = breakDuration;
@@ -59,5 +63,8 @@ public class TournamentPostDTO {
     }
     public void setInformationBox(String informationBox) {
         this.informationBox = informationBox;
+    }
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

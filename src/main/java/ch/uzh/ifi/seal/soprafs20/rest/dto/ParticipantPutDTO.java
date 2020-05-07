@@ -1,16 +1,16 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 
 public class ParticipantPutDTO{
 
     private String token;
     private Long participantID;
-    private UserState userState;
+    private UserStatus userStatus;
 
 
-    public UserState getUserState() {
-        return userState;
+    public UserStatus getUserStatus() {
+        return userStatus;
     }
     public String getToken() {
         return token;
@@ -25,8 +25,8 @@ public class ParticipantPutDTO{
     public void setParticipantID(long participantID) {
         this.participantID = participantID;
     }
-    public void setUserState(UserState userState) {
-        this.userState = userState;
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }
 

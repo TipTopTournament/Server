@@ -24,8 +24,8 @@ public class TournamentController {
     private final TournamentService tournamentService;
     private final ParticipantService participantService;
     private final ManagerService managerService;
-
-    private final String errorMsgNotExists = "No tournament with such a code exists";
+    private static final String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
+    private static final String ERROR_MSG_MANAGER = "Manager isn't valid.";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
@@ -73,7 +73,7 @@ public class TournamentController {
 
         // Check if tournament exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         return DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournamentService.getTournamentByTournamentCode(tournamentCode));
@@ -86,7 +86,7 @@ public class TournamentController {
         List<GameGetDTO> allGamesGetDTO = new ArrayList<>();
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
         // return all the games in the bracket
         List<Game> allGames =  tournamentService.getBracketByTournamentCode(tournamentCode);
@@ -106,7 +106,7 @@ public class TournamentController {
 
         // Check if tournament code exists
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
@@ -127,11 +127,32 @@ public class TournamentController {
                                 @RequestBody GamePutDTO gamePutDTO) {
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         tournamentService.updateGameWithScore(tournamentCode, gameId, gamePutDTO.getScore1(), gamePutDTO.getScore2());
     }
+    
+    @PutMapping("/tournaments/{tournamentCode}/bracket/{gameId}/{managerId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void managerUpdateScore(@PathVariable("tournamentCode") String tournamentCode,
+    							   @PathVariable("gameId") long gameId,
+    							   @PathVariable("managerId") long managerId,
+    							   @RequestBody GamePutDTO gamePutDTO){
+    	//Check if the tournament exists. If not, 
+    	 if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
+         }
+
+        //Check if the manager exists
+        if (!managerService.checkIfManagerIdExists(managerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_MANAGER);
+        }
+    	 
+    	 tournamentService.updateGameAsManager(tournamentCode,gameId,gamePutDTO.getScore1(),gamePutDTO.getScore2());
+    	
+    } 
 
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
     @ResponseBody
@@ -140,7 +161,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         // if user id is not valid, e.g. user does not exist
@@ -152,6 +173,7 @@ public class TournamentController {
 
         // at the start of the tournament the status is NOT READY as a default.
         participant.setUserState(UserState.NOTREADY);
+        participant.setCode(tournamentCode);
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
@@ -165,7 +187,7 @@ public class TournamentController {
 
         // if tournament does not exist, error
         if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMsgNotExists);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
         // if user id is not valid, e.g. user does not exist
@@ -179,6 +201,7 @@ public class TournamentController {
 
         // set User state to left
         participant.setUserState(UserState.LEFT);
+        participant.setCode(null);
 
         // update Bracket
         tournamentService.updateBracketAfterUserLeft(participant, tournament);

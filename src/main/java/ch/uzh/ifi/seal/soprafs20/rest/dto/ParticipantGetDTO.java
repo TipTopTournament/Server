@@ -1,7 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 
 public class ParticipantGetDTO {
 
@@ -10,6 +9,7 @@ public class ParticipantGetDTO {
     private String vorname;
     private String nachname;
     private UserState userState;
+    private String code;
 
     public Long getParticipantID() {
         return participantID;
@@ -47,5 +47,13 @@ public class ParticipantGetDTO {
 
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

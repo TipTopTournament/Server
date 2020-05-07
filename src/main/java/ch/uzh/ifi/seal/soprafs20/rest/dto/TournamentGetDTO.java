@@ -12,6 +12,7 @@ public class TournamentGetDTO {
     private int numberTables;
     private int amountOfPlayers;
     private String informationBox;
+    private String location;
 
     public long getTournamentId() {
         return tournamentId;
@@ -42,6 +43,9 @@ public class TournamentGetDTO {
     }
     public String getInformationBox() {
         return informationBox;
+    }
+    public String getLocation() {
+        return location;
     }
 
     public void setTournamentId(long tournamentId) {
@@ -74,4 +78,8 @@ public class TournamentGetDTO {
     public void setInformationBox(String informationBox) {
         this.informationBox = informationBox;
     }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 }
