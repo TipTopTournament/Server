@@ -5,7 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -94,10 +94,10 @@ public class ParticipantService {
         }
     }
     
-    public void updateState(Long id, UserState state) {
+    public void updateStatus(Long id, UserStatus status) {
     	if(checkIfParticipantIdExists(id)) {
     		Participant participant = getParticipantById(id);
-    		participant.setUserState(state);
+    		participant.setUserStatus(status);
     	}
     	else {
     		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);

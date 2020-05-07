@@ -39,7 +39,7 @@ public interface DTOMapper {
     @Mapping(source = "licenseNumber", target = "licenseNumber")
     Participant convertParticipantPostDTOtoEntity(ParticipantPostDTO participantPostDTO);
     
-    @Mapping(source = "userState", target = "userState")
+    @Mapping(source = "userStatus", target = "userStatus")
     Participant convertParticipantPutDTOToEntity(ParticipantPutDTO participantPutDTO);
     
     @Mapping(source = "participantID", target = "participantID")
