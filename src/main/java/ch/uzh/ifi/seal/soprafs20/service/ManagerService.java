@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class ManagerService {
         newManager.setToken(UUID.randomUUID().toString());
 
         if (!checkIfUsernameIsTaken(newManager)) {
+            newManager.setUserStatus(UserStatus.OFFLINE);
             newManager = managerRepository.save(newManager);
             managerRepository.flush();
             return newManager;
@@ -83,12 +85,17 @@ public class ManagerService {
         return false;
     }
     
-    public void updateStatus(Long id, UserStatus status) {
-    	if(checkIfManagerIdExists(id)) {
+    public void updateStatus(Long id, UserStatus status, String token) {
+    	if(checkIfManagerIdAndToken(id, token)) {
     		Manager manager = getManagerById(id);
     		manager.setUserStatus(status);
+
+    		managerRepository.save(manager);
+    		managerRepository.flush();
     	}
-    	
+    	else if (checkIfManagerIdExists(id)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Manager Id and token do not match, status update prevented!");
+        }
     	else {
     		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No manager found with this Id");
     	}
@@ -108,5 +115,14 @@ public class ManagerService {
 
         managerRepository.save(manager);
         managerRepository.flush();
+    }
+
+    private boolean checkIfManagerIdAndToken(Long id, String token) {
+        for (Manager manager : getManagers()) {
+            if (manager.getToken().equals(token) && manager.getManagerID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

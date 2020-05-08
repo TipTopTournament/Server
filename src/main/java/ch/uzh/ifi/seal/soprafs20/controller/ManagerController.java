@@ -83,9 +83,10 @@ public class ManagerController {
     	//Used to get the status
     	Manager managerStatus = DTOMapper.INSTANCE.convertManagerPutDTOToEntity(managerPutDTO);
     	UserStatus status = managerStatus.getUserStatus();
+    	String token = managerStatus.getToken();
     	
     	//Update the Managers Status
-    	managerService.updateStatus(id,status);
+    	managerService.updateStatus(id,status, token);
     }
 
     @GetMapping("/managers/{managerId}/tournaments")

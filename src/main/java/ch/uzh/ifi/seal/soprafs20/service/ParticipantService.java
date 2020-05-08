@@ -69,6 +69,7 @@ public class ParticipantService {
             newParticipant.setToken(UUID.randomUUID().toString());
             newParticipant.setLicenseNumber(createNewLicenseNumber());
             newParticipant.setStatistics(createEmptyStats());
+            newParticipant.setUserStatus(UserStatus.OFFLINE);
 
             participantRepository.save(newParticipant);
             participantRepository.flush();
@@ -80,6 +81,7 @@ public class ParticipantService {
         	if(participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()) == null) {
         		newParticipant.setToken(UUID.randomUUID().toString());
             	newParticipant.setStatistics(createEmptyStats());
+                newParticipant.setUserStatus(UserStatus.OFFLINE);
             	
             	participantRepository.save(newParticipant);
             	participantRepository.flush();
@@ -98,9 +100,14 @@ public class ParticipantService {
     	if(checkIfParticipantIdAndToken(id, token)) {
     		Participant participant = getParticipantById(id);
     		participant.setUserStatus(status);
-    	}else if (checkIfParticipantIdExists(id)){
+
+    		participantRepository.save(participant);
+    		participantRepository.flush();
+    	}
+    	else if (checkIfParticipantIdExists(id)){
     		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Participant Id and token do not match, status update prevented!");
-    	}else{
+    	}
+    	else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
         }
     }
@@ -113,7 +120,7 @@ public class ParticipantService {
         }
         return false;
     }
-    // Abklären am Freitag
+
     public boolean checkIfParticipantIdAndToken(Long id, String token){
         for (Participant participant : getParticipants()) {
             if (participant.getToken().equals(token) && participant.getParticipantID().equals(id)) {

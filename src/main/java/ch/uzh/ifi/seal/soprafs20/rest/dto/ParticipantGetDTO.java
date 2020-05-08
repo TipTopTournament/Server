@@ -1,5 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+
 public class ParticipantGetDTO {
 
     private Long participantID;
@@ -7,6 +9,7 @@ public class ParticipantGetDTO {
     private String vorname;
     private String nachname;
     private String code;
+    private UserStatus userStatus;
 
     public Long getParticipantID() {
         return participantID;
@@ -43,5 +46,13 @@ public class ParticipantGetDTO {
     }
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }
