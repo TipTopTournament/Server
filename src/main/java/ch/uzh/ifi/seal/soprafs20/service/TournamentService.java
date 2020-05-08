@@ -177,7 +177,7 @@ public class TournamentService {
         bracketRepository.flush();
     }
 
-    public void updateGameWithScore(String tournamentCode, long gameId, int score1, int score2) {
+    public void updateGameWithScore(String tournamentCode, long gameId, int score1, int score2, long participantId) {
 
         Game game = gameRepository.findByGameId(gameId);
 
@@ -186,6 +186,26 @@ public class TournamentService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Game score has already been set and is locked.");
         }
         else if (game != null) {
+
+            // check if the user even is in the game
+            if (!(game.getParticipant1().getParticipantID().equals(participantId) || game.getParticipant2().getParticipantID().equals(participantId))) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Participant is not in this game!");
+            }
+
+            // check if this participant has already entered a score
+            if (game.getParticipant1().getParticipantID().equals(participantId) && game.isParticipant1Reported()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "A score has already been reported with this id.");
+            }
+            else if (game.getParticipant1().getParticipantID().equals(participantId) && !game.isParticipant1Reported()) {
+                game.setParticipant1Reported(true);
+            }
+            else if (game.getParticipant2().getParticipantID().equals(participantId) && game.isParticipant2Reported()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "A score has already been reported with this id.");
+            }
+            else if (game.getParticipant2().getParticipantID().equals(participantId) && !game.isParticipant2Reported()) {
+                game.setParticipant2Reported(true);
+            }
+
             // check if first entry
             if (game.getGameState() == GameState.NOTREADY) {
                 game.setScore1(score1);

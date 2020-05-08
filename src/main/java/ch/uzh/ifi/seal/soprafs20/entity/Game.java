@@ -26,6 +26,12 @@ public class Game {
     @OneToOne
     public Participant participant1;
 
+    @Column
+    public boolean participant1Reported;
+
+    @Column
+    public boolean participant2Reported;
+
     @OneToOne
     public Participant participant2;
 
@@ -57,6 +63,12 @@ public class Game {
     public String getTournamentCode() {
         return tournamentCode;
     }
+    public boolean isParticipant1Reported() {
+        return participant1Reported;
+    }
+    public boolean isParticipant2Reported() {
+        return participant2Reported;
+    }
 
     public void setGameId(long gameId) {
         this.gameId = gameId;
@@ -82,5 +94,15 @@ public class Game {
     public void setTournamentCode(String tournamentCode) {
         this.tournamentCode = tournamentCode;
     }
+    public void setParticipant1Reported(boolean participant1Reported) {
+        this.participant1Reported = participant1Reported;
+    }
+    public void setParticipant2Reported(boolean participant2Reported) {
+        this.participant2Reported = participant2Reported;
+    }
+
+
+
+
 }
 

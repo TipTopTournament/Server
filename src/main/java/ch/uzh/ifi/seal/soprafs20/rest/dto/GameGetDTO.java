@@ -12,7 +12,9 @@ public class GameGetDTO {
     private int score1;
     private int score2;
     private ParticipantGetDTO participant1;
+    private boolean participant1Reported;
     private ParticipantGetDTO participant2;
+    private boolean participant2Reported;
     private String tournamentCode;
 
 
@@ -64,5 +66,21 @@ public class GameGetDTO {
     }
     public void setTournamentCode(String tournamentCode) {
         this.tournamentCode = tournamentCode;
+    }
+
+    public boolean isParticipant1Reported() {
+        return participant1Reported;
+    }
+
+    public void setParticipant1Reported(boolean participant1Reported) {
+        this.participant1Reported = participant1Reported;
+    }
+
+    public boolean isParticipant2Reported() {
+        return participant2Reported;
+    }
+
+    public void setParticipant2Reported(boolean participant2Reported) {
+        this.participant2Reported = participant2Reported;
     }
 }

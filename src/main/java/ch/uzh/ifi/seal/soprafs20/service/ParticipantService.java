@@ -130,7 +130,6 @@ public class ParticipantService {
         return false;
     }
 
-
     public boolean checkLicenseNumberAndPassword(String licenseNumber, String password) {
         for (Participant participant : getParticipants()) {
             if (participant.getLicenseNumber().equals(licenseNumber) && participant.getPassword().equals(password)) {

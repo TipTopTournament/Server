@@ -83,6 +83,8 @@ public interface DTOMapper {
     @Mapping(source = "score1", target = "score1")
     @Mapping(source = "score2", target = "score2")
     @Mapping(source = "participant1", target = "participant1")
+    @Mapping(source = "participant1Reported", target = "participant1Reported")
+    @Mapping(source = "participant2Reported", target = "participant2Reported")
     @Mapping(source = "participant2", target = "participant2")
     @Mapping(source = "tournamentCode", target = "tournamentCode")
     GameGetDTO convertEntityToGameGetDTO(Game game);
