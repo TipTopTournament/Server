@@ -1,8 +1,8 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
+import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Leaderboard {
@@ -11,33 +11,88 @@ public class Leaderboard {
     @GeneratedValue
     public long leaderboardId;
 
-    @ManyToMany(targetEntity = Participant.class)
-    private List<Participant> leaderboardList = new ArrayList<>();
+    @ManyToOne
+    private Participant participant;
 
     @Column
-    private String wins;
+    private int wins;
 
-    public List<Participant> getLeaderboardList() {
-        return leaderboardList;
+    @Column
+    private int losses;
+
+    @Column
+    private int pointsScored;
+
+    @Column
+    private int pointsConceded;
+
+    @Column
+    private PlayerState playerState;
+
+    @Column
+    private String tournamentCode;
+
+    public long getLeaderboardId() {
+        return leaderboardId;
     }
-    public List<Integer> getWins() {
-        List<Integer> result = new ArrayList<>();
 
-        for(String x : wins.split(",")) {
-            result.add(Integer.parseInt(x));
-        }
-
-        return result;
+    public void setLeaderboardId(long leaderboardId) {
+        this.leaderboardId = leaderboardId;
     }
 
-    public void addParticipant(Participant participant) {
-        leaderboardList.add(participant);
+    public Participant getParticipant() {
+        return participant;
     }
-    public void setWins(List<Integer> vals) {
-        String string = "";
-        for (int x : vals) {
-            string = string.concat(Integer.toString(x) + ",");
-        }
-        this.wins = string.substring(0, string.length() - 1);
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
+    public int getPointsScored() {
+        return pointsScored;
+    }
+
+    public void setPointsScored(int pointsScored) {
+        this.pointsScored = pointsScored;
+    }
+
+    public int getPointsConceded() {
+        return pointsConceded;
+    }
+
+    public void setPointsConceded(int pointsConceded) {
+        this.pointsConceded = pointsConceded;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+
+    public String getTournamentCode() {
+        return tournamentCode;
+    }
+
+    public void setTournamentCode(String tournamentCode) {
+        this.tournamentCode = tournamentCode;
     }
 }

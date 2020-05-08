@@ -1,10 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-import ch.uzh.ifi.seal.soprafs20.entity.Game;
-import ch.uzh.ifi.seal.soprafs20.entity.Manager;
-import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
+import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
@@ -110,11 +106,11 @@ public class TournamentController {
         }
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
+        List<Leaderboard> leaderboardList = tournamentService.getLeaderboardFromTournament(tournamentCode);
 
-        for (int i = 0 ; i < tournament.getLeaderboard().getLeaderboardList().size(); i++) {
-            LeaderboardGetDTO leaderboardGetDTO = new LeaderboardGetDTO();
-            leaderboardGetDTO.setParticipantGetDTO(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getLeaderboard().getLeaderboardList().get(i)));
-            leaderboardGetDTO.setWins(tournament.getLeaderboard().getWins().get(i));
+        for (Leaderboard leaderboard : leaderboardList) {
+            LeaderboardGetDTO leaderboardGetDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(leaderboard);
+            leaderboardGetDTO.setParticipant(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()));
             leaderboardGetDTOList.add(leaderboardGetDTO);
         }
         return leaderboardGetDTOList;
@@ -171,8 +167,6 @@ public class TournamentController {
 
         Participant participant = participantService.getParticipantById(participantId);
 
-        // at the start of the tournament the status is NOT READY as a default.
-        participant.setUserState(UserState.NOTREADY);
         participant.setCode(tournamentCode);
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
@@ -200,11 +194,12 @@ public class TournamentController {
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
         // set User state to left
-        participant.setUserState(UserState.LEFT);
+        // TODO: update with leaderboard method
+        //  participant.setUserState(UserState.LEFT);
         participant.setCode(null);
 
         // update Bracket
-        tournamentService.updateBracketAfterUserLeft(participant, tournament);
+        tournamentService.updateBracketAndLeaderboardAfterUserLeft(participant, tournament);
 
     }
 }

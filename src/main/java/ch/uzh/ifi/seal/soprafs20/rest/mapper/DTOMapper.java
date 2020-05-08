@@ -92,4 +92,11 @@ public interface DTOMapper {
     @Mapping(source = "pointsScored", target = "pointsScored")
     @Mapping(source = "pointsConceded", target = "pointsConceded")
     StatisticsGetDTO convertEntityToStatisticsGetDTO(Statistics statistics);
+
+    @Mapping(source = "wins", target = "wins")
+    @Mapping(source = "losses", target = "losses")
+    @Mapping(source = "pointsScored", target = "pointsScored")
+    @Mapping(source = "pointsConceded", target = "pointsConceded")
+    @Mapping(source = "playerState", target = "playerState")
+    LeaderboardGetDTO convertEntityToLeaderboardGetDTO(Leaderboard leaderboard);
 }
