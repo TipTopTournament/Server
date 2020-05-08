@@ -1,7 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
-
 import javax.persistence.*;
 
 @Entity(name = "Participant")
@@ -18,9 +16,6 @@ public class Participant extends Person{
 
     @Column
     private String code;
-
-    @Column
-    private UserState userState;
 
     @Column
     private int eloScore;
@@ -41,9 +36,6 @@ public class Participant extends Person{
     public String getCode() {
         return code;
     }
-    public UserState getUserState() {
-        return userState;
-    }
     public int getEloScore() {
         return eloScore;
     }
@@ -60,9 +52,6 @@ public class Participant extends Person{
     }
     public void setCode(String code) {
         this.code = code;
-    }
-    public void setUserState(UserState userState) {
-        this.userState = userState;
     }
     public void setParticipantID(Long participantID) {
         this.participantID = participantID;
