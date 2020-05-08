@@ -1,8 +1,10 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -227,7 +231,7 @@ public class ParticipantControllerTest {
     }
 
     /**
-     * test the statistics endpoint
+     * test the statistics endpoint, -positive
      */
     @Test
     public void statisticsTest() throws Exception {
@@ -251,6 +255,107 @@ public class ParticipantControllerTest {
                 .andExpect(jsonPath("$.pointsScored", is(46)))
                 .andExpect(jsonPath("$.pointsConceded", is(32)));
     }
+
+    /**
+     * test the statistics endpoint, -negative for Id not found
+     */
+    @Test
+    public void statisticsTestFailure() throws Exception{
+        Statistics stats = new Statistics();
+        stats.setWins(13);
+        stats.setLosses(2);
+        stats.setPointsScored(46);
+        stats.setPointsConceded(32);
+
+        testParticipant1.setStatistics(stats);
+        given(participantService.getStatsByParticipantID(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // mock the request
+        MockHttpServletRequestBuilder statsRequest = get("/participants/333/statistics");
+
+        // do the request
+        mockMvc.perform(statsRequest).andExpect(status().isNotFound());
+    }
+
+    /**
+     * Check if the status update works, -positive
+     */
+    @Test
+    public void updateStatusPositive() throws Exception{
+
+        testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        testParticipant1.setUserStatus(UserStatus.OFFLINE);
+
+        ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
+        participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        participantPutDTO.setUserStatus(UserStatus.ONLINE);
+
+        participantService.updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
+
+        // mock the request
+        MockHttpServletRequestBuilder updateRequest = put("/participants/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(participantPutDTO));
+
+        // do the request
+        mockMvc.perform(updateRequest).andExpect(status().isOk());
+
+    }
+
+    /**
+     * Check if the status update works, -negative no Id found
+     */
+    @Test
+    public void updateStatusNegative() throws Exception{
+
+        testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        testParticipant1.setUserStatus(UserStatus.OFFLINE);
+
+        ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
+        participantPutDTO.setParticipantID(69);
+        participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        participantPutDTO.setUserStatus(UserStatus.ONLINE);
+
+        willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).given(participantService).updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
+
+        // mock the request
+        MockHttpServletRequestBuilder updateRequest = put("/participants/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(participantPutDTO));
+
+        // do the request
+        mockMvc.perform(updateRequest).andExpect(status().isNotFound());
+
+
+    }
+
+    /**
+     * Check if the status update works, -negative cannot update someone else status
+     */
+    @Test
+    public void updateStatusNotAuthorized() throws Exception{
+
+        testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        testParticipant1.setUserStatus(UserStatus.OFFLINE);
+
+        ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
+        participantPutDTO.setToken("254h7x88-jk5c-6254-o8o2-y642f7988p06");
+        participantPutDTO.setUserStatus(UserStatus.ONLINE);
+
+        willThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED)).given(participantService).updateStatus(Mockito.any(), Mockito.any(), Mockito.any());
+        // mock the request
+        MockHttpServletRequestBuilder updateRequest = put("/participants/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(participantPutDTO));
+
+        // do the request
+        mockMvc.perform(updateRequest).andExpect(status().isUnauthorized());
+
+    }
+
+
+
+
 
     // helpers
     private String asJsonString(final Object object) {

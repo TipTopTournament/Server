@@ -5,7 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -94,14 +94,15 @@ public class ParticipantService {
         }
     }
     
-    public void updateState(Long id, UserState state) {
-    	if(checkIfParticipantIdExists(id)) {
+    public void updateStatus(Long id, UserStatus status, String token) {
+    	if(checkIfParticipantIdAndToken(id, token)) {
     		Participant participant = getParticipantById(id);
-    		participant.setUserState(state);
-    	}
-    	else {
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
-    	}
+    		participant.setUserStatus(status);
+    	}else if (checkIfParticipantIdExists(id)){
+    		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Participant Id and token do not match, status update prevented!");
+    	}else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_FOUND);
+        }
     }
 
     public boolean checkIfParticipantIdExists(Long id) {
@@ -112,6 +113,16 @@ public class ParticipantService {
         }
         return false;
     }
+    // Abklären am Freitag
+    public boolean checkIfParticipantIdAndToken(Long id, String token){
+        for (Participant participant : getParticipants()) {
+            if (participant.getToken().equals(token) && participant.getParticipantID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean checkLicenseNumberAndPassword(String licenseNumber, String password) {
         for (Participant participant : getParticipants()) {

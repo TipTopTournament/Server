@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ch.uzh.ifi.seal.soprafs20.constant.UserState;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,12 +76,13 @@ public class ParticipantController {
     @PutMapping("/participants/{participantId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void updateParticipantState(@RequestBody ParticipantPutDTO participantPutDTO,@PathVariable("participantId") long id) {
-    	//Used to get the state
-    	Participant participantState = DTOMapper.INSTANCE.convertParticipantPutDTOToEntity(participantPutDTO);
-    	UserState state = participantState.getUserState();
-    	//Update the Participant State
-    	participantService.updateState(id,state);
+    public void updateParticipantStatus(@RequestBody ParticipantPutDTO participantPutDTO,@PathVariable("participantId") long id) {
+    	//Used to get the status
+    	Participant participantStatus = DTOMapper.INSTANCE.convertParticipantPutDTOToEntity(participantPutDTO);
+    	UserStatus status = participantStatus.getUserStatus();
+    	String token = participantStatus.getToken();
+    	//Update the Participant Status
+    	participantService.updateStatus(id,status,token);
     }
 
     @GetMapping("/participants/{participantId}/statistics")
