@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -193,17 +192,17 @@ public class ParticipantControllerTest {
      */
     @Test
     public void loginPositive() throws Exception {
-        ParticipantPostDTO participantPostDTO = new ParticipantPostDTO();
-        participantPostDTO.setVorname("Fabio");
-        participantPostDTO.setNachname("Sisi");
-        participantPostDTO.setPassword("ferrari");
+        ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
+        participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        participantPutDTO.setParticipantID(1L);
+        participantPutDTO.setUserStatus(UserStatus.ONLINE);
 
         given(participantService.checkLicenseNumberAndPassword(Mockito.any(), Mockito.any())).willReturn(true);
 
         // mock the request
         MockHttpServletRequestBuilder putRequest = put("/participants/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(participantPostDTO));
+                .content(asJsonString(participantPutDTO));
 
         // do the request
         mockMvc.perform(putRequest).andExpect(status().isOk());
@@ -214,17 +213,17 @@ public class ParticipantControllerTest {
      */
     @Test
     public void loginNegative() throws Exception {
-        ParticipantPostDTO participantPostDTO = new ParticipantPostDTO();
-        participantPostDTO.setVorname("Fabio");
-        participantPostDTO.setNachname("Sisi");
-        participantPostDTO.setPassword("ferrari");
+        ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
+        participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
+        participantPutDTO.setParticipantID(1L);
+        participantPutDTO.setUserStatus(UserStatus.ONLINE);
 
         given(participantService.checkLicenseNumberAndPassword(Mockito.any(), Mockito.any())).willReturn(false);
 
         // mock the request
         MockHttpServletRequestBuilder putRequest = put("/participants/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(participantPostDTO));
+                .content(asJsonString(participantPutDTO));
 
         // do the request
         mockMvc.perform(putRequest).andExpect(status().isUnauthorized());
