@@ -186,7 +186,7 @@ public class ManagerControllerTest {
         // do the request
         mockMvc.perform(getRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$.managerID", is(testManager1.getManagerID())))
-                .andExpect(jsonPath("$.nachname", is(testManager1.getUsername())));
+                .andExpect(jsonPath("$.username", is(testManager1.getUsername())));
     }
 
     /**
