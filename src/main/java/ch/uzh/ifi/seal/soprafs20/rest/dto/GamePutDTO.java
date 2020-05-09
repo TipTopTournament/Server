@@ -1,6 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
-public class GamePutDTO {
+public class    GamePutDTO {
 
     private int score1;
     private int score2;
