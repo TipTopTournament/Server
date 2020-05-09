@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Participant;
+import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
 import ch.uzh.ifi.seal.soprafs20.repository.ParticipantRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.StatisticsRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,9 @@ public class ParticipantServiceTest {
     private Participant testParticipant2;
     private Participant testParticipant3;
 
+    @InjectMocks
+    private Statistics testStatistics3;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -43,16 +47,27 @@ public class ParticipantServiceTest {
         testParticipant1.setVorname("Fabio");
         testParticipant1.setNachname("Sisi");
         testParticipant1.setPassword("ferrari");
+        testParticipant1.setToken("000z0z00-yy1y-2222-x3x3-w444w4444w44");
 
         testParticipant2.setVorname("Stefano");
         testParticipant2.setNachname("Anzolut");
         testParticipant2.setPassword("banana");
         testParticipant2.setLicenseNumber("123456");
+        testParticipant2.setParticipantID(1L);
+        testParticipant2.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
 
         testParticipant3.setVorname("Tony");
         testParticipant3.setNachname("Ly");
         testParticipant3.setPassword("apple");
         testParticipant3.setLicenseNumber("654321");
+        testParticipant3.setParticipantID(2L);
+        testParticipant3.setToken("222b2b22-cc3c-4444-d5d5-e666e6666e66");
+        testParticipant3.setStatistics(testStatistics3);
+        testStatistics3.setParticipant(testParticipant3);
+        testStatistics3.setLosses(69);
+        testStatistics3.setWins(420);
+        testStatistics3.setPointsConceded(108);
+        testStatistics3.setPointsScored(1260);
     }
 
     /**
@@ -82,26 +97,29 @@ public class ParticipantServiceTest {
     }
 
     /**
-     * Creates a user which already has a license number
-     
+     * Creates a user which already has a license number in the database
+     *
+     */
+
     @Test
     public void createParticipantSuccessWithLicenseNumber() {
+
         // create dummy participant which will be returned
         Participant dummyParticipant = new Participant();
-        dummyParticipant.setVorname("Stefano");
-        dummyParticipant.setNachname("Anzolut");
-        dummyParticipant.setLicenseNumber("123456");
+        dummyParticipant.setVorname("Tony");
+        dummyParticipant.setNachname("Ly");
+        dummyParticipant.setLicenseNumber("654321");
 
-        // setup the mocks, testuser2 is in the database but has not been registered yet, and therefore doesn't have a password
+        // setup the mocks, testParticipant3 is in the database but has not been registered yet, and therefore doesn't have a password
         Mockito.when(participantRepository.findByLicenseNumber(Mockito.any())).thenReturn(dummyParticipant);
 
         // create the participant object
-        Participant createdParticipant = participantService.createParticipant(testParticipant2);
+        Participant createdParticipant = participantService.createParticipant(testParticipant3);
 
         // assert that data is correct
-        assertEquals(testParticipant2.getVorname(), createdParticipant.getVorname());
-        assertEquals(testParticipant2.getNachname(), createdParticipant.getNachname());
-        assertEquals(testParticipant2.getPassword(), createdParticipant.getPassword());
+        assertEquals(testParticipant3.getVorname(), createdParticipant.getVorname());
+        assertEquals(testParticipant3.getNachname(), createdParticipant.getNachname());
+        assertEquals(testParticipant3.getPassword(), createdParticipant.getPassword());
 
         // token and licenseNumber must be set and have the correct length
         assertNotNull(createdParticipant.getLicenseNumber());
@@ -116,7 +134,7 @@ public class ParticipantServiceTest {
         assertEquals(0, createdParticipant.getStatistics().getPointsConceded());
         assertEquals(0, createdParticipant.getStatistics().getHistory().size());
     }
-	*/
+
     /**
      * A user with this license number exists but already has a password, therefore, an exception should be thrown
      */
@@ -129,7 +147,7 @@ public class ParticipantServiceTest {
         dummyParticipant.setPassword("apple");
         dummyParticipant.setLicenseNumber("654321");
 
-        // setup the mocks, testuser2 is in the database and has already been registered
+        // setup the mocks, testParticipant3 is in the database and has already been registered
         Mockito.when(participantRepository.findByLicenseNumber(Mockito.any())).thenReturn(dummyParticipant);
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
@@ -198,4 +216,125 @@ public class ParticipantServiceTest {
 
         assertFalse(participantService.checkLicenseNumberAndPassword(testParticipant1.getLicenseNumber(), testParticipant1.getPassword()));
     }
+
+    /**
+     * Check if the method getParticipantByID returns an exception, given a not assigned ParticipantId
+     */
+    @Test
+    public void participantByIdNegative() throws ResponseStatusException{
+        long dummyId = 111111111L;
+
+        // setup the mocks, there does not exist such an Id
+        Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(null);
+
+        assertThrows(ResponseStatusException.class, () -> { participantService.getParticipantById(dummyId); });
+    }
+
+    /**
+     * Check if the method getParticipantByID returns a participant, given an known ParticipantId
+     */
+    @Test
+    public void participantByIdPositive(){
+
+        // create dummy participant which will be returned
+        Participant dummyParticipant = new Participant();
+        dummyParticipant.setVorname("Stefano");
+        dummyParticipant.setNachname("Anzolut");
+        dummyParticipant.setPassword("banana");
+        dummyParticipant.setLicenseNumber("123456");
+        dummyParticipant.setParticipantID(1L);
+
+        // setup the mocks, testParticipant2 is in the database and has already been registered thus has an Id
+        Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(dummyParticipant);
+
+        Participant searchedParticipantById = participantService.getParticipantById(testParticipant2.getParticipantID());
+
+        // assert that data is correct
+        assertEquals(testParticipant2.getVorname(), searchedParticipantById.getVorname());
+        assertEquals(testParticipant2.getNachname(), searchedParticipantById.getNachname());
+        assertEquals(testParticipant2.getPassword(), searchedParticipantById.getPassword());
+    }
+
+    /**
+     * Check if the method getStatsByParticipantID returns an exception, given a not assigned ParticipantId
+     */
+    @Test
+    public void participantStatsByIdNegative() throws ResponseStatusException{
+        long dummyId = 111111111L;
+
+        // setup the mocks, there does not exist such an Id
+        Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(null);
+
+        assertThrows(ResponseStatusException.class, () -> { participantService.getParticipantById(dummyId); });
+    }
+
+    /**
+     * Check if the method getStatsByParticipantID returns statistics, given an known ParticipantId
+     */
+    @Test
+    public void participantStatsByIdPositive(){
+
+
+        // create dummy participant
+        Participant dummyParticipant = new Participant();
+        dummyParticipant.setVorname("Tony");
+        dummyParticipant.setNachname("Ly");
+        dummyParticipant.setPassword("apple");
+        dummyParticipant.setParticipantID(2L);
+        //create dummy statistics
+        Statistics dummyStatistics = new Statistics();
+        dummyStatistics.setLosses(69);
+        dummyStatistics.setWins(420);
+        dummyStatistics.setPointsConceded(108);
+        dummyStatistics.setPointsScored(1260);
+
+        dummyStatistics.setParticipant(dummyParticipant);
+        dummyParticipant.setStatistics(dummyStatistics);
+
+        // setup the mocks, testParticipant2 is in the database and has already been registered thus has an Id
+        Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(dummyParticipant);
+
+        Statistics statsById = participantService.getStatsByParticipantID(testParticipant3.getParticipantID());
+
+        // assert that data is correct
+        assertEquals(testParticipant3.getStatistics().getParticipant().getVorname(), statsById.getParticipant().getVorname());
+        assertEquals(testParticipant3.getStatistics().getParticipant().getNachname(), statsById.getParticipant().getNachname());
+        assertEquals(testParticipant3.getStatistics().getWins(), statsById.getWins());
+        assertEquals(testParticipant3.getStatistics().getLosses(), statsById.getLosses());
+        assertEquals(testParticipant3.getStatistics().getPointsConceded(), statsById.getPointsConceded());
+        assertEquals(testParticipant3.getStatistics().getPointsScored(), statsById.getPointsScored());
+    }
+
+    /**
+     * Check if the method which checks participantId and token combinations, positive
+     */
+    @Test
+    public void participantCheckPositive() {
+        List<Participant> dummyList = new ArrayList<>();
+
+        dummyList.add(testParticipant2);
+        dummyList.add(testParticipant3);
+
+        // setup the mock
+        Mockito.when(participantService.getParticipants()).thenReturn(dummyList);
+
+        assertTrue(participantService.checkIfParticipantIdAndToken(testParticipant2.getParticipantID(), testParticipant2.getToken()));
+    }
+
+    /**
+     * Check if the method which checks participantId and token combinations, negative
+     */
+    @Test
+    public void participantCheckNegative() {
+        List<Participant> dummyList = new ArrayList<>();
+
+        dummyList.add(testParticipant2);
+        dummyList.add(testParticipant3);
+
+        // setup the mock
+        Mockito.when(participantService.getParticipants()).thenReturn(dummyList);
+
+        assertFalse(participantService.checkIfParticipantIdAndToken(testParticipant1.getParticipantID(), testParticipant1.getToken()));
+    }
+
 }
