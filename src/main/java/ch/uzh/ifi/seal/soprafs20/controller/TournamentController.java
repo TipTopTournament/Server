@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.comparators.SortLeaderboardById;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -108,6 +109,8 @@ public class TournamentController {
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
         List<Leaderboard> leaderboardList = tournamentService.getLeaderboardFromTournament(tournamentCode);
 
+        leaderboardList.sort(new SortLeaderboardById());
+
         for (Leaderboard leaderboard : leaderboardList) {
             LeaderboardGetDTO leaderboardGetDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(leaderboard);
             leaderboardGetDTO.setParticipant(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()));
@@ -194,9 +197,7 @@ public class TournamentController {
 
         Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
 
-        // set User state to left
-        // TODO: update with leaderboard method
-        //  participant.setUserState(UserState.LEFT);
+        // set tournament code to null
         participant.setCode(null);
 
         // update Bracket

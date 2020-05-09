@@ -1,11 +1,11 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
+import ch.uzh.ifi.seal.soprafs20.comparators.SortGamesByGameId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -20,18 +20,12 @@ public class Bracket {
 
     public List<Game> getBracketList() {
 
-        bracketList.sort(new SortByGameId());
+        bracketList.sort(new SortGamesByGameId());
         return bracketList;
     }
     public void setBracketList(List<Game> bracketList) {
         this.bracketList = bracketList;
     }
 
-    static class SortByGameId implements Comparator<Game> {
 
-        public int compare(Game game1, Game game2) {
-
-            return (int)game1.getGameId() - (int)game2.getGameId();
-        }
-    }
 }
