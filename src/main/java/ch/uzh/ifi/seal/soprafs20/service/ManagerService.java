@@ -2,7 +2,6 @@ package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Manager;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
-import ch.uzh.ifi.seal.soprafs20.entity.Participant;
 import ch.uzh.ifi.seal.soprafs20.entity.Tournament;
 import ch.uzh.ifi.seal.soprafs20.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -108,7 +108,6 @@ public class TournamentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
         }
 
-        Tournament tournament = tournamentService.getTournamentByTournamentCode(tournamentCode);
         List<Leaderboard> leaderboardList = tournamentService.getLeaderboardFromTournament(tournamentCode);
 
         leaderboardList.sort(new SortLeaderboardById());
@@ -153,7 +152,7 @@ public class TournamentController {
         }
     	 
     	 tournamentService.updateGameAsManager(tournamentCode,gameId,gamePutDTO.getScore1(),gamePutDTO.getScore2());
-    	
+
     } 
 
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")

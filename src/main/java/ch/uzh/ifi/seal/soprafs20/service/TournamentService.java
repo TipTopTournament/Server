@@ -9,7 +9,6 @@ import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
 import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.*;
-import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -108,9 +107,6 @@ public class TournamentService {
 
         leaderboardRepository.save(leaderboard);
         leaderboardRepository.flush();
-
-        // get the right bracket
-        Bracket bracket = tournament.getBracket();
     }
 
     // get methods
@@ -240,7 +236,6 @@ public class TournamentService {
     public void updateGameAsManager(String tournamentCode, long gameId, int score1, int score2) {
 
         Game game = gameRepository.findByGameId(gameId);
-        Leaderboard leaderboard = tournamentRepository.findByTournamentCode(tournamentCode).getLeaderboard();
 
         game.setScore1(score1);
         game.setScore2(score2);
@@ -259,15 +254,14 @@ public class TournamentService {
 
         for (Game game : bracket.getBracketList()) {
             // go through all the games and find the one which the participant is part of and is not finished
-            if (game.getParticipant1() != null && game.getParticipant2() != null) {
-                if ((game.getParticipant1().getParticipantID().equals(participant.getParticipantID())
-                        || game.getParticipant2().getParticipantID().equals(participant.getParticipantID()))
-                        && game.getGameState() != GameState.FINISHED) {
-
+            if (game.getParticipant1() != null &&
+                game.getParticipant2() != null &&
+                game.getGameState() != GameState.FINISHED &&
+                (game.getParticipant1().getParticipantID().equals(participant.getParticipantID()) ||
+                game.getParticipant2().getParticipantID().equals(participant.getParticipantID()))) {
                     gameForfait(game, participant, tournament.getTournamentCode());
                 }
             }
-        }
 
         for (Leaderboard leaderboard : leaderboardRepository.findAllByTournamentCode(tournament.getTournamentCode())) {
             if (leaderboard.getParticipant().getParticipantID().equals(participant.getParticipantID())) {
