@@ -95,7 +95,34 @@ public class ParticipantService {
         	
         }
     }
-    
+
+    private String createNewLicenseNumber() {
+        boolean exists = true;
+        String newLicensenumber = "";
+
+        while (exists) {
+            newLicensenumber = Integer.toString(r.nextInt((999999-100000)+1) + 100000);
+
+            exists = participantRepository.findByLicenseNumber(newLicensenumber) != null;
+        }
+
+        return newLicensenumber;
+    }
+
+    private Statistics createEmptyStats() {
+        Statistics stats = new Statistics();
+
+        stats.setWins(0);
+        stats.setLosses(0);
+        stats.setPointsScored(0);
+        stats.setPointsConceded(0);
+
+        statisticsRepository.save(stats);
+        statisticsRepository.flush();
+
+        return stats;
+    }
+
     public void updateStatus(Long id, UserStatus status, String token) {
     	if(checkIfParticipantIdAndToken(id, token)) {
     		Participant participant = getParticipantById(id);
@@ -139,30 +166,4 @@ public class ParticipantService {
         return false;
     }
 
-    private String createNewLicenseNumber() {
-        boolean exists = true;
-        String newLicensenumber = "";
-
-        while (exists) {
-            newLicensenumber = Integer.toString(r.nextInt((999999-100000)+1) + 100000);
-
-            exists = participantRepository.findByLicenseNumber(newLicensenumber) != null;
-        }
-
-        return newLicensenumber;
-    }
-
-    private Statistics createEmptyStats() {
-        Statistics stats = new Statistics();
-
-        stats.setWins(0);
-        stats.setLosses(0);
-        stats.setPointsScored(0);
-        stats.setPointsConceded(0);
-
-        statisticsRepository.save(stats);
-        statisticsRepository.flush();
-
-        return stats;
-    }
 }
