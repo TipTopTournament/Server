@@ -125,4 +125,17 @@ public class ManagerService {
         }
         return false;
     }
+
+    public boolean checkIfTournamentCodeIsInList(Long id, String tournamentCode) {
+
+        Manager manager = getManagerById(id);
+
+        for (Tournament tournament :
+                manager.getTournamentList()) {
+            if (tournament.getTournamentCode().equals(tournamentCode)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

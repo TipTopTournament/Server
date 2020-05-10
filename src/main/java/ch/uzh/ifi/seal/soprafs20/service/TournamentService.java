@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.uzh.ifi.seal.soprafs20.constant.GameState;
 import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
+import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.*;
 import org.apache.catalina.filters.RemoteIpFilter;
@@ -42,6 +43,7 @@ public class TournamentService {
 
         // 8-Character Tournament Code is generated
         tournament.setTournamentCode(generateTournamentCode());
+        tournament.setTournamentState(TournamentState.ACTIVE);
 
         // Bracket is generated
         tournament.setBracket(createBracket(tournament.getAmountOfPlayers(),
@@ -387,6 +389,15 @@ public class TournamentService {
                 break;
             default:
         }
+    }
+
+    public void endTournament(String tournamentCode) {
+        Tournament tournament = getTournamentByTournamentCode(tournamentCode);
+
+        tournament.setTournamentState(TournamentState.ENDED);
+
+        tournamentRepository.save(tournament);
+        tournamentRepository.flush();
     }
 
 

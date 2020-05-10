@@ -1,8 +1,12 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
+import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
+import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
+
 public class TournamentGetDTO {
 
     private long tournamentId;
+    private TournamentState tournamentState;
     private String tournamentName;
     private String tournamentCode;
     private ParticipantGetDTO winner;
@@ -47,6 +51,9 @@ public class TournamentGetDTO {
     public String getLocation() {
         return location;
     }
+    public TournamentState getTournamentState() {
+        return tournamentState;
+    }
 
     public void setTournamentId(long tournamentId) {
         this.tournamentId = tournamentId;
@@ -81,5 +88,7 @@ public class TournamentGetDTO {
     public void setLocation(String location) {
         this.location = location;
     }
-
+    public void setTournamentState(TournamentState tournamentState) {
+        this.tournamentState = tournamentState;
+    }
 }

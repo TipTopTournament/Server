@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.comparators.SortLeaderboardById;
+import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
 import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -23,6 +24,7 @@ public class TournamentController {
     private final ManagerService managerService;
     private static final String ERROR_MSG_NOT_EXISTS = "No tournament with such a code exists";
     private static final String ERROR_MSG_MANAGER = "Manager isn't valid.";
+    private static final String ERROR_MSG_MANAGER_NOT_AUTHORIZED = "This manager is not the owner of this tournament and cannot end it.";
 
     public TournamentController(TournamentService tournamentService, ParticipantService participantService, ManagerService managerService) {
         this.tournamentService = tournamentService;
@@ -202,6 +204,37 @@ public class TournamentController {
 
         // update Bracket
         tournamentService.updateBracketAndLeaderboardAfterUserLeft(participant, tournament);
+
+    }
+
+
+    @PutMapping("/tournaments/{tournamentCode}/{managerId}/cancel")
+    @ResponseBody
+    public void endTournament(@PathVariable("tournamentCode") String tournamentCode,
+                              @PathVariable("managerId") long managerId) {
+
+        // if tournament does not exist, error
+        if (!tournamentService.checkIfTournamentCodeExists(tournamentCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_NOT_EXISTS);
+        }
+
+        //Check if the manager exists
+        if (!managerService.checkIfManagerIdExists(managerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_MSG_MANAGER);
+        }
+
+        // Check if the tournament has already been cancelled
+        if (tournamentService.getTournamentByTournamentCode(tournamentCode).getTournamentState() == TournamentState.ENDED) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+
+        // check if this tournament is in this managers tournament list
+        if (managerService.checkIfTournamentCodeIsInList(managerId, tournamentCode)) {
+            tournamentService.endTournament(tournamentCode);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MSG_MANAGER_NOT_AUTHORIZED);
+        }
 
     }
 }

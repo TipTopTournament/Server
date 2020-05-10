@@ -14,7 +14,7 @@ public class Tournament {
     public long tournamentId;
 
     @Column
-    public String tournamentName; // something like Zürich Open or Champions League 23.4.20 by Tony
+    public String tournamentName;
 
     @OneToOne
     public Participant winner;

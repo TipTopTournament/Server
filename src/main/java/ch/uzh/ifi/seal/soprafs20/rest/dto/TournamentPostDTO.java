@@ -1,8 +1,11 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
+import ch.uzh.ifi.seal.soprafs20.constant.TournamentState;
+
 public class TournamentPostDTO {
 
     private String tournamentName;
+    private TournamentState tournamentState;
     private float breakDuration;
     private float gameDuration;
     private String startTime;
@@ -39,6 +42,9 @@ public class TournamentPostDTO {
     public String getLocation() {
         return location;
     }
+    public TournamentState getTournamentState() {
+        return tournamentState;
+    }
 
     public void setBreakDuration(float breakDuration) {
         this.breakDuration = breakDuration;
@@ -66,5 +72,8 @@ public class TournamentPostDTO {
     }
     public void setLocation(String location) {
         this.location = location;
+    }
+    public void setTournamentState(TournamentState tournamentState) {
+        this.tournamentState = tournamentState;
     }
 }
