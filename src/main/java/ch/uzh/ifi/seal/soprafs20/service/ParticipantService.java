@@ -78,7 +78,7 @@ public class ParticipantService {
         }
         else {
         	//Check if a player with that license number exists
-        	if(participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()).getPassword() == null) {
+        	if(participantRepository.findByLicenseNumber(newParticipant.getLicenseNumber()) == null) {
         		newParticipant.setToken(UUID.randomUUID().toString());
             	newParticipant.setStatistics(createEmptyStats());
                 newParticipant.setUserStatus(UserStatus.OFFLINE);
