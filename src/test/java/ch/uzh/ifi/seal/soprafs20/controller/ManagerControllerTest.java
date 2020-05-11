@@ -259,6 +259,7 @@ public class ManagerControllerTest {
     /**
      * Check if the get request returns the correct status when succesfully returning list of tournaments
      */
+
     @Test
     public void getAllParticipants() throws Exception{
 Tournament tournament1= new Tournament();
@@ -272,9 +273,8 @@ tournament1.setTournamentName("testtournament");
 tournament1.setAmountOfPlayers(0);
 tournament1.setBracket(new Bracket());
 tournament1.setLeaderboard(new Leaderboard());
-tournament1.setActivePlayers();
-tournament2.setAmountOfPlayers(1);
-tournament2.setBreakDuration(10);
+tournament2.setAmountOfPlayers(0);
+tournament2.setBreakDuration(10.0F);
 tournament2.setInformationBox("this is a test");
 tournament2.setTournamentCode("1111233333");
 tournament2.setLocation("baden");
@@ -282,27 +282,34 @@ tournament2.setTournamentName("testtournament");
 
 
 
+
         List<Tournament> dummyList = new ArrayList<>();
         dummyList.add(tournament1);
-       // dummyList.add(tournament2);
+        dummyList.add(tournament2);
+        testManager1.setTournamentList(dummyList);
 
 
-        given(managerService.getManagerById((long) 1).getTournamentList()).willReturn(dummyList);
+        given(managerService.getManagerById(Mockito.any())).willReturn(testManager1);
+
             ;
 
         // mock the request
-        MockHttpServletRequestBuilder getAllRequest = get("//managers/1/tournaments")
+        MockHttpServletRequestBuilder getAllRequest = get("/managers/1/tournaments")
                 .contentType(MediaType.APPLICATION_JSON);
 
         // do the request
         mockMvc.perform(getAllRequest).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].tournamentName", is(tournament1.getTournamentName())))
                 .andExpect(jsonPath("$[0].amountOfPlayers", is(tournament1.getAmountOfPlayers())))
-                .andExpect(jsonPath("$[0].tournamnetCode", is(tournament1.getTournamentCode())))
-                .andExpect(jsonPath("$[0].breakDuration", is(tournament1.getBreakDuration())))
+                .andExpect(jsonPath("$[0].tournamentCode", is(tournament1.getTournamentCode())))
                 .andExpect(jsonPath("$[0].informationBox", is(tournament1.getInformationBox())))
-                .andExpect(jsonPath("$[0].location", is(tournament1.getLocation())));
+                .andExpect(jsonPath("$[0].location", is(tournament1.getLocation())))
+                .andExpect(jsonPath("$[1].tournamentName", is(tournament1.getTournamentName())))
+                .andExpect(jsonPath("$[1].amountOfPlayers", is(tournament1.getAmountOfPlayers())))
+                .andExpect(jsonPath("$[1].tournamentCode", is(tournament1.getTournamentCode())))
+                .andExpect(jsonPath("$[1].informationBox", is(tournament1.getInformationBox())))
+                .andExpect(jsonPath("$[1].location", is(tournament1.getLocation())));
 
     }
 
@@ -311,7 +318,7 @@ tournament2.setTournamentName("testtournament");
      */
     @Test
     public void getAllParticipantsFailure() throws Exception{
-        TournamentGetDTO tournamentGetDTO= new TournamentGetDTO();
+        /*TournamentGetDTO tournamentGetDTO= new TournamentGetDTO();
         tournamentGetDTO.setAmountOfPlayers(2);
         tournamentGetDTO.setBreakDuration(10);
         tournamentGetDTO.setGameDuration(10);
@@ -321,14 +328,16 @@ tournament2.setTournamentName("testtournament");
         tournamentGetDTO.setTournamentCode("23421234");
         tournamentGetDTO.setTournamentId(1);
         tournamentGetDTO.setTournamentName("TESTtournament");
-        tournamentGetDTO.setStartTime("08:00");
-        willThrow(new ResponseStatusException( HttpStatus.NOT_FOUND, "No manager found with this Id")).given(managerService.getManagerById((long) 1).getTournamentList());
-        MockHttpServletRequestBuilder putRequest = put("/managers/1/tournaments")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(tournamentGetDTO));
+        tournamentGetDTO.setStartTime("08:00");*/
+
+        given(managerService.getManagerById(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "No Manager found with this Id"));
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/managers/1/tournaments")
+                .contentType(MediaType.APPLICATION_JSON);
 
         // do the request
-        mockMvc.perform(putRequest).andExpect(status().isNotFound());
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
     }
 }
 
