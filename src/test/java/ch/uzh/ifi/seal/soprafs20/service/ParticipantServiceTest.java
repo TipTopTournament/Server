@@ -395,10 +395,4 @@ public class ParticipantServiceTest {
         });
     }
 
-
-
-
-
-
-
 }
