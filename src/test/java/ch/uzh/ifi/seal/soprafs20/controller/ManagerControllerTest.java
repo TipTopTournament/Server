@@ -1,12 +1,8 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
-import ch.uzh.ifi.seal.soprafs20.entity.Manager;
-import ch.uzh.ifi.seal.soprafs20.entity.Participant;
-import ch.uzh.ifi.seal.soprafs20.entity.Statistics;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ManagerPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.ParticipantPutDTO;
+import ch.uzh.ifi.seal.soprafs20.entity.*;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import ch.uzh.ifi.seal.soprafs20.service.ManagerService;
 import ch.uzh.ifi.seal.soprafs20.service.ParticipantService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -175,7 +172,7 @@ public class ManagerControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isUnauthorized());
     }
     @Test
-    public void getParticipantById() throws Exception{
+    public void getManagerById() throws Exception{
 
         given(managerService.getManagerById(Mockito.any())).willReturn(testManager1);
 
@@ -193,7 +190,7 @@ public class ManagerControllerTest {
      * Checks if the correct error is returned if the participant is not found -negative
      */
     @Test
-    public void getParticipantByIdFailure() throws Exception {
+    public void getManagerByIdFailure() throws Exception {
 
         given(managerService.getManagerById(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "No Manager found with this Id"));
 
@@ -206,7 +203,133 @@ public class ManagerControllerTest {
     }
 
     /**
-     * Check if the post request returns the correct status, positive
+     * Check if the post request returns the correct status when updating the manager Status with positive status
      */
+    @Test
+    public void updateManagerStatusSuccesful() throws Exception {
+        ManagerPutDTO managerPutDTO = new ManagerPutDTO();
+        managerPutDTO.setToken("111111111444443");
+        managerPutDTO.setUserStatus(UserStatus.OFFLINE);
+        managerPutDTO.setManagerID((long) 1);
+                // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/managers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(managerPutDTO));
 
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isOk());
+    }
+    /**
+     * Check if the post request returns the correct status when updating the manager Status with incorrect token Id combination
+     */
+    @Test
+    public void updateManagerStatusTokenIdNotMatch() throws Exception {
+        ManagerPutDTO managerPutDTO = new ManagerPutDTO();
+        managerPutDTO.setToken("111111111444443");
+        managerPutDTO.setUserStatus(UserStatus.OFFLINE);
+        managerPutDTO.setManagerID((long) 1);
+        willThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Manager Id and token do not match, status update prevented!")).given(managerService).updateStatus(Mockito.any(),Mockito.any(),Mockito.any());
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/managers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(managerPutDTO));
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isUnauthorized());
+    }
+    /**
+     * Check if the post request returns the correct status when updating the manager Status with incorrect Id
+     */
+    @Test
+    public void updateManagerStatusWrongId() throws Exception {
+        ManagerPutDTO managerPutDTO = new ManagerPutDTO();
+        managerPutDTO.setToken("111111111444443");
+        managerPutDTO.setUserStatus(UserStatus.OFFLINE);
+        managerPutDTO.setManagerID((long) 1);
+        willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,"No manager found with this Id")).given(managerService).updateStatus(Mockito.any(),Mockito.any(),Mockito.any());
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/managers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(managerPutDTO));
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
+    }
+
+    /**
+     * Check if the get request returns the correct status when succesfully returning list of tournaments
+     */
+    @Test
+    public void getAllParticipants() throws Exception{
+Tournament tournament1= new Tournament();
+Tournament  tournament2 = new Tournament();
+tournament1.setAmountOfPlayers(1);
+tournament1.setBreakDuration(10);
+tournament1.setInformationBox("this is a test");
+tournament1.setTournamentCode("1111233333");
+tournament1.setLocation("baden");
+tournament1.setTournamentName("testtournament");
+tournament1.setAmountOfPlayers(0);
+tournament1.setBracket(new Bracket());
+tournament1.setLeaderboard(new Leaderboard());
+tournament1.setActivePlayers();
+tournament2.setAmountOfPlayers(1);
+tournament2.setBreakDuration(10);
+tournament2.setInformationBox("this is a test");
+tournament2.setTournamentCode("1111233333");
+tournament2.setLocation("baden");
+tournament2.setTournamentName("testtournament");
+
+
+
+        List<Tournament> dummyList = new ArrayList<>();
+        dummyList.add(tournament1);
+       // dummyList.add(tournament2);
+
+
+        given(managerService.getManagerById((long) 1).getTournamentList()).willReturn(dummyList);
+            ;
+
+        // mock the request
+        MockHttpServletRequestBuilder getAllRequest = get("//managers/1/tournaments")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getAllRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].tournamentName", is(tournament1.getTournamentName())))
+                .andExpect(jsonPath("$[0].amountOfPlayers", is(tournament1.getAmountOfPlayers())))
+                .andExpect(jsonPath("$[0].tournamnetCode", is(tournament1.getTournamentCode())))
+                .andExpect(jsonPath("$[0].breakDuration", is(tournament1.getBreakDuration())))
+                .andExpect(jsonPath("$[0].informationBox", is(tournament1.getInformationBox())))
+                .andExpect(jsonPath("$[0].location", is(tournament1.getLocation())));
+
+    }
+
+    /**
+     * Check if the get request returns the correct status when nonexisting manager id is given
+     */
+    @Test
+    public void getAllParticipantsFailure() throws Exception{
+        TournamentGetDTO tournamentGetDTO= new TournamentGetDTO();
+        tournamentGetDTO.setAmountOfPlayers(2);
+        tournamentGetDTO.setBreakDuration(10);
+        tournamentGetDTO.setGameDuration(10);
+        tournamentGetDTO.setInformationBox("test");
+        tournamentGetDTO.setLocation("baden");
+        tournamentGetDTO.setNumberTables(5);
+        tournamentGetDTO.setTournamentCode("23421234");
+        tournamentGetDTO.setTournamentId(1);
+        tournamentGetDTO.setTournamentName("TESTtournament");
+        tournamentGetDTO.setStartTime("08:00");
+        willThrow(new ResponseStatusException( HttpStatus.NOT_FOUND, "No manager found with this Id")).given(managerService.getManagerById((long) 1).getTournamentList());
+        MockHttpServletRequestBuilder putRequest = put("/managers/1/tournaments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(tournamentGetDTO));
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
+    }
 }
+
+
