@@ -33,6 +33,7 @@ public class TournamentController {
     }
 
     @GetMapping("/tournaments")
+    @ResponseStatus(HttpStatus.OK)
     @Query
     public List<TournamentGetDTO> getAllTournaments() {
         List<TournamentGetDTO> allTournaments = new ArrayList<>();
