@@ -122,6 +122,7 @@ public class TournamentControllerTest {
         testTournament1.setStartTime("12:00");
         testTournament1.setTournamentName("NAME1");
         testTournament1.setWinner(testParticipant1);
+        testTournament1.setActivePlayers(dummyList1);
 
         testTournament2.setAmountOfPlayers(8);
         testTournament2.setBracket(testBracket2);
@@ -136,6 +137,7 @@ public class TournamentControllerTest {
         testTournament2.setStartTime("22:00");
         testTournament2.setTournamentName("NAME2");
         testTournament2.setWinner(testParticipant2);
+        testTournament2.setActivePlayers(dummyList1);
 
         List<Game> dummyList3 = new ArrayList<>();
 
@@ -187,7 +189,22 @@ public class TournamentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         // do the request
-        mockMvc.perform(getAllRequest).andExpect(status().isOk());
+        mockMvc.perform(getAllRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].tournamentName", is(testTournament1.getTournamentName())))
+                .andExpect(jsonPath("$[0].location", is(testTournament1.getLocation())))
+                .andExpect(jsonPath("$[0].tournamentState", is(testTournament1.getTournamentState())))
+                .andExpect(jsonPath("$[0].startTime", is(testTournament1.getStartTime())))
+                //.andExpect(jsonPath("$[0].gameDuration", is(testTournament1.getGameDuration()))) // confusion with floats?
+                //.andExpect(jsonPath("$[0].breakDuration", is(testTournament1.getBreakDuration()))) // dito
+                .andExpect(jsonPath("$[0].tournamentCode", is(testTournament1.getTournamentCode())))
+                .andExpect(jsonPath("$[0].amountOfPlayers", is(testTournament1.getAmountOfPlayers())))
+                .andExpect(jsonPath("$[0].numberTables", is(testTournament1.getNumberTables())))
+                .andExpect(jsonPath("$[0].informationBox", is(testTournament1.getInformationBox())));
+                //.andExpect(jsonPath("$[0].leaderboard", is(testTournament1.getLeaderboard()))) // no representation of leaderboard object in json format
+                //.andExpect(jsonPath("$[0].bracket", is(testTournament1.getBracket()))) // dito
+                //.andExpect(jsonPath("$[0].activePlayers", is(testTournament1.getActivePlayers()))); // dito
     }
 
 /**
