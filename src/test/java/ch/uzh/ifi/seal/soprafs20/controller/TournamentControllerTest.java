@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.seal.soprafs20.rest.dto.GameGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -251,7 +252,7 @@ public class TournamentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(tournamentPostDTO));
 
-        mockMvc.perform(postRequest).andExpect(status().isCreated()); // this test says tournament code is null but it should be generated??
+        mockMvc.perform(postRequest).andExpect(status().isCreated());
     }
 
 /**
@@ -362,6 +363,66 @@ public class TournamentControllerTest {
         // do the request
         mockMvc.perform(getRequest).andExpect(status().isNotFound());
     }
+
+    @Test
+    public void getAllGamesFromATournamentWithTCodePositive() throws Exception{
+
+
+        GameGetDTO testGameDTO1 = new GameGetDTO();
+        GameGetDTO testGameDTO2 = new GameGetDTO();
+
+        testGameDTO1.setStartTime("10:00");
+        testGameDTO1.setGameState(GameState.FINISHED);
+        testGameDTO1.setScore1(3);
+        testGameDTO1.setScore2(0);
+        testGameDTO1.setParticipant1(testParticipant1);
+        testGameDTO1.setParticipant2(testParticipant2);
+        testGameDTO1.setTournamentCode("TEST1");
+
+        testGameDTO2.setStartTime("14:00");
+        testGameDTO2.setGameState(GameState.READY);
+        testGameDTO2.setScore1(2);
+        testGameDTO2.setScore2(3);
+        testGameDTO2.setParticipant1(testParticipant1);
+        testGameDTO2.setParticipant2(testParticipant2);
+        testGameDTO2.setTournamentCode("TEST2");
+
+
+        List<Game> gameList = new ArrayList<>();
+        gameList.add(testGame1);
+        gameList.add(testGame2);
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(tournamentService.getBracketByTournamentCode(Mockito.any())).willReturn(gameList);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/TEST1/bracket")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].startTime", is(testGameDTO1.getStartTime())))
+                //.andExpect(jsonPath("$[0].gameState", is(testGameDTO1.getGameState())));
+                .andExpect(jsonPath("$[0].score1", is(testGameDTO1.getScore1())))
+                .andExpect(jsonPath("$[0].score2", is(testGameDTO1.getScore2())))
+                .andExpect(jsonPath("$[0].tournamentCode", is(testGameDTO1.getTournamentCode())));
+    }
+
+    @Test
+    public void getAllGamesFromATournamentWithTCodeNegativeWhenTCodeNotExist() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = get("/tournaments/asdf23tawgarg/bracket") // TournamentCode not exist
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    }
+
+
+
 
     private String asJsonString(final Object object) {
         try {
