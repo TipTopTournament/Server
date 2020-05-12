@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -191,7 +192,7 @@ public class TournamentControllerTest {
         mockMvc.perform(getAllRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                //.andExpect(jsonPath("$[0].winner, is(testTournament1.getWinner()))) // representation of Participant object is different in json
+                .andExpect(jsonPath("$[0].winner.participantID", is(DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(testTournament1.getWinner()).getParticipantID()))) // representation of Participant object is different in json
                 .andExpect(jsonPath("$[0].tournamentName", is(testTournament1.getTournamentName())))
                 .andExpect(jsonPath("$[0].location", is(testTournament1.getLocation())))
                 .andExpect(jsonPath("$[0].tournamentState", is(testTournament1.getTournamentState())))
@@ -235,27 +236,27 @@ public class TournamentControllerTest {
      * Check if the post request returns the correct status, positive
      */
 
-//    @Test
-//    public void createTournamentPositive() throws Exception{
-//
-//        TournamentPostDTO tournamentPostDTO = new TournamentPostDTO();
-//        tournamentPostDTO.setAmountOfPlayers(4);
-//        tournamentPostDTO.setBreakDuration(10);
-//        tournamentPostDTO.setGameDuration(15);
-//        tournamentPostDTO.setInformationBox("INFO1");
-//        tournamentPostDTO.setLocation("TESTLOCATION1");
-//        tournamentPostDTO.setNumberTables(4);
-//        tournamentPostDTO.setStartTime("12:00");
-//        tournamentPostDTO.setTournamentName("NAME1");
-//
-//        given(tournamentService.createTournament(testTournament1)).willReturn(Mockito.any());
-//
-//        MockHttpServletRequestBuilder postRequest = post("/tournaments")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(asJsonString(tournamentPostDTO));
-//
-//        mockMvc.perform(postRequest).andExpect(status().isCreated()); // this test says tournament code is null but it should be generated??
-//    }
+    @Test
+    public void createTournamentPositive() throws Exception{
+
+        TournamentPostDTO tournamentPostDTO = new TournamentPostDTO();
+        tournamentPostDTO.setAmountOfPlayers(4);
+        tournamentPostDTO.setBreakDuration(10);
+        tournamentPostDTO.setGameDuration(15);
+        tournamentPostDTO.setInformationBox("INFO1");
+        tournamentPostDTO.setLocation("TESTLOCATION1");
+        tournamentPostDTO.setNumberTables(4);
+        tournamentPostDTO.setStartTime("12:00");
+        tournamentPostDTO.setTournamentName("NAME1");
+
+        given(tournamentService.createTournament(Mockito.any())).willReturn(testTournament1);
+
+        MockHttpServletRequestBuilder postRequest = post("/tournaments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(tournamentPostDTO));
+
+        mockMvc.perform(postRequest).andExpect(status().isCreated()); // this test says tournament code is null but it should be generated??
+    }
 
 /**
      * Checks if the get request using the tournamentCode works -positive
