@@ -157,6 +157,7 @@ public class TournamentController {
     } 
 
     @PutMapping("/tournaments/{tournamentCode}/{participantId}")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void userJoinsTournament(@PathVariable("tournamentCode") String tournamentCode,
                                     @PathVariable("participantId") long participantId) {

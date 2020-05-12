@@ -16,6 +16,7 @@ import ch.uzh.ifi.seal.soprafs20.rest.dto.GameGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -420,6 +421,51 @@ public class TournamentControllerTest {
         // do the request
         mockMvc.perform(getRequest).andExpect(status().isNotFound());
     }
+
+    @Test
+    public void userJoinsTournamentPositiveReturnsOK() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
+        given(participantService.getParticipantById(Mockito.any())).willReturn(testParticipant1);
+        given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
+
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/TEST1/1") // TournamentCode exists
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isOk());
+    }
+
+    @Test
+    public void userJoinsTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = put("/tournaments/asdfasdf/1") // TournamentCode does not exists
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void userJoinsTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(false);
+
+        // mock the request
+        MockHttpServletRequestBuilder getRequest = put("/tournaments/TEST1/1") // TournamentCode does not exists
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    }
+
 
 
 
