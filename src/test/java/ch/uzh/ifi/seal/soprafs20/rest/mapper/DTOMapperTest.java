@@ -167,7 +167,6 @@ public class DTOMapperTest {
         tournamentPostDTO.setGameDuration(20);
         tournamentPostDTO.setStartTime("10:00");
         tournamentPostDTO.setNumberTables(2);
-//        tournamentPostDTO.setManagerId();
         tournamentPostDTO.setAmountOfPlayers(4);
         tournamentPostDTO.setInformationBox("hoi das ist die info");
         tournamentPostDTO.setLocation("Binzmühlestrasse 14, 8050 Zürich, Switzerland");
@@ -191,7 +190,6 @@ public class DTOMapperTest {
     public void testGetDTOTournament() {
         // create Tournament
         Tournament tournament = new Tournament();
-//        tournament.setTournamentId(1L);
         tournament.setTournamentName("Zürich Open");
         tournament.setTournamentState(TournamentState.ACTIVE);
         tournament.setTournamentCode("12345678");
@@ -211,7 +209,7 @@ public class DTOMapperTest {
         assertEquals(tournamentGetDTO.getTournamentName(), tournament.getTournamentName());
         assertEquals(tournamentGetDTO.getTournamentState(), tournament.getTournamentState());
         assertEquals(tournamentGetDTO.getTournamentCode(), tournament.getTournamentCode());
-//        assertEquals(tournamentGetDTO.getWinner(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()));
+        assertEquals(tournamentGetDTO.getWinner().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getParticipantID());
         assertEquals(tournamentGetDTO.getBreakDuration(), tournament.getBreakDuration());
         assertEquals(tournamentGetDTO.getGameDuration(), tournament.getGameDuration());
         assertEquals(tournamentGetDTO.getStartTime(), tournament.getStartTime());
@@ -249,27 +247,33 @@ public class DTOMapperTest {
         assertEquals(gameGetDTO.getStartTime(), game.getStartTime());
         assertEquals(gameGetDTO.getScore1(), game.getScore1());
         assertEquals(gameGetDTO.getScore2(), game.getScore2());
-//        assertEquals(gameGetDTO.getParticipant1(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()));
-//        assertEquals(gameGetDTO.getParticipant2(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()));
+        assertEquals(gameGetDTO.getParticipant1().getVorname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getVorname());
+        assertEquals(gameGetDTO.getParticipant1().getNachname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getNachname());
+        assertEquals(gameGetDTO.getParticipant1().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getParticipantID());
+        assertEquals(gameGetDTO.getParticipant2().getVorname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getVorname());
+        assertEquals(gameGetDTO.getParticipant2().getNachname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getNachname());
+        assertEquals(gameGetDTO.getParticipant2().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getParticipantID());
         assertEquals(gameGetDTO.isParticipant1Reported(), game.isParticipant1Reported());
         assertEquals(gameGetDTO.isParticipant2Reported(), game.isParticipant2Reported());
         assertEquals(gameGetDTO.getTournamentCode(), game.getTournamentCode());
     }
 
-//    @Test
-//    public void testPutDTOGame() {
-//        // create GamePutDTO
-//        GamePutDTO gamePutDTO = new GamePutDTO();
-//        gamePutDTO.setScore1(1);
-//        gamePutDTO.setScore2(3);
-//
-//        // MAP -> Update game
-//        Game game = DTOMapper.INSTANCE.convertGamePutDTOToEntity(gamePutDTO);
-//
-//        // check content
-//        assertEquals(game.getScore1(), gamePutDTO.getScore1());
-//        assertEquals(game.getScore2(), gamePutDTO.getScore2());
-//    }
+    @Test
+    public void testPutDTOGame() {
+        // create GamePutDTO
+        GamePutDTO gamePutDTO = new GamePutDTO();
+        gamePutDTO.setScore1(1);
+        gamePutDTO.setScore2(3);
+
+        //create Game
+        Game game = new Game();
+        game.setScore1(gamePutDTO.getScore1());
+        game.setScore2(gamePutDTO.getScore2());
+
+        // check content
+        assertEquals(game.getScore1(), gamePutDTO.getScore1());
+        assertEquals(game.getScore2(), gamePutDTO.getScore2());
+    }
 
     /**
      * Statistics GetDTO
@@ -318,7 +322,7 @@ public class DTOMapperTest {
         LeaderboardGetDTO leaderboardGetDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(leaderboard);
 
         // check content
-//        assertEquals(leaderboardGetDTO.getParticipant(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()));
+        assertEquals(leaderboardGetDTO.getParticipant().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getParticipantID());
         assertEquals(leaderboardGetDTO.getWins(), leaderboard.getWins());
         assertEquals(leaderboardGetDTO.getLosses(), leaderboard.getLosses());
         assertEquals(leaderboardGetDTO.getPointsScored(), leaderboard.getPointsScored());

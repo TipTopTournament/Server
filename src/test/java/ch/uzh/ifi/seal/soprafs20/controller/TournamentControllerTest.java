@@ -111,7 +111,6 @@ public class TournamentControllerTest {
 
         testTournament1.setAmountOfPlayers(4);
         testTournament1.setBracket(testBracket1);
-        testTournament1.setActivePlayers(dummyList1);
         testTournament1.setBreakDuration(10);
         testTournament1.setGameDuration(15);
         testTournament1.setTournamentCode("TEST1");
@@ -122,11 +121,9 @@ public class TournamentControllerTest {
         testTournament1.setStartTime("12:00");
         testTournament1.setTournamentName("NAME1");
         testTournament1.setWinner(testParticipant1);
-        testTournament1.setActivePlayers(dummyList1);
 
         testTournament2.setAmountOfPlayers(8);
         testTournament2.setBracket(testBracket2);
-        testTournament2.setActivePlayers(dummyList1);
         testTournament2.setBreakDuration(5);
         testTournament2.setGameDuration(10);
         testTournament2.setTournamentCode("TEST2");
@@ -137,7 +134,6 @@ public class TournamentControllerTest {
         testTournament2.setStartTime("22:00");
         testTournament2.setTournamentName("NAME2");
         testTournament2.setWinner(testParticipant2);
-        testTournament2.setActivePlayers(dummyList1);
 
         List<Game> dummyList3 = new ArrayList<>();
 

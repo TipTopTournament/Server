@@ -6,8 +6,8 @@ public class TournamentPostDTO {
 
     private String tournamentName;
     private TournamentState tournamentState;
-    private float breakDuration;
-    private float gameDuration;
+    private int breakDuration;
+    private int gameDuration;
     private String startTime;
     private int numberTables;
     private int amountOfPlayers;
@@ -15,13 +15,13 @@ public class TournamentPostDTO {
     private String informationBox;
     private String location;
 
-    public float getBreakDuration() {
+    public int getBreakDuration() {
         return breakDuration;
     }
     public String getTournamentName() {
         return tournamentName;
     }
-    public float getGameDuration() {
+    public int getGameDuration() {
         return gameDuration;
     }
     public String getStartTime() {
@@ -46,13 +46,13 @@ public class TournamentPostDTO {
         return tournamentState;
     }
 
-    public void setBreakDuration(float breakDuration) {
+    public void setBreakDuration(int breakDuration) {
         this.breakDuration = breakDuration;
     }
     public void setTournamentName(String tournamentName) {
         this.tournamentName = tournamentName;
     }
-    public void setGameDuration(float gameDuration) {
+    public void setGameDuration(int gameDuration) {
         this.gameDuration = gameDuration;
     }
     public void setStartTime(String startTime) {
