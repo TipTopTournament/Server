@@ -52,9 +52,6 @@ public class Tournament {
     @OneToOne
     public Bracket bracket;
 
-    @OneToMany
-    public List<Participant> activePlayers;
-
     public long getTournamentId() {
         return tournamentId;
     }
@@ -93,9 +90,6 @@ public class Tournament {
     }
     public Bracket getBracket() {
         return bracket;
-    }
-    public List<Participant> getActivePlayers() {
-        return activePlayers;
     }
     public String getInformationBox() {
         return informationBox;
@@ -139,8 +133,5 @@ public class Tournament {
     }
     public void setBracket(Bracket bracket) {
         this.bracket = bracket;
-    }
-    public void setActivePlayers(List<Participant> activePlayers) {
-        this.activePlayers = activePlayers;
     }
 }
