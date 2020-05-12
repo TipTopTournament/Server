@@ -57,7 +57,7 @@ public class TournamentService {
         return tournament;
     }
 
-    public Bracket createBracket(int numberOfPlayers, String tournamentCode, int tables, String startTime, float breatTime, float gameTime) {
+    public Bracket createBracket(int numberOfPlayers, String tournamentCode, int tables, String startTime, int breakTime, int gameTime) {
         List<Game> newGames = new ArrayList<>();
         // create new Bracket
         Bracket bracket = new Bracket();
@@ -73,7 +73,7 @@ public class TournamentService {
             gameRepository.flush();
         }
 
-        calculateTimes(newGames, startTime, breatTime, gameTime, tables);
+        calculateTimes(newGames, startTime, breakTime, gameTime, tables);
 
         // add the games to the bracket
         bracket.setBracketList(newGames);
@@ -475,7 +475,7 @@ public class TournamentService {
         statsLoser.addGameToHistory(game);
     }
 
-    private void calculateTimes(List<Game> gameList, String startTime, float breakTime, float gameTime, int tables) {
+    private void calculateTimes(List<Game> gameList, String startTime, int breakTime, int gameTime, int tables) {
         LocalTime start = LocalTime.parse(startTime);
 
         switch (gameList.size()){

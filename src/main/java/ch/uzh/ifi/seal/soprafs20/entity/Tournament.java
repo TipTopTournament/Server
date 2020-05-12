@@ -29,10 +29,10 @@ public class Tournament {
     public String startTime;
 
     @Column
-    public float gameDuration;
+    public int gameDuration;
 
     @Column
-    public float breakDuration;
+    public int breakDuration;
 
     @Column
     public String tournamentCode;
@@ -70,10 +70,10 @@ public class Tournament {
     public String getStartTime() {
         return startTime;
     }
-    public float getGameDuration() {
+    public int getGameDuration() {
         return gameDuration;
     }
-    public float getBreakDuration() {
+    public int getBreakDuration() {
         return breakDuration;
     }
     public String getTournamentCode() {
@@ -113,10 +113,10 @@ public class Tournament {
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    public void setGameDuration(float gameDuration) {
+    public void setGameDuration(int gameDuration) {
         this.gameDuration = gameDuration;
     }
-    public void setBreakDuration(float breakDuration) {
+    public void setBreakDuration(int breakDuration) {
         this.breakDuration = breakDuration;
     }
     public void setTournamentCode(String tournamentCode) {
