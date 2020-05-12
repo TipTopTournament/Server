@@ -262,23 +262,23 @@ public class ManagerControllerTest {
 
     @Test
     public void getAllParticipants() throws Exception{
-Tournament tournament1= new Tournament();
-Tournament  tournament2 = new Tournament();
-tournament1.setAmountOfPlayers(1);
-tournament1.setBreakDuration(10);
-tournament1.setInformationBox("this is a test");
-tournament1.setTournamentCode("1111233333");
-tournament1.setLocation("baden");
-tournament1.setTournamentName("testtournament");
-tournament1.setAmountOfPlayers(0);
-tournament1.setBracket(new Bracket());
-tournament1.setLeaderboard(new Leaderboard());
-tournament2.setAmountOfPlayers(0);
-tournament2.setBreakDuration(10.0F);
-tournament2.setInformationBox("this is a test");
-tournament2.setTournamentCode("1111233333");
-tournament2.setLocation("baden");
-tournament2.setTournamentName("testtournament");
+        Tournament tournament1= new Tournament();
+        Tournament tournament2 = new Tournament();
+        tournament1.setAmountOfPlayers(1);
+        tournament1.setBreakDuration(10);
+        tournament1.setInformationBox("this is a test");
+        tournament1.setTournamentCode("1111233333");
+        tournament1.setLocation("baden");
+        tournament1.setTournamentName("testtournament");
+        tournament1.setAmountOfPlayers(0);
+        tournament1.setBracket(new Bracket());
+        tournament1.setLeaderboard(new Leaderboard());
+        tournament2.setAmountOfPlayers(0);
+        tournament2.setBreakDuration(10);
+        tournament2.setInformationBox("this is a test");
+        tournament2.setTournamentCode("1111233333");
+        tournament2.setLocation("baden");
+        tournament2.setTournamentName("testtournament");
 
 
 
