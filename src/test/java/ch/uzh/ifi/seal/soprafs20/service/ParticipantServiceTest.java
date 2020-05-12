@@ -99,44 +99,44 @@ public class ParticipantServiceTest {
         assertEquals(0, createdParticipant.getStatistics().getHistory().size());
     }
 
-//    /**
-//     * Creates a user which already has a license number in the database
-//     *
-//     */
-//
-//    @Test
-//    public void createParticipantSuccessWithLicenseNumber() {
-//
-//        // create dummy participant which will be returned
-//        Participant dummyParticipant = new Participant();
-//        dummyParticipant.setVorname("Tony");
-//        dummyParticipant.setNachname("Ly");
-//        dummyParticipant.setLicenseNumber("654321");
-//
-//        // setup the mocks, testParticipant3 is in the database but has not been registered yet, and therefore doesn't have a password
-//        Mockito.when(participantRepository.findByLicenseNumber(Mockito.any())).thenReturn(dummyParticipant);
-//
-//        // create the participant object
-//        Participant createdParticipant = participantService.createParticipant(testParticipant3);
-//
-//        // assert that data is correct
-//        assertEquals(testParticipant3.getVorname(), createdParticipant.getVorname());
-//        assertEquals(testParticipant3.getNachname(), createdParticipant.getNachname());
-//        assertEquals(testParticipant3.getPassword(), createdParticipant.getPassword());
-//
-//        // token and licenseNumber must be set and have the correct length
-//        assertNotNull(createdParticipant.getLicenseNumber());
-//        assertEquals(6, createdParticipant.getLicenseNumber().length());
-//        assertNotNull(createdParticipant.getToken());
-//
-//        // check that stats have been created and the correct values are set
-//        assertNotNull(createdParticipant.getStatistics());
-//        assertEquals(0, createdParticipant.getStatistics().getWins());
-//        assertEquals(0, createdParticipant.getStatistics().getLosses());
-//        assertEquals(0, createdParticipant.getStatistics().getPointsScored());
-//        assertEquals(0, createdParticipant.getStatistics().getPointsConceded());
-//        assertEquals(0, createdParticipant.getStatistics().getHistory().size());
-//    }
+    /**
+     * Creates a user which already has a license number in the database
+     *
+     */
+
+    @Test
+    public void createParticipantSuccessWithLicenseNumber() {
+
+        // create dummy participant which will be returned
+        Participant dummyParticipant = new Participant();
+        dummyParticipant.setVorname("Tony");
+        dummyParticipant.setNachname("Ly");
+        dummyParticipant.setLicenseNumber("654321");
+
+        // setup the mocks, testParticipant3 is in the database but has not been registered yet, and therefore doesn't have a password
+        Mockito.when(participantRepository.findByLicenseNumber(Mockito.any())).thenReturn(null);
+
+        // create the participant object
+        Participant createdParticipant = participantService.createParticipant(testParticipant3);
+
+        // assert that data is correct
+        assertEquals(testParticipant3.getVorname(), createdParticipant.getVorname());
+        assertEquals(testParticipant3.getNachname(), createdParticipant.getNachname());
+        assertEquals(testParticipant3.getPassword(), createdParticipant.getPassword());
+
+        // token and licenseNumber must be set and have the correct length
+        assertNotNull(createdParticipant.getLicenseNumber());
+        assertEquals(6, createdParticipant.getLicenseNumber().length());
+        assertNotNull(createdParticipant.getToken());
+
+        // check that stats have been created and the correct values are set
+        assertNotNull(createdParticipant.getStatistics());
+        assertEquals(0, createdParticipant.getStatistics().getWins());
+        assertEquals(0, createdParticipant.getStatistics().getLosses());
+        assertEquals(0, createdParticipant.getStatistics().getPointsScored());
+        assertEquals(0, createdParticipant.getStatistics().getPointsConceded());
+        assertEquals(0, createdParticipant.getStatistics().getHistory().size());
+    }
 
     /**
      * A user with this license number exists but already has a password, therefore, an exception should be thrown
