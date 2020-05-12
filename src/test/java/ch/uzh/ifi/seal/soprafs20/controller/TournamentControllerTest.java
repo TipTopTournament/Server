@@ -445,11 +445,11 @@ public class TournamentControllerTest {
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
 
         // mock the request
-        MockHttpServletRequestBuilder getRequest = put("/tournaments/asdfasdf/1") // TournamentCode does not exists
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/asdfasdf/1") // TournamentCode does not exists
                 .contentType(MediaType.APPLICATION_JSON);
 
         // do the request
-        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
     }
 
     @Test
@@ -459,15 +459,57 @@ public class TournamentControllerTest {
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(false);
 
         // mock the request
-        MockHttpServletRequestBuilder getRequest = put("/tournaments/TEST1/1") // TournamentCode does not exists
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/TEST1/1")
                 .contentType(MediaType.APPLICATION_JSON);
 
         // do the request
-        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
     }
 
+    @Test
+    public void userLeavesTournamentPositiveReturnsOk() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
+        given(participantService.getParticipantById(Mockito.any())).willReturn(testParticipant1);
+        given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
 
 
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/TEST1/1/leave")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isOk());
+    }
+
+    @Test
+    public void userLeavesTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
+
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/asdfwega/1/leave")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void userLeavesTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
+
+        given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
+        given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(false);
+
+        // mock the request
+        MockHttpServletRequestBuilder putRequest = put("/tournaments/Test1/1/leave")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // do the request
+        mockMvc.perform(putRequest).andExpect(status().isNotFound());
+    }
 
 
     private String asJsonString(final Object object) {
