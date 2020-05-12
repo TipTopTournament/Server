@@ -27,5 +27,9 @@ public class Bracket {
         this.bracketList = bracketList;
     }
 
+    public long getBracketID(){
+        return this.bracketID;
+    }
+
 
 }

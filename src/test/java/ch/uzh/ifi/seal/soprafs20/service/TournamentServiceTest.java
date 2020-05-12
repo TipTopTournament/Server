@@ -1,5 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.service;
-/*
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -41,7 +41,6 @@ class TournamentServiceTest {
 	private LeaderboardRepository leaderboardRepository;
 
     @InjectMocks
-    private ParticipantService participantService;
     private TournamentService tournamentService;
     
     private Participant testParticipant1;
@@ -97,7 +96,6 @@ class TournamentServiceTest {
          
          testTournament1.setAmountOfPlayers(4);
          testTournament1.setBracket(testBracket1);
-         testTournament1.setActivePlayers(dummyList1);
          testTournament1.setBreakDuration(10);
          testTournament1.setGameDuration(15);
          testTournament1.setTournamentCode("TEST1");
@@ -107,23 +105,20 @@ class TournamentServiceTest {
          testTournament1.setNumberTables(4);
          testTournament1.setStartTime("12:00");
          testTournament1.setTournamentName("NAME1");
-         testTournament1.setTournamentState(TournamentState.READY);
          testTournament1.setWinner(testParticipant1);
          
-         testTournament1.setAmountOfPlayers(8);
-         testTournament1.setBracket(testBracket2);
-         testTournament1.setActivePlayers(dummyList1);
-         testTournament1.setBreakDuration(5);
-         testTournament1.setGameDuration(10);
-         testTournament1.setTournamentCode("TEST2");
-         testTournament1.setInformationBox("INFO2");
-         testTournament1.setLeaderboard(testLeaderboard1);
-         testTournament1.setLocation("TESTLOCATION2");
-         testTournament1.setNumberTables(4);
-         testTournament1.setStartTime("22:00");
-         testTournament1.setTournamentName("NAME2");
-         testTournament1.setTournamentState(TournamentState.DONE);
-         testTournament1.setWinner(testParticipant2);
+         testTournament2.setAmountOfPlayers(8);
+         testTournament2.setBracket(testBracket2);
+         testTournament2.setBreakDuration(5);
+         testTournament2.setGameDuration(10);
+         testTournament2.setTournamentCode("TEST2");
+         testTournament2.setInformationBox("INFO2");
+         testTournament2.setLeaderboard(testLeaderboard1);
+         testTournament2.setLocation("TESTLOCATION2");
+         testTournament2.setNumberTables(4);
+         testTournament2.setStartTime("22:00");
+         testTournament2.setTournamentName("NAME2");
+         testTournament2.setWinner(testParticipant2);
          
          List<Game> dummyList3 = new ArrayList<>();
          
@@ -156,20 +151,36 @@ class TournamentServiceTest {
          dummyList1.add(testParticipant2);
          dummyList1.add(testParticipant3);
     }
-    
     @Test
-    public void updateGameWithScoreTest() {
-    	
-    	Mockito.when(gameRepository.findByGameId(Mockito.any())).thenReturn(testGame1);
-    	Mockito.when(tournamentRepository.findByTournamentCode(Mockito.any())).thenReturn(testTournament1);
-    	
-    	testGame1.setGameState(GameState.FIRSTENTRY);
-    	testGame1.setScore1(3);
-    	testGame1.setScore1(0);
-    	
-    	Exception exception = assertThrows(ResponseStatusException.class, () -> {
-            tournamentService.updateGameWithScore("TEST1", 1, 2, 3);
-        });
-    	
+    public void createTournamentSuccessShouldHaveTournamentCode(){
+        Tournament createdTournament = tournamentService.createTournament(testTournament1);
+
+        assertNotNull(createdTournament.getTournamentCode()); // random generated tournament code
+        assertEquals(createdTournament.getAmountOfPlayers(), testTournament1.getAmountOfPlayers());
+        assertEquals(createdTournament.getBracket(), testTournament1.getBracket());
+        assertEquals(createdTournament.getBreakDuration(), testTournament1.getBreakDuration());
+        assertEquals(createdTournament.getGameDuration(), testTournament1.getGameDuration());
+        assertEquals(createdTournament.getInformationBox(), testTournament1.getInformationBox());
+        assertEquals(createdTournament.getLeaderboard(), testTournament1.getLeaderboard());
+        assertEquals(createdTournament.getLocation(), testTournament1.getLocation());
+        assertEquals(createdTournament.getStartTime(), testTournament1.getStartTime());
+        assertEquals(createdTournament.getTournamentName(), testTournament1.getTournamentName());
+
     }
-}*/
+
+    @Test
+    public void createBracketSuccessShouldReturnBracket() {
+        int numberOfPlayers = 8;
+        String tournamentCode = "TEST2";
+        int numberOfTables = 4;
+        String startTime = "08:00";
+        int breakTime = 10;
+        int gameTime = 30;
+
+        Bracket createdBracket = tournamentService.createBracket(numberOfPlayers, tournamentCode, numberOfTables,
+                startTime, breakTime, gameTime);
+
+        assertNotNull(createdBracket);
+        assertNotNull(createdBracket.getBracketList());
+    }
+}
