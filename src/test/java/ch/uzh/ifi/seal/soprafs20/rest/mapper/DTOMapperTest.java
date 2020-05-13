@@ -193,7 +193,6 @@ public class DTOMapperTest {
         tournament.setTournamentName("Zürich Open");
         tournament.setTournamentState(TournamentState.ACTIVE);
         tournament.setTournamentCode("12345678");
-        tournament.setWinner(testParticipant2);
         tournament.setBreakDuration(10);
         tournament.setGameDuration(20);
         tournament.setStartTime("10:00");
@@ -201,6 +200,8 @@ public class DTOMapperTest {
         tournament.setAmountOfPlayers(4);
         tournament.setInformationBox("hoi das ist die info");
         tournament.setLocation("Binzmühlestrasse 14, 8050 Zürich, Switzerland");
+        tournament.setWinner(testParticipant2);
+
 
         // MAP -> tournamentGetDTO
         TournamentGetDTO tournamentGetDTO = DTOMapper.INSTANCE.convertEntityToTournamentGetDTO(tournament);
@@ -209,7 +210,6 @@ public class DTOMapperTest {
         assertEquals(tournamentGetDTO.getTournamentName(), tournament.getTournamentName());
         assertEquals(tournamentGetDTO.getTournamentState(), tournament.getTournamentState());
         assertEquals(tournamentGetDTO.getTournamentCode(), tournament.getTournamentCode());
-        assertEquals(tournamentGetDTO.getWinner().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getParticipantID());
         assertEquals(tournamentGetDTO.getBreakDuration(), tournament.getBreakDuration());
         assertEquals(tournamentGetDTO.getGameDuration(), tournament.getGameDuration());
         assertEquals(tournamentGetDTO.getStartTime(), tournament.getStartTime());
@@ -217,6 +217,19 @@ public class DTOMapperTest {
         assertEquals(tournamentGetDTO.getAmountOfPlayers(), tournament.getAmountOfPlayers());
         assertEquals(tournamentGetDTO.getInformationBox(), tournament.getInformationBox());
         assertEquals(tournamentGetDTO.getLocation(), tournament.getLocation());
+        assertEquals(tournamentGetDTO.getWinner().getParticipantID(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getParticipantID());
+        assertEquals(tournamentGetDTO.getWinner().getVorname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getVorname());
+        assertEquals(tournamentGetDTO.getWinner().getNachname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getNachname());
+        assertEquals(tournamentGetDTO.getWinner().getLicenseNumber(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getLicenseNumber());
+        assertEquals(tournamentGetDTO.getWinner().getCode(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getCode());
+        assertEquals(tournamentGetDTO.getWinner().getUserStatus(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(tournament.getWinner()).getUserStatus());
+
     }
 
     /**
@@ -247,15 +260,35 @@ public class DTOMapperTest {
         assertEquals(gameGetDTO.getStartTime(), game.getStartTime());
         assertEquals(gameGetDTO.getScore1(), game.getScore1());
         assertEquals(gameGetDTO.getScore2(), game.getScore2());
-        assertEquals(gameGetDTO.getParticipant1().getVorname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getVorname());
-        assertEquals(gameGetDTO.getParticipant1().getNachname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getNachname());
-        assertEquals(gameGetDTO.getParticipant1().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getParticipantID());
-        assertEquals(gameGetDTO.getParticipant2().getVorname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getVorname());
-        assertEquals(gameGetDTO.getParticipant2().getNachname(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getNachname());
-        assertEquals(gameGetDTO.getParticipant2().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getParticipantID());
         assertEquals(gameGetDTO.isParticipant1Reported(), game.isParticipant1Reported());
         assertEquals(gameGetDTO.isParticipant2Reported(), game.isParticipant2Reported());
         assertEquals(gameGetDTO.getTournamentCode(), game.getTournamentCode());
+
+        assertEquals(gameGetDTO.getParticipant1().getVorname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getVorname());
+        assertEquals(gameGetDTO.getParticipant1().getNachname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getNachname());
+        assertEquals(gameGetDTO.getParticipant1().getParticipantID(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getParticipantID());
+        assertEquals(gameGetDTO.getParticipant1().getLicenseNumber(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getLicenseNumber());
+        assertEquals(gameGetDTO.getParticipant1().getCode(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getCode());
+        assertEquals(gameGetDTO.getParticipant1().getUserStatus(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant1()).getUserStatus());
+        assertEquals(gameGetDTO.getParticipant2().getVorname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getVorname());
+        assertEquals(gameGetDTO.getParticipant2().getNachname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getNachname());
+        assertEquals(gameGetDTO.getParticipant2().getParticipantID(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getParticipantID());
+        assertEquals(gameGetDTO.getParticipant2().getLicenseNumber(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getLicenseNumber());
+        assertEquals(gameGetDTO.getParticipant2().getCode(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getCode());
+        assertEquals(gameGetDTO.getParticipant2().getUserStatus(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(game.getParticipant2()).getUserStatus());
+
     }
 
     @Test
@@ -322,12 +355,23 @@ public class DTOMapperTest {
         LeaderboardGetDTO leaderboardGetDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(leaderboard);
 
         // check content
-        assertEquals(leaderboardGetDTO.getParticipant().getParticipantID(), DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getParticipantID());
         assertEquals(leaderboardGetDTO.getWins(), leaderboard.getWins());
         assertEquals(leaderboardGetDTO.getLosses(), leaderboard.getLosses());
         assertEquals(leaderboardGetDTO.getPointsScored(), leaderboard.getPointsScored());
         assertEquals(leaderboardGetDTO.getPointsConceded(), leaderboard.getPointsConceded());
         assertEquals(leaderboardGetDTO.getPlayerState(), leaderboard.getPlayerState());
+        assertEquals(leaderboardGetDTO.getParticipant().getParticipantID(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getParticipantID());
+        assertEquals(leaderboardGetDTO.getParticipant().getNachname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getNachname());
+        assertEquals(leaderboardGetDTO.getParticipant().getVorname(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getVorname());
+        assertEquals(leaderboardGetDTO.getParticipant().getCode(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getCode());
+        assertEquals(leaderboardGetDTO.getParticipant().getLicenseNumber(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getLicenseNumber());
+        assertEquals(leaderboardGetDTO.getParticipant().getUserStatus(),
+                DTOMapper.INSTANCE.convertEntityToParticipantGetDTO(leaderboard.getParticipant()).getUserStatus());
 
     }
 
