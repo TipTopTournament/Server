@@ -5,6 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.*;
 import ch.uzh.ifi.seal.soprafs20.repository.BracketRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.LeaderboardRepository;
+import ch.uzh.ifi.seal.soprafs20.repository.TournamentRepository;
 import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class TournamentIntegration {
 
     @Mock
     private LeaderboardRepository leaderboardRepository;
+
+    @Mock
+    private TournamentRepository tournamentRepository;
 
     private Tournament testTournament1;
     private Participant testParticipant1;
@@ -49,7 +53,6 @@ public class TournamentIntegration {
         wholeLeaderboard = new ArrayList<>();
 
         testTournament1.setAmountOfPlayers(4);
-        testTournament1.setBracket(new Bracket());
         testTournament1.setBreakDuration(10);
         testTournament1.setGameDuration(15);
         testTournament1.setTournamentCode("TEST1");
@@ -146,5 +149,23 @@ public class TournamentIntegration {
             assertNotNull(leaderboard.getParticipant());
             assertNotNull(leaderboard.getLeaderboardId());
         }
+    }
+
+    @Test
+    public void addBracketToTournament() {
+
+        Tournament createdTournament = tournamentService.createTournament(testTournament1);
+
+        assertNotNull(createdTournament.getBracket());
+        assertEquals(3, createdTournament.getBracket().getBracketList().size());
+    }
+
+    @Test
+    public void addLeaderBoardToTournament() {
+
+        Tournament createdTournament = tournamentService.createTournament(testTournament1);
+
+        // at this point the leaderboard is empty and should therefore return an empty list
+        assertEquals(new ArrayList<>(), tournamentService.getLeaderboardFromTournament(createdTournament.getTournamentCode()));
     }
 }
