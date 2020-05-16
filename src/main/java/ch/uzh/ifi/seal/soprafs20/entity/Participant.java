@@ -17,12 +17,6 @@ public class Participant extends Person{
     @Column
     private String code;
 
-    @Column
-    private int eloScore;
-
-    @Column
-    private int ranking;
-
     @OneToOne
     private Statistics statistics;
 
@@ -35,12 +29,6 @@ public class Participant extends Person{
     }
     public String getCode() {
         return code;
-    }
-    public int getEloScore() {
-        return eloScore;
-    }
-    public int getRanking() {
-        return ranking;
     }
     public Statistics getStatistics() {
         return statistics;
@@ -55,12 +43,6 @@ public class Participant extends Person{
     }
     public void setParticipantID(Long participantID) {
         this.participantID = participantID;
-    }
-    public void setEloScore(int eloScore) {
-        this.eloScore = eloScore;
-    }
-    public void setRanking(int ranking) {
-        this.ranking = ranking;
     }
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
