@@ -263,6 +263,7 @@ public class TournamentService {
                 }
             }
 
+
         for (Leaderboard leaderboard : leaderboardRepository.findAllByTournamentCode(tournament.getTournamentCode())) {
             if (leaderboard.getParticipant().getParticipantID().equals(participant.getParticipantID())) {
                 leaderboard.setPlayerState(PlayerState.LEFT);

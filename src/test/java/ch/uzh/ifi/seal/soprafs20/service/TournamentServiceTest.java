@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -75,6 +76,7 @@ class TournamentServiceTest {
          testParticipant1.setNachname("Sisi");
          testParticipant1.setPassword("ferrari");
          testParticipant1.setLicenseNumber("112233");
+         testParticipant1.setParticipantID(1L);
 
          testParticipant2.setVorname("Stefano");
          testParticipant2.setNachname("Anzolut");
@@ -208,6 +210,27 @@ class TournamentServiceTest {
         Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(list); //testTournament2 has max ammount of players also 8
 
         assertThrows(ResponseStatusException.class, () -> { tournamentService.createLeaderboardEntry(testParticipant1, testTournament2); });
+
+    }
+
+    @Test
+    public void updateBracketAndLeaderboardAfterUserLeftSuccessPlayerStateLEFT() {
+        Leaderboard leaderboardOfTestParticipant1 = new Leaderboard();
+        leaderboardOfTestParticipant1.setLosses(4);
+        leaderboardOfTestParticipant1.setParticipant(testParticipant1);
+        leaderboardOfTestParticipant1.setPointsScored(3);
+        leaderboardOfTestParticipant1.setPointsConceded(7);
+        leaderboardOfTestParticipant1.setPlayerState(PlayerState.ACTIVE);
+        leaderboardOfTestParticipant1.setWins(9000);
+
+        List<Leaderboard> returnedList = new ArrayList<>();
+        returnedList.add(leaderboardOfTestParticipant1);
+
+        Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(returnedList);
+
+        tournamentService.updateBracketAndLeaderboardAfterUserLeft(testParticipant1, testTournament1);
+
+        assertEquals(PlayerState.LEFT, leaderboardOfTestParticipant1.getPlayerState());
 
     }
 
