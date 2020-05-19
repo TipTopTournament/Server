@@ -26,6 +26,8 @@ import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.LeaderboardRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.TournamentRepository;
 
+import javax.servlet.http.Part;
+
 class TournamentServiceTest {
 
 	@Mock
@@ -192,6 +194,21 @@ class TournamentServiceTest {
 
         assertThrows(ResponseStatusException.class, () -> { tournamentService.updateGameWithScore(testGame1.getTournamentCode(),
                 testGame1.getGameId(), testGame1.getScore1(), testGame1.getScore2(), Mockito.anyLong()); });
+    }
+
+    @Test
+    public void createLeaderboardEntryNoSuccessWhenTournamentFullShouldRaiseException() throws Exception{
+
+        List<Leaderboard> list = new ArrayList<>();
+
+        for (int i = 0 ; i <8 ; i++){
+            list.add(new Leaderboard());
+        }
+
+        Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(list); //testTournament2 has max ammount of players also 8
+
+        assertThrows(ResponseStatusException.class, () -> { tournamentService.createLeaderboardEntry(testParticipant1, testTournament2); });
+
     }
 
 }
