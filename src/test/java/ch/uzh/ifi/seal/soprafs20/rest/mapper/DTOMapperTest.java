@@ -332,8 +332,6 @@ public class DTOMapperTest {
         assertEquals(statisticsGetDTO.getLosses(), statistics.getLosses());
         assertEquals(statisticsGetDTO.getPointsScored(), statistics.getPointsScored());
         assertEquals(statisticsGetDTO.getPointsConceded(), statistics.getPointsConceded());
-//        assertEquals(statisticsGetDTO.getHistory(), DTOMapper.INSTANCE.convertEntityToGameGetDTO(statistics.getHistory());
-
     }
 
     /**
