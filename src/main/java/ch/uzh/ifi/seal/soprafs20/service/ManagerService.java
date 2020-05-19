@@ -36,7 +36,7 @@ public class ManagerService {
 
     public Manager getManagerById(Long id) {
         for (Manager manager : getManagers()) {
-            if (manager.getManagerID()==id) {
+            if (manager.getManagerID().equals(id)) {
                 return manager;
             }
         }
@@ -45,7 +45,7 @@ public class ManagerService {
 
     public Manager getManagerByUsername(String username) {
         for (Manager manager : getManagers()) {
-            if (manager.getUsername()==username) {
+            if (manager.getUsername().equals(username)) {
                 return manager;
             }
         }
