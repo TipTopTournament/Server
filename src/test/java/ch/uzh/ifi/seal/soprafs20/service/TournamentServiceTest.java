@@ -184,21 +184,14 @@ class TournamentServiceTest {
         assertNotNull(createdBracket.getBracketList());
     }
 
-/*
+
     @Test
     public void updateGameWithScoreNoSuccessWhenGameLockedRaiseException() throws Exception{
-        Game gameToBeReturned = new Game();
-        gameToBeReturned.setGameState(GameState.FINISHED);
-        gameToBeReturned.setGameId(1);
-        gameToBeReturned.setTournamentCode("TEST1");
-        gameToBeReturned.setScore1(3);
-        gameToBeReturned.setScore2(0);
-        gameToBeReturned.setStartTime("10:00");
 
-        Mockito.when(gameRepository.findByGameId(Mockito.any())).thenReturn(gameToBeReturned);
+        Mockito.when(gameRepository.findByGameId(Mockito.anyLong())).thenReturn(testGame1); // testGame1 is finished
 
-        assertThrows(ResponseStatusException.class, () -> { tournamentService.updateGameWithScore(gameToBeReturned.getTournamentCode(),
-                gameToBeReturned.getGameId(), gameToBeReturned.getScore1(), gameToBeReturned.getScore2(), testParticipant1.getParticipantID()); });
+        assertThrows(ResponseStatusException.class, () -> { tournamentService.updateGameWithScore(testGame1.getTournamentCode(),
+                testGame1.getGameId(), testGame1.getScore1(), testGame1.getScore2(), Mockito.anyLong()); });
     }
-*/
+
 }
