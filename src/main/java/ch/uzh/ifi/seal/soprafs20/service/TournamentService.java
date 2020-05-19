@@ -263,6 +263,7 @@ public class TournamentService {
                 }
             }
 
+
         for (Leaderboard leaderboard : leaderboardRepository.findAllByTournamentCode(tournament.getTournamentCode())) {
             if (leaderboard.getParticipant().getParticipantID().equals(participant.getParticipantID())) {
                 leaderboard.setPlayerState(PlayerState.LEFT);
@@ -276,110 +277,66 @@ public class TournamentService {
         List<Game> gameList = tournament.getBracket().getBracketList();
         // jaaaa ich weiss isch hardcoded, aber bis mer en besseri lösig findet
         switch (gameList.size()) {
-
             case 1:
-                if (gameList.get(0).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
-                    tournament.setWinner(calculateWinner(gameList.get(0)));
-                }
+                // game 0 // final
+                calculateTournamentWinner(gameList, 0, tournament);
                 break;
             case 3:
-                if (gameList.get(0).getGameState() == GameState.FINISHED && gameList.get(2).getParticipant1() == null) {
-                    gameList.get(2).setParticipant1(calculateWinner(gameList.get(0)));
-                }
-                if (gameList.get(1).getGameState() == GameState.FINISHED && gameList.get(2).getParticipant2() == null) {
-                    gameList.get(2).setParticipant2(calculateWinner(gameList.get(1)));
-                }
-                if (gameList.get(2).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
-                    tournament.setWinner(calculateWinner(gameList.get(2)));
-                }
+                // game 0
+                calculateNextFixture(gameList, 0, 2, 1);
+                // game 1
+                calculateNextFixture(gameList, 1, 2, 2);
+                // game 2 // final
+                calculateTournamentWinner(gameList, 2, tournament);
                 break;
             case 7:
-                if (gameList.get(0).getGameState() == GameState.FINISHED && gameList.get(4).getParticipant1() == null) {
-                    gameList.get(4).setParticipant1(calculateWinner(gameList.get(0)));
-                }
-                if (gameList.get(1).getGameState() == GameState.FINISHED && gameList.get(4).getParticipant2() == null) {
-                    gameList.get(4).setParticipant2(calculateWinner(gameList.get(1)));
-                }
-                if (gameList.get(2).getGameState() == GameState.FINISHED && gameList.get(5).getParticipant1() == null) {
-                    gameList.get(5).setParticipant1(calculateWinner(gameList.get(2)));
-                }
-                if (gameList.get(3).getGameState() == GameState.FINISHED && gameList.get(5).getParticipant2() == null) {
-                    gameList.get(5).setParticipant2(calculateWinner(gameList.get(3)));
-                }
-                if (gameList.get(4).getGameState() == GameState.FINISHED && gameList.get(6).getParticipant1() == null) {
-                    gameList.get(6).setParticipant1(calculateWinner(gameList.get(4)));
-                }
-                if (gameList.get(5).getGameState() == GameState.FINISHED && gameList.get(6).getParticipant2() == null) {
-                    gameList.get(6).setParticipant2(calculateWinner(gameList.get(5)));
-                }
-                if (gameList.get(5).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
-                    gameList.get(6).setParticipant2(calculateWinner(gameList.get(5)));
-                }
-                if (gameList.get(6).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
-                    tournament.setWinner(calculateWinner(gameList.get(6)));
-                }
+                // game 0
+                calculateNextFixture(gameList, 0, 4, 1);
+                // game 1
+                calculateNextFixture(gameList, 1, 4, 2);
+                // game 2
+                calculateNextFixture(gameList, 2, 5, 1);
+                // game 3
+                calculateNextFixture(gameList, 3, 5, 2);
+                // game 4
+                calculateNextFixture(gameList, 4, 6, 1);
+                // game 5
+                calculateNextFixture(gameList, 5, 6, 2);
+                // game 6 // final
+                calculateTournamentWinner(gameList, 6, tournament);
+
                 break;
             case 15:
                 // game 0
-                if (gameList.get(0).getGameState() == GameState.FINISHED && gameList.get(8).getParticipant1() == null) {
-                    gameList.get(8).setParticipant1(calculateWinner(gameList.get(0)));
-                }
+                calculateNextFixture(gameList, 0, 8, 1);
                 // game 1
-                if (gameList.get(1).getGameState() == GameState.FINISHED && gameList.get(8).getParticipant2() == null) {
-                    gameList.get(8).setParticipant2(calculateWinner(gameList.get(1)));
-                }
+                calculateNextFixture(gameList, 1, 8, 2);
                 // game 2
-                if (gameList.get(2).getGameState() == GameState.FINISHED && gameList.get(9).getParticipant1() == null) {
-                    gameList.get(9).setParticipant1(calculateWinner(gameList.get(2)));
-                }
+                calculateNextFixture(gameList, 2, 9, 1);
                 // game 3
-                if (gameList.get(3).getGameState() == GameState.FINISHED && gameList.get(9).getParticipant2() == null) {
-                    gameList.get(9).setParticipant2(calculateWinner(gameList.get(3)));
-                }
+                calculateNextFixture(gameList, 3, 9, 2);
                 // game 4
-                if (gameList.get(4).getGameState() == GameState.FINISHED && gameList.get(10).getParticipant1() == null) {
-                    gameList.get(10).setParticipant1(calculateWinner(gameList.get(4)));
-                }
+                calculateNextFixture(gameList, 4, 10, 1);
                 // game 5
-                if (gameList.get(5).getGameState() == GameState.FINISHED && gameList.get(10).getParticipant2() == null) {
-                    gameList.get(10).setParticipant2(calculateWinner(gameList.get(5)));
-                }
+                calculateNextFixture(gameList, 5, 10, 2);
                 // game 6
-                if (gameList.get(6).getGameState() == GameState.FINISHED && gameList.get(11).getParticipant1() == null) {
-                    gameList.get(11).setParticipant1(calculateWinner(gameList.get(6)));
-                }
+                calculateNextFixture(gameList, 6, 11, 1);
                 // game 7
-                if (gameList.get(7).getGameState() == GameState.FINISHED && gameList.get(11).getParticipant2() == null) {
-                    gameList.get(11).setParticipant2(calculateWinner(gameList.get(7)));
-                }
+                calculateNextFixture(gameList, 7, 11,2);
                 // game 8
-                if (gameList.get(8).getGameState() == GameState.FINISHED && gameList.get(12).getParticipant1() == null) {
-                    gameList.get(12).setParticipant1(calculateWinner(gameList.get(8)));
-                }
+                calculateNextFixture(gameList, 9,12,1);
                 // game 9
-                if (gameList.get(9).getGameState() == GameState.FINISHED && gameList.get(12).getParticipant2() == null) {
-                    gameList.get(12).setParticipant2(calculateWinner(gameList.get(9)));
-                }
+                calculateNextFixture(gameList, 9, 12,2);
                 // game 10
-                if (gameList.get(10).getGameState() == GameState.FINISHED && gameList.get(13).getParticipant1() == null) {
-                    gameList.get(13).setParticipant1(calculateWinner(gameList.get(10)));
-                }
+                calculateNextFixture(gameList, 10,13,1);
                 // game 11
-                if (gameList.get(11).getGameState() == GameState.FINISHED && gameList.get(13).getParticipant2() == null) {
-                    gameList.get(13).setParticipant2(calculateWinner(gameList.get(11)));
-                }
+                calculateNextFixture(gameList, 11, 13,2);
                 // game 12
-                if (gameList.get(12).getGameState() == GameState.FINISHED && gameList.get(14).getParticipant1() == null) {
-                    gameList.get(14).setParticipant1(calculateWinner(gameList.get(12)));
-                }
+                calculateNextFixture(gameList, 12,14,1);
                 // game 13
-                if (gameList.get(13).getGameState() == GameState.FINISHED && gameList.get(14).getParticipant2() == null) {
-                    gameList.get(14).setParticipant2(calculateWinner(gameList.get(13)));
-                }
+                calculateNextFixture(gameList, 13,14,2);
                 // game 14 // final
-                if (gameList.get(14).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
-                    tournament.setWinner(calculateWinner(gameList.get(14)));
-                }
+                calculateTournamentWinner(gameList, 14, tournament);
                 break;
             default:
         }
@@ -396,6 +353,25 @@ public class TournamentService {
 
 
     //helpers
+
+    private void calculateNextFixture(List<Game> gameList, int firstGame, int gameToBeCalculated, int participant) {
+        if (participant == 1) {
+            if (gameList.get(firstGame).getGameState() == GameState.FINISHED && gameList.get(gameToBeCalculated).getParticipant1() == null) {
+                gameList.get(gameToBeCalculated).setParticipant1(calculateWinner(gameList.get(firstGame)));
+            }
+        }
+        else {
+            if (gameList.get(firstGame).getGameState() == GameState.FINISHED && gameList.get(gameToBeCalculated).getParticipant2() == null) {
+                gameList.get(gameToBeCalculated).setParticipant2(calculateWinner(gameList.get(firstGame)));
+            }
+        }
+    }
+
+    private void calculateTournamentWinner(List<Game> gameList, int game, Tournament tournament) {
+        if (gameList.get(game).getGameState() == GameState.FINISHED && tournament.getWinner() == null) {
+            tournament.setWinner(calculateWinner(gameList.get(game)));
+        }
+    }
     public static Participant calculateWinner(Game game) {
         if (game.getScore1() > game.getScore2()) {
             return game.getParticipant1();

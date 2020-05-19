@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.seal.soprafs20.constant.PlayerState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,6 +26,8 @@ import ch.uzh.ifi.seal.soprafs20.repository.BracketRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.LeaderboardRepository;
 import ch.uzh.ifi.seal.soprafs20.repository.TournamentRepository;
+
+import javax.servlet.http.Part;
 
 class TournamentServiceTest {
 
@@ -73,6 +76,7 @@ class TournamentServiceTest {
          testParticipant1.setNachname("Sisi");
          testParticipant1.setPassword("ferrari");
          testParticipant1.setLicenseNumber("112233");
+         testParticipant1.setParticipantID(1L);
 
          testParticipant2.setVorname("Stefano");
          testParticipant2.setNachname("Anzolut");
@@ -183,4 +187,51 @@ class TournamentServiceTest {
         assertNotNull(createdBracket);
         assertNotNull(createdBracket.getBracketList());
     }
+
+
+    @Test
+    public void updateGameWithScoreNoSuccessWhenGameLockedRaiseException() throws Exception{
+
+        Mockito.when(gameRepository.findByGameId(Mockito.anyLong())).thenReturn(testGame1); // testGame1 is finished
+
+        assertThrows(ResponseStatusException.class, () -> { tournamentService.updateGameWithScore(testGame1.getTournamentCode(),
+                testGame1.getGameId(), testGame1.getScore1(), testGame1.getScore2(), Mockito.anyLong()); });
+    }
+
+    @Test
+    public void createLeaderboardEntryNoSuccessWhenTournamentFullShouldRaiseException() throws Exception{
+
+        List<Leaderboard> list = new ArrayList<>();
+
+        for (int i = 0 ; i <8 ; i++){
+            list.add(new Leaderboard());
+        }
+
+        Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(list); //testTournament2 has max ammount of players also 8
+
+        assertThrows(ResponseStatusException.class, () -> { tournamentService.createLeaderboardEntry(testParticipant1, testTournament2); });
+
+    }
+
+    @Test
+    public void updateBracketAndLeaderboardAfterUserLeftSuccessPlayerStateLEFT() {
+        Leaderboard leaderboardOfTestParticipant1 = new Leaderboard();
+        leaderboardOfTestParticipant1.setLosses(4);
+        leaderboardOfTestParticipant1.setParticipant(testParticipant1);
+        leaderboardOfTestParticipant1.setPointsScored(3);
+        leaderboardOfTestParticipant1.setPointsConceded(7);
+        leaderboardOfTestParticipant1.setPlayerState(PlayerState.ACTIVE);
+        leaderboardOfTestParticipant1.setWins(9000);
+
+        List<Leaderboard> returnedList = new ArrayList<>();
+        returnedList.add(leaderboardOfTestParticipant1);
+
+        Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(returnedList);
+
+        tournamentService.updateBracketAndLeaderboardAfterUserLeft(testParticipant1, testTournament1);
+
+        assertEquals(PlayerState.LEFT, leaderboardOfTestParticipant1.getPlayerState());
+
+    }
+
 }
