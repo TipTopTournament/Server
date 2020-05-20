@@ -1,89 +1,76 @@
-# SoPra RESTful Service Template FS20
+# SoPra FS20 Group 01 - TipTop Tournament
 
-## Getting started with Spring Boot
+## Introduction
+The goal of this project was to implement a working tournament management software where tasks which are hard to do manually, would be automated and conveniently done without any "manual labor".
 
--   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
--   Guides: http://spring.io/guides
-    -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
-    -   Building REST services with Spring: http://spring.io/guides/tutorials/bookmarks/
+More specifically is was the task of the server to store data about users, tournaments, games and so on.
 
-## Setup this Template with your IDE of choice
+## Technologies
 
-Download your IDE of choice: (e.g., [Eclipse](http://www.eclipse.org/downloads/), [IntelliJ](https://www.jetbrains.com/idea/download/)) and make sure Java 13 is installed on your system.
+-   Java
+-   JPA
+-   Hibernate
+-   Springboot
+-   PostgreSQL
 
-1. File -> Open... -> SoPra Server Template
-2. Accept to import the project as a `gradle project`
+## High-level components
+The server is structured in a way that the requests are handled by the respective controller ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ManagerController.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/TournamentController.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ParticipantController.java)). Those controllers will then perform the requested action or provide the requested information using the respective service ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ManagerService.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/service/TournamentService.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ParticipantService.java)).
 
-To build right click the `build.gradle` file and choose `Run Build`
+Generally a controller would only call its service counterpart to update an entitiy (e.g. the tournament controller would call the tournament service to create a tournament entity). However, we had to compromise that principle since after a game has been updated (using the tournament service), the result of that game would also have to be entered in the participants statistics.
 
-## Building with Gradle
+## Launch & Deployment
 
-You can use the local Gradle Wrapper to build the application. Hoi zäme
+### Getting started with the application
+Start with having a look at the entities with respect to their fields. Once you've got a feel for that, continue with the controllers and have a look what service methods they're calling. By doing that you should get an understanding how the server works.
 
-Plattform-Prefix:
+### Running the project
+To start the server locally, just run the [Application](src/main/java/ch/uzh/ifi/seal/soprafs20/Application.java) file and the server should be reachable under *http://localhost:8080/*.
 
--   MAC OS X: `./gradlew`
--   Linux: `./gradlew`
--   Windows: `./gradlew.bat`
+### Running the test
+That depends on what IDE you're using. If you happen to use IntelliJ just right-click on the [Test folder](src/test) and choose "Run tests...".
 
-More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
+### External dependencies and databases
+Gradle should take care of the dependencies and the external PostgreSQL database is only used in the production build.
 
-### Build
+### Releases
+To deploy changes one simply needs to commit and push their changes and the application will automatically be deployed on [heroku](https://sopra-fs20-group-01-server.herokuapp.com/) (if all tests pass).
 
-```bash
-./gradlew build
-```
+## Roadmap
+-   One Feature we definitely would have liked to implement was the ability for the participant to be in multiple tournaments. At the moment, it is only possible to take part in one tournament at a time
 
-### Run
+-   We would like to develop a more elegant version of our tournament update algorithm (which is called when a game is finished and the new fixtures need to be calculated).
 
-```bash
-./gradlew bootRun
-```
+-   Another idea was to implement a more sophisticated security system to prevent just anyone to make requests.
 
-### Test
+-   We would have very much liked to work together with the Swiss Table Tennis Association and their data to display interesting statistics. Our idea was to diplay intersting facts based on the tournament happening right now such as "Player XY has the same winning percentage as Roger Federer has had in his career so far". This proved to be out of scope rather quickly.
 
-```bash
-./gradlew test
-```
+## Acknowledgment
+Developers:
+-   Stefano Anzolut
+-   Tony Ly
+-   Mauro Hirt
+-   Vukasin Arandjelovic
+-   Fabio Sisi
 
-### Development Mode
+We would like to extend our thanks to anyone who has supported us through this challenging but experience-filled project. Also, we'd like to especially mention our TA Alex Scheitlin whose advice and guidance was very valuable to us.
 
-You can start the backend in development mode, this will automatically trigger a new build and reload the application
-once the content of a file has been changed and you save the file.
+## License DRAFT
+Copyright (c) 2020 Fabio Sisi
 
-Start two terminal windows and run:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-`./gradlew build --continuous`
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-and in the other one:
-
-`./gradlew bootRun`
-
-If you want to avoid running all tests with every change, use the following command instead:
-
-`./gradlew build --continuous -xtest`
-
-## API Endpoint Testing
-
-### Postman
-
--   We highly recommend to use [Postman](https://www.getpostman.com) in order to test your API Endpoints.
-
-## Debugging
-
-If something is not working and/or you don't know what is going on. We highly recommend that you use a debugger and step
-through the process step-by-step.
-
-To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command),
-do the following:
-
-1. Open Tab: **Run**/Edit Configurations
-2. Add a new Remote Configuration and name it properly
-3. Start the Server in Debug mode: `./gradlew bootRun --debug-jvm`
-4. Press `Shift + F9` or the use **Run**/Debug"Name of your task"
-5. Set breakpoints in the application where you need it
-6. Step through the process one step at a time
-
-## Testing
-
-Have a look here: https://www.baeldung.com/spring-boot-testing
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
