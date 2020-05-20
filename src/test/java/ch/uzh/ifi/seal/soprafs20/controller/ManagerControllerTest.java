@@ -220,7 +220,7 @@ public class ManagerControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isOk());
     }
     /**
-     * Check if the post request returns the correct status when updating the manager Status with incorrect token Id combination
+     * Check if the put request returns the correct status when updating the manager Status with incorrect token Id combination
      */
     @Test
     public void updateManagerStatusTokenIdNotMatch() throws Exception {
@@ -238,7 +238,7 @@ public class ManagerControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isUnauthorized());
     }
     /**
-     * Check if the post request returns the correct status when updating the manager Status with incorrect Id
+     * Check if the put request returns the correct status when updating the manager Status with incorrect Id
      */
     @Test
     public void updateManagerStatusWrongId() throws Exception {
