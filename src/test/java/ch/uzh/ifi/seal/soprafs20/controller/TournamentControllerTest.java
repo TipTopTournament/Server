@@ -46,7 +46,7 @@ import ch.uzh.ifi.seal.soprafs20.service.TournamentService;
 
 
 @WebMvcTest(TournamentController.class)
-public class TournamentControllerTest {
+ class TournamentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

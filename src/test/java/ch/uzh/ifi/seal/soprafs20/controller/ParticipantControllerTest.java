@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(ParticipantController.class)
-public class ParticipantControllerTest {
+ class ParticipantControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

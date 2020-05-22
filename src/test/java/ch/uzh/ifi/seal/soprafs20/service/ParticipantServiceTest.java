@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParticipantServiceTest {
+ class ParticipantServiceTest {
 
     @Mock
     private ParticipantRepository participantRepository;
