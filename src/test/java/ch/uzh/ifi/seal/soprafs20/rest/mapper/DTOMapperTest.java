@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     private Participant testParticipant2;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
 
     // given
     testParticipant1 = new Participant();

@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
     private Statistics testStatistics3;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         MockitoAnnotations.initMocks(this);
 
         // given
