@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DTOMapperTest {
+ class DTOMapperTest {
 
 
     private Participant testParticipant1;
@@ -42,7 +42,7 @@ public class DTOMapperTest {
      * Manager DTO's
      */
     @Test
-    public void testPostDTOManager() {
+     void testPostDTOManager() {
         // create UserPostDTO
         ManagerPostDTO managerPostDTO = new ManagerPostDTO();
         managerPostDTO.setVorname("Peter");
@@ -61,7 +61,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testPutDTOManager() {
+     void testPutDTOManager() {
         // create UserPutDTO
         ManagerPutDTO managerPutDTO = new ManagerPutDTO();
         managerPutDTO.setToken("000z0z00-yy1y-2222-x3x3-w444w4444w44");
@@ -78,7 +78,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testGetDTOManager() {
+     void testGetDTOManager() {
         // create Manager
         Manager manager = new Manager();
         manager.setUserStatus(UserStatus.ONLINE);
@@ -96,7 +96,7 @@ public class DTOMapperTest {
      * Participant DTO's
      */
     @Test
-    public void testPostDTOParticipant() {
+     void testPostDTOParticipant() {
         // create ParticipantPostDTO
         ParticipantPostDTO participantPostDTO = new ParticipantPostDTO();
         participantPostDTO.setVorname("Peter");
@@ -115,7 +115,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testPutDTOParticipant() {
+     void testPutDTOParticipant() {
         // create ParticipantPutDTO
         ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
         participantPutDTO.setToken("000z0z00-yy1y-2222-x3x3-w444w4444w44");
@@ -132,7 +132,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testGetDTOParticipant() {
+     void testGetDTOParticipant() {
         // create Participant
         Participant participant = new Participant();
         participant.setUserStatus(UserStatus.ONLINE);
@@ -158,7 +158,7 @@ public class DTOMapperTest {
      * Tournament DTO's
      */
     @Test
-    public void testPostDTOTournament() {
+     void testPostDTOTournament() {
         // create TournamentPostDTO
         TournamentPostDTO tournamentPostDTO = new TournamentPostDTO();
         tournamentPostDTO.setTournamentName("Zürich Open");
@@ -187,7 +187,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testGetDTOTournament() {
+     void testGetDTOTournament() {
         // create Tournament
         Tournament tournament = new Tournament();
         tournament.setTournamentName("Zürich Open");
@@ -237,7 +237,7 @@ public class DTOMapperTest {
      */
 
     @Test
-    public void testGetDTOGame() {
+     void testGetDTOGame() {
         // create Game
         Game game = new Game();
         game.setGameId(1L);
@@ -292,7 +292,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testPutDTOGame() {
+     void testPutDTOGame() {
         // create GamePutDTO
         GamePutDTO gamePutDTO = new GamePutDTO();
         gamePutDTO.setScore1(1);
@@ -313,7 +313,7 @@ public class DTOMapperTest {
      */
 
     @Test
-    public void testGetDTOStatistics() {
+     void testGetDTOStatistics() {
         // create Statistics
         Statistics statistics = new Statistics();
         statistics.setStatisticsID(1L);
@@ -339,7 +339,7 @@ public class DTOMapperTest {
      */
 
     @Test
-    public void testGetDTOLeaderboard() {
+     void testGetDTOLeaderboard() {
         // create Leaderboard
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setParticipant(testParticipant1);

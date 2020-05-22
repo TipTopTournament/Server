@@ -77,7 +77,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Completely new User without a license number should be created with empty stats
      */
     @Test
-    public void createParticipantSuccessWithoutLicenseNumber() {
+     void createParticipantSuccessWithoutLicenseNumber() {
         Participant createdParticipant = participantService.createParticipant(testParticipant1);
 
         // assert that the data is correct
@@ -105,7 +105,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
 
     @Test
-    public void createParticipantSuccessWithLicenseNumber() {
+     void createParticipantSuccessWithLicenseNumber() {
 
         // create dummy participant which will be returned
         Participant dummyParticipant = new Participant();
@@ -142,7 +142,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * A user with this license number exists but already has a password, therefore, an exception should be thrown
      */
     @Test
-    public void createParticipantButPasswordHasBeenSet() throws ResponseStatusException{
+     void createParticipantButPasswordHasBeenSet() throws ResponseStatusException{
         // create dummy participant which will be returned
         Participant dummyParticipant = new Participant();
         dummyParticipant.setVorname("Tony");
@@ -163,7 +163,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Tests if the list of participants which is returned is correct
      */
     @Test
-    public void checkListOfParticipants() {
+     void checkListOfParticipants() {
         List<Participant> dummyList = new ArrayList<>();
 
         dummyList.add(testParticipant2);
@@ -192,7 +192,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method which checks license number and password combinations, positive
      */
     @Test
-    public void passwordCheckPositive() {
+     void passwordCheckPositive() {
         List<Participant> dummyList = new ArrayList<>();
 
         dummyList.add(testParticipant2);
@@ -208,7 +208,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method which checks license number and password combinations, negative
      */
     @Test
-    public void passwordCheckNegative() {
+     void passwordCheckNegative() {
         List<Participant> dummyList = new ArrayList<>();
 
         dummyList.add(testParticipant2);
@@ -224,7 +224,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method getParticipantByID returns an exception, given a not assigned ParticipantId
      */
     @Test
-    public void participantByIdNegative() throws ResponseStatusException{
+     void participantByIdNegative() throws ResponseStatusException{
 
         // setup the mocks, there does not exist such an Id
         Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(null);
@@ -236,7 +236,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method getParticipantByID returns a participant, given an known ParticipantId
      */
     @Test
-    public void participantByIdPositive(){
+     void participantByIdPositive(){
 
         // setup the mocks, testParticipant2 is in the database and has already been registered thus has an Id
         Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(testParticipant2);
@@ -252,7 +252,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method getParticipantByLicense returns a participant, given an known ParticipantId
      */
     @Test
-    public void participantByLicenseNumber(){
+     void participantByLicenseNumber(){
 
         // setup the mocks, testParticipant2 is in the database and has already been registered thus has an LicenseNumber
         Mockito.when(participantRepository.findByLicenseNumber(Mockito.any())).thenReturn(testParticipant2);
@@ -269,7 +269,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method getStatsByParticipantID returns an exception, given a not assigned ParticipantId
      */
     @Test
-    public void participantStatsByIdNegative() throws ResponseStatusException{
+     void participantStatsByIdNegative() throws ResponseStatusException{
 
         // setup the mocks, there does not exist such an Id
         Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(null);
@@ -281,7 +281,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method getStatsByParticipantID returns statistics, given an known ParticipantId
      */
     @Test
-    public void participantStatsByIdPositive(){
+     void participantStatsByIdPositive(){
 
         // setup the mocks, testParticipant2 is in the database and has already been registered thus has an Id
         Mockito.when(participantRepository.findByParticipantID(Mockito.any())).thenReturn(testParticipant3);
@@ -301,7 +301,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method which checks participantId and token combinations, positive
      */
     @Test
-    public void participantCheckPositive() {
+     void participantCheckPositive() {
         List<Participant> dummyList = new ArrayList<>();
 
         dummyList.add(testParticipant2);
@@ -317,7 +317,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Check if the method which checks participantId and token combinations, negative
      */
     @Test
-    public void participantCheckNegative() {
+     void participantCheckNegative() {
         List<Participant> dummyList = new ArrayList<>();
 
         dummyList.add(testParticipant2);
@@ -333,7 +333,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Update UserStatus, -positive
      */
     @Test
-    public void updateUserStatusSuccess() {
+     void updateUserStatusSuccess() {
         //New Status to be set
         UserStatus dummyStatus = UserStatus.ONLINE;
 
@@ -357,7 +357,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Update UserStatus, -negative throws ResponseException Not Found Since Id given does not exist
      */
     @Test
-    public void updateUserStatusFailureNoSuchIdExists() throws ResponseStatusException{
+     void updateUserStatusFailureNoSuchIdExists() throws ResponseStatusException{
         //New Status to be set
         UserStatus dummyStatus = UserStatus.ONLINE;
 
@@ -379,7 +379,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Update UserStatus, -negative throws ResponseException Unauthorized Since Id and Token do not match
      */
     @Test
-    public void updateUserStatusFailureIdAndToken() throws ResponseStatusException{
+     void updateUserStatusFailureIdAndToken() throws ResponseStatusException{
         //New Status to be set
         UserStatus dummyStatus = UserStatus.ONLINE;
 
