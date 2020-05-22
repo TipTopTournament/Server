@@ -48,7 +48,7 @@ public class TournamentIntegration {
     TournamentService tournamentService;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         MockitoAnnotations.initMocks(this);
 
         testTournament1 = new Tournament();
@@ -139,7 +139,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void addGamesToBracket() {
+     void addGamesToBracket() {
         List<Integer> differentPlayers = new ArrayList<Integer>();
         differentPlayers.add(2);
         differentPlayers.add(4);
@@ -162,7 +162,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void checkTimes() {
+     void checkTimes() {
         String tournamentCode = "12345678";
 
         Bracket bracket = tournamentService.createBracket(4, tournamentCode, 1, "10:00", 10, 20);
@@ -175,7 +175,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void addPlayerToLeaderboard() {
+     void addPlayerToLeaderboard() {
         tournamentService.createLeaderboardEntry(testParticipant1, testTournament1);
         tournamentService.createLeaderboardEntry(testParticipant2, testTournament1);
 
@@ -198,7 +198,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void addBracketToTournament() {
+     void addBracketToTournament() {
 
         Tournament createdTournament = tournamentService.createTournament(testTournament1);
 
@@ -207,7 +207,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void addLeaderBoardToTournament() {
+     void addLeaderBoardToTournament() {
 
         Tournament createdTournament = tournamentService.createTournament(testTournament1);
 
@@ -216,7 +216,7 @@ public class TournamentIntegration {
     }
 
     @Test
-    public void playersReportScores() {
+     void playersReportScores() {
 
         Tournament createdTournament = tournamentService.createTournament(testTournament1);
 

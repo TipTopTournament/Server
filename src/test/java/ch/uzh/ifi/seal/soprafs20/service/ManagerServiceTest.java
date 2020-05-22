@@ -45,7 +45,7 @@ class ManagerserviceTest {
      * testing if get managers works when mocking the repository (kind of trivial here)
      */
     @Test
-    public void getManagersTest(){
+     void getManagersTest(){
         Manager testmanager = new Manager();
         testmanager.setUsername("mauro");
         List<Manager> expectedList = new ArrayList<>();
@@ -59,7 +59,7 @@ class ManagerserviceTest {
      * testing if the correct manager gets returned when searching by ID that corresponds to existing manager
      */
     @Test
-    public void getManagersByIDPositiveTest(){
+     void getManagersByIDPositiveTest(){
         Manager testmanager1 = mock(Manager.class);
         testmanager1.setUsername("mauro");
         Manager testmanager2 = mock(Manager.class);
@@ -81,7 +81,7 @@ class ManagerserviceTest {
      * checking if an exception is thrown when searching for and Id that doesnt exist
      */
 @Test
-    public void getManagersByIDNegativeTest(){
+     void getManagersByIDNegativeTest(){
         Manager testmanager1 = mock(Manager.class);
         testmanager1.setUsername("mauro");
         Manager testmanager2 = mock(Manager.class);
@@ -101,7 +101,7 @@ class ManagerserviceTest {
      * checking if correct manager is returned when searching for manager by username
      */
     @Test
-    public void getManagersByUsernamePositiveTest(){
+     void getManagersByUsernamePositiveTest(){
         Manager testmanager1 = new Manager();
         testmanager1.setUsername("mauro");
         Manager testmanager2 = new Manager();
@@ -122,7 +122,7 @@ class ManagerserviceTest {
      * checking if assertion is thrown when searching for username of non existing manager
      */
     @Test
-    public void getManagersByUsernameNegativeTest(){
+     void getManagersByUsernameNegativeTest(){
         Manager testmanager1 = new Manager();
         testmanager1.setUsername("mauro");
         Manager testmanager2 = new Manager();
@@ -140,7 +140,7 @@ class ManagerserviceTest {
      * testing if assertion is thrown when trying to create a manager with an existing username
      */
     @Test
-    public void createManagerTestNegative(){
+     void createManagerTestNegative(){
         Manager testmanager1 =new Manager();
         testmanager1.setUsername("mauro");
         Manager testmanager2 = new Manager();
@@ -158,7 +158,7 @@ class ManagerserviceTest {
      * test if manaager can be created when there is no conflict
      */
     @Test
-    public void createManagerTestPositive(){
+     void createManagerTestPositive(){
         Manager testmanager1 =new Manager();
         testmanager1.setUsername("mauro");
         Manager testmanager2 = new Manager();
@@ -180,7 +180,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * checking if the helperfunction returns true when mamanger ID exists
      */
     @Test
-    public void checkIfManagerIdExistsTestPositive(){
+     void checkIfManagerIdExistsTestPositive(){
         Manager testmanager1 =mock(Manager.class);
 
         List<Manager> managerList = new ArrayList<>();
@@ -195,7 +195,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * testing if helperfunction returns false when managerId does not exist
      */
     @Test
-    public void checkIfManagerIdExistsTestNegative(){
+     void checkIfManagerIdExistsTestNegative(){
         Manager testmanager1 = mock(Manager.class);
         List<Manager> managerList = new ArrayList<>();
         managerList.add(testmanager1);
@@ -209,7 +209,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      *testing if the managerstatus is succesfully upddated when correct input is given
      */
     @Test
-    public void updateManagerStatusSuccessTest(){
+     void updateManagerStatusSuccessTest(){
         Manager testmanager1 =spy(new Manager());
         testmanager1.setUserStatus(UserStatus.OFFLINE);
         testmanager1.setToken("1");
@@ -231,7 +231,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * testing if assertion is thrown when token and id do not match
      */
     @Test
-    public void updateManagerStatusNegativeIdTokenNotMatchingTest(){
+     void updateManagerStatusNegativeIdTokenNotMatchingTest(){
         Manager testmanager1 =spy(new Manager());
         testmanager1.setUserStatus(UserStatus.OFFLINE);
         testmanager1.setToken("1");
@@ -252,7 +252,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * testing if assertion is thrown when invalid Id is given to the function call
      */
     @Test
-    public void updateManagerStatusNegativeIdTnotFoundTest(){
+     void updateManagerStatusNegativeIdTnotFoundTest(){
         Manager testmanager1 =spy(new Manager());
         testmanager1.setUserStatus(UserStatus.OFFLINE);
         testmanager1.setToken("1");
@@ -273,7 +273,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * test if function returns true when given a valid password and username
      */
     @Test
-    public void checkUsernameAndPasswordPositiveTest(){
+     void checkUsernameAndPasswordPositiveTest(){
         Manager testmanager1 =spy(new Manager());
     testmanager1.setUsername("mauro");
     testmanager1.setPassword("hirt");
@@ -291,7 +291,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * test if function returns false when given invalid / nonexistening password username pair
      */
     @Test
-    public void checkUsernameAndPasswordNegativeTest(){
+     void checkUsernameAndPasswordNegativeTest(){
         Manager testmanager1 =spy(new Manager());
         testmanager1.setUsername("mauro");
         testmanager1.setPassword("hirt");
@@ -308,7 +308,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * check if torunament gets added succesfully to a managers tournament list
      */
     @Test
-    public void addTournamentToListTest(){
+     void addTournamentToListTest(){
         Manager testmanager1 =spy(new Manager());
         Tournament testtournament = mock(Tournament.class);
 
@@ -319,7 +319,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      * check if function returns true when searching for an existing tournament beloning to an existing managers tournamentlist
      */
     @Test
-    public void checkIfTournamentIsInListTestPositive(){
+     void checkIfTournamentIsInListTestPositive(){
         Manager testmanager1 =spy(new Manager());
         Tournament testtournament = spy(new Tournament());
         testtournament.setTournamentCode("12");

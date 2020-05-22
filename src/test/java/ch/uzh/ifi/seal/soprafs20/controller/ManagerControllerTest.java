@@ -80,7 +80,7 @@ public class ManagerControllerTest {
      * Check if the post request returns the correct status, positive
      */
     @Test
-    public void createManager() throws Exception{
+     void createManager() throws Exception{
 
         ManagerPostDTO managerPostDTO = new ManagerPostDTO();
         managerPostDTO.setVorname("Fabio");
@@ -102,7 +102,7 @@ public class ManagerControllerTest {
      * Check if the post request returns the correct status, negative
      */
     @Test
-    public void createManagerFailure() throws Exception{
+     void createManagerFailure() throws Exception{
 
         ManagerPostDTO managerPostDTO = new ManagerPostDTO();
         managerPostDTO.setVorname("Fabio");
@@ -134,7 +134,7 @@ public class ManagerControllerTest {
      * Check if the login works, -positive
      */
     @Test
-    public void loginPositive() throws Exception {
+     void loginPositive() throws Exception {
         ManagerPostDTO managerPostDTO = new ManagerPostDTO();
         managerPostDTO.setVorname("Fabio");
         managerPostDTO.setNachname("Sisi");
@@ -155,7 +155,7 @@ public class ManagerControllerTest {
      * Check if the login works, -negative
      */
     @Test
-    public void loginNegative() throws Exception {
+     void loginNegative() throws Exception {
         ManagerPostDTO managerPostDTO = new ManagerPostDTO();
         managerPostDTO.setVorname("Fabio");
         managerPostDTO.setNachname("Sisi");
@@ -172,7 +172,7 @@ public class ManagerControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isUnauthorized());
     }
     @Test
-    public void getManagerById() throws Exception{
+     void getManagerById() throws Exception{
 
         given(managerService.getManagerById(Mockito.any())).willReturn(testManager1);
 
@@ -190,7 +190,7 @@ public class ManagerControllerTest {
      * Checks if the correct error is returned if the participant is not found -negative
      */
     @Test
-    public void getManagerByIdFailure() throws Exception {
+     void getManagerByIdFailure() throws Exception {
 
         given(managerService.getManagerById(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "No Manager found with this Id"));
 
@@ -206,7 +206,7 @@ public class ManagerControllerTest {
      * Check if the post request returns the correct status when updating the manager Status with positive status
      */
     @Test
-    public void updateManagerStatusSuccesful() throws Exception {
+     void updateManagerStatusSuccesful() throws Exception {
         ManagerPutDTO managerPutDTO = new ManagerPutDTO();
         managerPutDTO.setToken("111111111444443");
         managerPutDTO.setUserStatus(UserStatus.OFFLINE);
@@ -223,7 +223,7 @@ public class ManagerControllerTest {
      * Check if the put request returns the correct status when updating the manager Status with incorrect token Id combination
      */
     @Test
-    public void updateManagerStatusTokenIdNotMatch() throws Exception {
+     void updateManagerStatusTokenIdNotMatch() throws Exception {
         ManagerPutDTO managerPutDTO = new ManagerPutDTO();
         managerPutDTO.setToken("111111111444443");
         managerPutDTO.setUserStatus(UserStatus.OFFLINE);
@@ -241,7 +241,7 @@ public class ManagerControllerTest {
      * Check if the put request returns the correct status when updating the manager Status with incorrect Id
      */
     @Test
-    public void updateManagerStatusWrongId() throws Exception {
+     void updateManagerStatusWrongId() throws Exception {
         ManagerPutDTO managerPutDTO = new ManagerPutDTO();
         managerPutDTO.setToken("111111111444443");
         managerPutDTO.setUserStatus(UserStatus.OFFLINE);
@@ -261,7 +261,7 @@ public class ManagerControllerTest {
      */
 
     @Test
-    public void getAllParticipants() throws Exception{
+     void getAllParticipants() throws Exception{
         Tournament tournament1= new Tournament();
         Tournament tournament2 = new Tournament();
         tournament1.setAmountOfPlayers(1);
@@ -317,7 +317,7 @@ public class ManagerControllerTest {
      * Check if the get request returns the correct status when nonexisting manager id is given
      */
     @Test
-    public void getAllParticipantsFailure() throws Exception{
+     void getAllParticipantsFailure() throws Exception{
         /*TournamentGetDTO tournamentGetDTO= new TournamentGetDTO();
         tournamentGetDTO.setAmountOfPlayers(2);
         tournamentGetDTO.setBreakDuration(10);

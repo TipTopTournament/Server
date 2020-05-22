@@ -174,7 +174,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void getAllTournamentsPositive() throws Exception{
+     void getAllTournamentsPositive() throws Exception{
 
         List<Tournament> dummyList2 = new ArrayList<>();
         dummyList2.add(testTournament1);
@@ -211,7 +211,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void createTournamentWhenTooMuchTableThenNegative() throws Exception{
+     void createTournamentWhenTooMuchTableThenNegative() throws Exception{
 
         TournamentPostDTO tournamentPostDTO = new TournamentPostDTO();
         tournamentPostDTO.setAmountOfPlayers(24);
@@ -235,7 +235,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void createTournamentPositive() throws Exception{
+     void createTournamentPositive() throws Exception{
 
         TournamentPostDTO tournamentPostDTO = new TournamentPostDTO();
         tournamentPostDTO.setAmountOfPlayers(4);
@@ -261,7 +261,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void getTournamentByTournamentCodePositive() throws Exception{
+     void getTournamentByTournamentCodePositive() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
         given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
@@ -290,7 +290,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void getTournamentByTournamentCodeNegative() throws Exception{
+     void getTournamentByTournamentCodeNegative() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
         given(tournamentService.getTournamentByTournamentCode(Mockito.any())).willReturn(testTournament1);
@@ -308,7 +308,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void getBracketByTournamentCodePositive() throws Exception{
+     void getBracketByTournamentCodePositive() throws Exception{
 
     	ArrayList<Game> dummyList3 = new ArrayList<>();
 
@@ -347,7 +347,7 @@ public class TournamentControllerTest {
      */
 
     @Test
-    public void getBracketByTournamentCodeNegative() throws Exception{
+     void getBracketByTournamentCodeNegative() throws Exception{
 
     	ArrayList<Game> dummyList3 = new ArrayList<>();
 
@@ -366,7 +366,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void getAllGamesFromATournamentWithTCodePositive() throws Exception{
+     void getAllGamesFromATournamentWithTCodePositive() throws Exception{
 
 
         GameGetDTO testGameDTO1 = new GameGetDTO();
@@ -410,7 +410,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void getAllGamesFromATournamentWithTCodeNegativeWhenTCodeNotExist() throws Exception{
+     void getAllGamesFromATournamentWithTCodeNegativeWhenTCodeNotExist() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
 
@@ -423,7 +423,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userJoinsTournamentPositiveReturnsOK() throws Exception{
+     void userJoinsTournamentPositiveReturnsOK() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
@@ -439,7 +439,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userJoinsTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
+     void userJoinsTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
@@ -453,7 +453,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userJoinsTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
+     void userJoinsTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(false);
@@ -467,7 +467,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userLeavesTournamentPositiveReturnsOk() throws Exception{
+     void userLeavesTournamentPositiveReturnsOk() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
@@ -484,7 +484,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userLeavesTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
+     void userLeavesTournamentNegativeReturnsNotFoundWhenTCodeNotExist() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(false);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(true);
@@ -498,7 +498,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void userLeavesTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
+     void userLeavesTournamentNegativeReturnsNotFoundWhenPlayerNotExist() throws Exception{
 
         given(tournamentService.checkIfTournamentCodeExists(Mockito.any())).willReturn(true);
         given(participantService.checkIfParticipantIdExists(Mockito.any())).willReturn(false);

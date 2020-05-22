@@ -80,7 +80,7 @@ public class ParticipantControllerTest {
      * checks if all participants are returned
      */
     @Test
-    public void getAllParticipants() throws Exception{
+    void getAllParticipants() throws Exception{
 
         List<Participant> dummyList = new ArrayList<>();
         dummyList.add(testParticipant1);
@@ -112,7 +112,7 @@ public class ParticipantControllerTest {
      * Checks if the get request using the participantId works -positive
      */
     @Test
-    public void getParticipantById() throws Exception{
+     void getParticipantById() throws Exception{
 
         given(participantService.getParticipantById(Mockito.any())).willReturn(testParticipant1);
 
@@ -131,7 +131,7 @@ public class ParticipantControllerTest {
      * Checks if the correct error is returned if the participant is not found -negative
      */
     @Test
-    public void getParticipantByIdFailure() throws Exception {
+     void getParticipantByIdFailure() throws Exception {
 
         given(participantService.getParticipantById(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "No participant found with this Id"));
 
@@ -147,7 +147,7 @@ public class ParticipantControllerTest {
      * Check if the post request returns the correct status, positive
      */
     @Test
-    public void createParticipant() throws Exception{
+     void createParticipant() throws Exception{
 
         ParticipantPostDTO participantPostDTO = new ParticipantPostDTO();
         participantPostDTO.setVorname("Fabio");
@@ -169,7 +169,7 @@ public class ParticipantControllerTest {
      * Check if the post request returns the correct status, negative
      */
     @Test
-    public void createParticipantFailure() throws Exception{
+     void createParticipantFailure() throws Exception{
 
         ParticipantPostDTO participantPostDTO = new ParticipantPostDTO();
         participantPostDTO.setVorname("Fabio");
@@ -191,7 +191,7 @@ public class ParticipantControllerTest {
      * Check if the login works, -positive
      */
     @Test
-    public void loginPositive() throws Exception {
+     void loginPositive() throws Exception {
         ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
         participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         participantPutDTO.setParticipantID(1L);
@@ -212,7 +212,7 @@ public class ParticipantControllerTest {
      * Check if the login works, -negative
      */
     @Test
-    public void loginNegative() throws Exception {
+     void loginNegative() throws Exception {
         ParticipantPutDTO participantPutDTO = new ParticipantPutDTO();
         participantPutDTO.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         participantPutDTO.setParticipantID(1L);
@@ -233,7 +233,7 @@ public class ParticipantControllerTest {
      * test the statistics endpoint, -positive
      */
     @Test
-    public void statisticsTest() throws Exception {
+     void statisticsTest() throws Exception {
         Statistics stats = new Statistics();
         stats.setWins(13);
         stats.setLosses(2);
@@ -259,7 +259,7 @@ public class ParticipantControllerTest {
      * test the statistics endpoint, -negative for Id not found
      */
     @Test
-    public void statisticsTestFailure() throws Exception{
+     void statisticsTestFailure() throws Exception{
         Statistics stats = new Statistics();
         stats.setWins(13);
         stats.setLosses(2);
@@ -280,7 +280,7 @@ public class ParticipantControllerTest {
      * Check if the status update works, -positive
      */
     @Test
-    public void updateStatusPositive() throws Exception{
+     void updateStatusPositive() throws Exception{
 
         testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         testParticipant1.setUserStatus(UserStatus.OFFLINE);
@@ -305,7 +305,7 @@ public class ParticipantControllerTest {
      * Check if the status update works, -negative no Id found
      */
     @Test
-    public void updateStatusNegative() throws Exception{
+     void updateStatusNegative() throws Exception{
 
         testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         testParticipant1.setUserStatus(UserStatus.OFFLINE);
@@ -332,7 +332,7 @@ public class ParticipantControllerTest {
      * Check if the status update works, -negative cannot update someone else status
      */
     @Test
-    public void updateStatusNotAuthorized() throws Exception{
+     void updateStatusNotAuthorized() throws Exception{
 
         testParticipant1.setToken("111a1a11-bb2b-3333-c4c4-d555d5555d55");
         testParticipant1.setUserStatus(UserStatus.OFFLINE);
