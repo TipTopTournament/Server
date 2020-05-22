@@ -3,7 +3,7 @@
 ## Introduction
 The goal of this project was to implement a working tournament management software where tasks which are hard to do manually, would be automated and conveniently done without any "manual labor".
 
-More specifically is was the task of the server to store data about users, tournaments, games and so on.
+More specifically, it was the task of the server to store data about users, tournaments, games and so on.
 
 ## Technologies
 
@@ -14,26 +14,30 @@ More specifically is was the task of the server to store data about users, tourn
 -   PostgreSQL
 
 ## High-level components
-The server is structured in a way that the requests are handled by the respective controller ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ManagerController.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/TournamentController.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ParticipantController.java)). Those controllers will then perform the requested action or provide the requested information using the respective service ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ManagerService.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/service/TournamentService.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ParticipantService.java)).
+The server is structured in a way that the requests are handled by the respective controller ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ManagerController.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/TournamentController.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ParticipantController.java)). Those controllers will then perform the requested action or provide the requested information using the respective service ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ManagerService.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/service/TournamentService.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ParticipantService.java)). A service is resonsible for handling all operations(creating, updating, deleting etc.) of its respective entity.
 
-Generally a controller would only call its service counterpart to update an entitiy (e.g. the tournament controller would call the tournament service to create a tournament entity). However, we had to compromise that principle since after a game has been updated (using the tournament service), the result of that game would also have to be entered in the participants statistics.
+Generally, a controller would only call its service counterpart to update an entity (e.g. the tournament controller would call the tournament service to create a tournament entity). However, we had to compromise that principle since after a game has been updated (using the tournament service), the result of that game would also have to be entered in the participants statistics. That means that there are situations where controllers are actually calling multiple services to execute tasks.
 
 ## Launch & Deployment
 
 ### Getting started with the application
+First of all, it can't hurt to know some basic terms of tournament terminology such as 'bracket', 'leaderboard' or 'round'. Please make yourself familiar with such terms. It will be a lot easier to understand the code.
+
 Start with having a look at the entities with respect to their fields. Once you've got a feel for that, continue with the controllers and have a look what service methods they're calling. By doing that you should get an understanding how the server works.
 
 ### Running the project
 To start the server locally, just run the [Application](src/main/java/ch/uzh/ifi/seal/soprafs20/Application.java) file and the server should be reachable under *http://localhost:8080/*.
 
 ### Running the test
-That depends on what IDE you're using. If you happen to use IntelliJ just right-click on the [Test folder](src/test) and choose "Run tests...".
+That depends on what IDE you're using. If you happen to use IntelliJ just right-click on the [Test folder](src/test) and choose "Run tests...". Alternatively, you can build the project (run the [build.gradle](build.gradle)) and subsequently all tests are being executed.
 
 ### External dependencies and databases
-Gradle should take care of the dependencies and the external PostgreSQL database is only used in the production build.
+Gradle should take care of the dependencies.The external PostgreSQL database is only used in the production build. The database is hosted on Heroku itself. It acts as an addon to the server app.The credentials for the database are stored in the Heroku settings of the server.
+
+
 
 ### Releases
-To deploy changes one simply needs to commit and push their changes and the application will automatically be deployed on [heroku](https://sopra-fs20-group-01-server.herokuapp.com/) (if all tests pass).
+To deploy changes one simply needs to commit and push their changes to Github. As a result, the application will automatically be deployed on [Heroku](https://sopra-fs20-group-01-server.herokuapp.com/) (if all tests pass). 
 
 ## Roadmap
 -   One Feature we definitely would have liked to implement was the ability for the participant to be in multiple tournaments. At the moment, it is only possible to take part in one tournament at a time
@@ -49,12 +53,11 @@ Developers:
 -   Stefano Anzolut
 -   Tony Ly
 -   Mauro Hirt
--   Vukasin Arandjelovic
 -   Fabio Sisi
 
 We would like to extend our thanks to anyone who has supported us through this challenging but experience-filled project. Also, we'd like to especially mention our TA Alex Scheitlin whose advice and guidance was very valuable to us.
 
-## License DRAFT
+## License
 Copyright (c) 2020 Fabio Sisi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
