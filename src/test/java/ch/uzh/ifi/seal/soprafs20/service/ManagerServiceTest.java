@@ -336,7 +336,7 @@ when(managerRepository.save(testmanager3)).thenReturn(testmanager3);
      *check if function returns false when searching for an nonexisting tournament a managers tournamentlist
      */
     @Test
-    public void checkIfTournamentIsInListTestNegative(){
+     void checkIfTournamentIsInListTestNegative(){
         Manager testmanager1 =spy(new Manager());
         List<Manager> managerList = new ArrayList<>();
         managerList.add(testmanager1);
