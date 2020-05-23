@@ -64,16 +64,16 @@ import static org.junit.jupiter.api.Assertions.*;
         newWholeLeaderboard = new ArrayList<>();
 
         testStats1.setStatisticsID(7L);
-        testStats1.setWins(2);
-        testStats1.setLosses(3);
-        testStats1.setPointsScored(14);
-        testStats1.setPointsConceded(69);
+        testStats1.setWins(0);
+        testStats1.setLosses(0);
+        testStats1.setPointsScored(0);
+        testStats1.setPointsConceded(0);
 
         testStats2.setStatisticsID(11L);
-        testStats2.setWins(2);
-        testStats2.setLosses(3);
-        testStats2.setPointsScored(14);
-        testStats2.setPointsConceded(69);
+        testStats2.setWins(0);
+        testStats2.setLosses(0);
+        testStats2.setPointsScored(0);
+        testStats2.setPointsConceded(0);
 
         testTournament1.setAmountOfPlayers(4);
         testTournament1.setBreakDuration(10);
@@ -311,5 +311,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
         // check bracket
         assertEquals(GameState.FINISHED, createdTournament.getBracket().getBracketList().get(0).gameState);
+    }
+
+    @Test
+     void playersReportGameShouldAppearInPlayerStatistics(){
+        Tournament createdTournament = tournamentService.createTournament(testTournament1);
+
+        Game firstGame = createdTournament.getBracket().getBracketList().get(0);
+
+        // user 1 joins
+        tournamentService.updateBracketWithNewParticipant(testParticipant1, createdTournament);
+        tournamentService.createLeaderboardEntry(testParticipant1, createdTournament);
+
+        // user 2 joins
+        tournamentService.updateBracketWithNewParticipant(testParticipant2, createdTournament);
+        tournamentService.createLeaderboardEntry(testParticipant2, createdTournament);
+
+        // player1 reports their scores
+        Mockito.when(gameRepository.findByGameId(Mockito.anyLong())).thenReturn(firstGame);
+        Mockito.when(tournamentRepository.findByTournamentCode(Mockito.any())).thenReturn(testTournament1);
+        tournamentService.updateGameWithScore(createdTournament.getTournamentCode(), firstGame.getGameId(), 3, 1, testParticipant1.getParticipantID());
+
+        // player2 reports their scores
+        tournamentService.updateGameWithScore(createdTournament.getTournamentCode(), firstGame.getGameId(), 3, 1, testParticipant2.getParticipantID());
+
+        // check stats of player1
+        assertEquals(1, testParticipant1.getStatistics().getWins());
+        assertEquals(0, testParticipant1.getStatistics().getLosses());
+
+        // check stats of player2
+        assertEquals(0, testParticipant2.getStatistics().getWins());
+        assertEquals(1, testParticipant2.getStatistics().getLosses());
+
+
     }
 }
