@@ -269,4 +269,47 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(1, tournamentService.getLeaderboardFromTournament(createdTournament.getTournamentCode()).get(0).getPointsConceded());
         assertEquals(3, tournamentService.getLeaderboardFromTournament(createdTournament.getTournamentCode()).get(1).getPointsConceded());
     }
+
+    @Test
+     void playersReportScoreShouldUpdateBracket(){
+        Tournament createdTournament = tournamentService.createTournament(testTournament1);
+
+        Game firstGame = createdTournament.getBracket().getBracketList().get(0);
+
+        // user 1 joins
+        tournamentService.updateBracketWithNewParticipant(testParticipant1, createdTournament);
+        tournamentService.createLeaderboardEntry(testParticipant1, createdTournament);
+
+        // user 2 joins
+        tournamentService.updateBracketWithNewParticipant(testParticipant2, createdTournament);
+        tournamentService.createLeaderboardEntry(testParticipant2, createdTournament);
+
+        // check if they are playing against each other
+        assertEquals(testParticipant1, firstGame.getParticipant1());
+        assertEquals(testParticipant2, firstGame.getParticipant2());
+
+        // player1 reports their scores
+        Mockito.when(gameRepository.findByGameId(Mockito.anyLong())).thenReturn(firstGame);
+        Mockito.when(tournamentRepository.findByTournamentCode(Mockito.any())).thenReturn(testTournament1);
+        tournamentService.updateGameWithScore(createdTournament.getTournamentCode(), firstGame.getGameId(), 3, 1, testParticipant1.getParticipantID());
+
+        // check for the first entry status update
+        assertEquals(GameState.FIRSTENTRY, firstGame.getGameState());
+        assertTrue(firstGame.isParticipant1Reported());
+
+        // player2 reports their scores
+        tournamentService.updateGameWithScore(createdTournament.getTournamentCode(), firstGame.getGameId(), 3, 1, testParticipant2.getParticipantID());
+
+        // check the game status
+        assertEquals(GameState.FINISHED, firstGame.getGameState());
+        assertEquals(3, firstGame.getScore1());
+        assertEquals(1, firstGame.getScore2());
+        assertTrue(firstGame.isParticipant2Reported());
+
+        // check the leaderboard
+        Mockito.when(leaderboardRepository.findAllByTournamentCode(Mockito.any())).thenReturn(newWholeLeaderboard);
+
+        // check bracket
+        assertEquals(GameState.FINISHED, createdTournament.getBracket().getBracketList().get(0).gameState);
+    }
 }
