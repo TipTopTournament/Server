@@ -7,11 +7,16 @@ More specifically, it was the task of the server to store data about users, tour
 
 ## Technologies
 
+####   Programming language and environment
 -   Java
--   JPA
--   Hibernate
 -   Springboot
+####   Database management
+-   Hibernate
+-   JPA
 -   PostgreSQL
+####   Version control & deployment
+-   GitHub
+-   Heroku
 
 ## High-level components
 The server is structured in a way that the requests are handled by the respective controller ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ManagerController.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/TournamentController.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ParticipantController.java)). Those controllers will then perform the requested action or provide the requested information using the respective service ([Manager](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ManagerService.java), [Tournament](src/main/java/ch/uzh/ifi/seal/soprafs20/service/TournamentService.java), [Participant](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ParticipantService.java)). A service is resonsible for handling all operations(creating, updating, deleting etc.) of its respective entity.
