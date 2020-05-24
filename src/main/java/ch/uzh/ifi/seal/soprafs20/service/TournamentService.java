@@ -372,6 +372,7 @@ public class TournamentService {
             tournament.setWinner(calculateWinner(gameList.get(game)));
         }
     }
+
     public static Participant calculateWinner(Game game) {
         if (game.getScore1() > game.getScore2()) {
             return game.getParticipant1();
@@ -437,16 +438,29 @@ public class TournamentService {
         // update winner
         Statistics statsWinner = winner.getStatistics();
 
-        statsWinner.setPointsScored(statsWinner.getPointsScored() + game.getScore1());
-        statsWinner.setPointsConceded(statsWinner.getPointsConceded() + game.getScore2());
+        if  (game.getScore1() > game.getScore2()) {
+            statsWinner.setPointsScored(statsWinner.getPointsScored() + game.getScore1());
+            statsWinner.setPointsConceded(statsWinner.getPointsConceded() + game.getScore2());
+        }
+        else {
+            statsWinner.setPointsScored(statsWinner.getPointsScored() + game.getScore2());
+            statsWinner.setPointsConceded(statsWinner.getPointsConceded() + game.getScore1());
+        }
+
         statsWinner.setWins(statsWinner.getWins() + 1);
         statsWinner.addGameToHistory(game);
 
         // update loser
         Statistics statsLoser = loser.getStatistics();
+        if (game.getScore1() < game.getScore2()) {
+            statsLoser.setPointsScored(statsLoser.getPointsScored() + game.getScore1());
+            statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore2());
+        }
+        else {
+            statsLoser.setPointsScored(statsLoser.getPointsScored() + game.getScore2());
+            statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore1());
+        }
 
-        statsLoser.setPointsScored(statsLoser.getPointsScored() + game.getScore2());
-        statsLoser.setPointsConceded(statsLoser.getPointsConceded() + game.getScore1());
         statsLoser.setLosses(statsLoser.getLosses() + 1);
         statsLoser.addGameToHistory(game);
     }
