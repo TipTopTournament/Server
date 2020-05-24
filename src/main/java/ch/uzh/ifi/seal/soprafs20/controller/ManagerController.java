@@ -48,8 +48,7 @@ public class ManagerController {
         Manager manager = managerService.getManagerById(id);
     	return DTOMapper.INSTANCE.convertEntityToManagerGetDTO(manager);
     }
-
-
+    
     @PostMapping("/managers")
     @ResponseStatus(HttpStatus.CREATED)
     public void createManager(@RequestBody ManagerPostDTO managerPostDTO) {
